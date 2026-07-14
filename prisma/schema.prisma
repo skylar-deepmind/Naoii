@@ -1,0 +1,288 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ─── Enums ────────────────────────────────────────────
+
+enum UserRole {
+  USER
+  MODERATOR
+  ADMIN
+}
+
+enum UserStatus {
+  ACTIVE
+  SUSPENDED
+  BANNED
+  DELETED
+}
+
+enum ProficiencyLevel {
+  BEGINNER
+  ELEMENTARY
+  INTERMEDIATE
+  UPPER_INTERMEDIATE
+  ADVANCED
+  MASTERY
+}
+
+enum PostStatus {
+  DRAFT
+  PUBLISHED
+  HIDDEN
+  FLAGGED
+  ACCEPTED
+  DELETED
+}
+
+enum PostVisibility {
+  PUBLIC
+  UNLISTED
+  PRIVATE
+}
+
+enum CorrectionStatus {
+  DRAFT
+  PUBLISHED
+  HIDDEN
+  DELETED
+}
+
+enum NotificationType {
+  CORRECTION_RECEIVED
+  CORRECTION_ADOPTED
+  REPUTATION_GAINED
+  POST_FLAGGED
+  POST_DELETED
+  SYSTEM_NOTICE
+}
+
+enum ReportStatus {
+  PENDING
+  RESOLVED
+  DISMISSED
+}
+
+enum ReportReason {
+  SPAM
+  HARASSMENT
+  INAPPROPRIATE_CONTENT
+  PLAGIARISM
+  OTHER
+}
+
+// ─── Models ────────────────────────────────────────────
+
+model User {
+  id           String     @id @default(cuid())
+  username     String     @unique
+  email        String     @unique
+  passwordHash String
+  role         UserRole   @default(USER)
+  status       UserStatus @default(ACTIVE)
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  profile       UserProfile?
+  posts         Post[]
+  corrections   Correction[]
+  reputationLog ReputationLog[]
+  collections   ExpressionCollectionItem[]
+  notifications Notification[]
+  reports         Report[]         @relation("Reporter")
+  resolvedReports Report[]         @relation("Resolver")
+  adminActions    AdminActionLog[]
+
+  @@index([status])
+  @@index([role])
+}
+
+model UserProfile {
+  id                 String           @id @default(cuid())
+  userId             String           @unique
+  displayName        String?
+  bio                String?
+  avatarUrl          String?
+  nativeLanguageId   String?
+  learningLanguageId String?
+  level              ProficiencyLevel @default(BEGINNER)
+  reputationScore    Int              @default(0)
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @updatedAt
+
+  user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  nativeLanguage   Language? @relation("NativeLanguage", fields: [nativeLanguageId], references: [id], onDelete: SetNull)
+  learningLanguage Language? @relation("LearningLanguage", fields: [learningLanguageId], references: [id], onDelete: SetNull)
+}
+
+model Language {
+  id         String @id @default(cuid())
+  code       String @unique
+  name       String
+  nativeName String
+  createdAt  DateTime @default(now())
+
+  nativeProfiles   UserProfile[] @relation("NativeLanguage")
+  learningProfiles UserProfile[] @relation("LearningLanguage")
+  sourcePosts      Post[]        @relation("SourceLanguage")
+  targetPosts      Post[]        @relation("TargetLanguage")
+}
+
+model Post {
+  id               String         @id @default(cuid())
+  authorId         String
+  sourceLanguageId String?
+  targetLanguageId String?
+  title            String?
+  content          String
+  expressionType   String?
+  tone             String?
+  visibility       PostVisibility @default(PUBLIC)
+  status           PostStatus     @default(PUBLISHED)
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+
+  author         User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  sourceLanguage Language? @relation("SourceLanguage", fields: [sourceLanguageId], references: [id], onDelete: SetNull)
+  targetLanguage Language? @relation("TargetLanguage", fields: [targetLanguageId], references: [id], onDelete: SetNull)
+
+  corrections  Correction[]
+  collections  ExpressionCollectionItem[]
+  reports      Report[]
+
+  @@index([authorId])
+  @@index([status, visibility])
+  @@index([createdAt])
+}
+
+model Correction {
+  id            String           @id @default(cuid())
+  postId        String
+  authorId      String
+  correctedText String
+  explanation   String?
+  toneNote      String?
+  status        CorrectionStatus @default(PUBLISHED)
+  isAccepted    Boolean          @default(false)
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
+
+  post      Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  author    User @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  segments    CorrectionSegment[]
+  collections ExpressionCollectionItem[]
+  reports     Report[]
+
+  @@index([postId])
+  @@index([authorId])
+  @@index([isAccepted])
+}
+
+model CorrectionSegment {
+  id            String @id @default(cuid())
+  correctionId  String
+  position      Int
+  originalText  String
+  correctedText String
+  explanation   String?
+
+  correction Correction @relation(fields: [correctionId], references: [id], onDelete: Cascade)
+
+  @@index([correctionId])
+}
+
+model ReputationLog {
+  id         String   @id @default(cuid())
+  userId     String
+  points     Int
+  reason     String
+  sourceType String
+  sourceId   String?
+  createdAt  DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([createdAt])
+}
+
+model ExpressionCollectionItem {
+  id                     String   @id @default(cuid())
+  userId                 String
+  postId                 String
+  correctionId           String?
+  originalTextSnapshot   String
+  correctedTextSnapshot  String?
+  explanationSnapshot    String?
+  toneNoteSnapshot       String?
+  tags                   Json     @default("[]")
+  createdAt              DateTime @default(now())
+
+  user       User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  post       Post        @relation(fields: [postId], references: [id], onDelete: Cascade)
+  correction Correction? @relation(fields: [correctionId], references: [id], onDelete: SetNull)
+
+  @@index([userId])
+  @@index([postId])
+  @@unique([userId, postId, correctionId])
+}
+
+model Notification {
+  id                   String           @id @default(cuid())
+  userId               String
+  type                 NotificationType
+  title                String
+  body                 String?
+  isRead               Boolean          @default(false)
+  relatedPostId        String?
+  relatedCorrectionId  String?
+  createdAt            DateTime         @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, isRead])
+  @@index([createdAt])
+}
+
+model Report {
+  id            String       @id @default(cuid())
+  reporterId    String
+  postId        String?
+  correctionId  String?
+  reason        ReportReason
+  description   String?
+  status        ReportStatus @default(PENDING)
+  resolvedById  String?
+  resolvedAt    DateTime?
+  createdAt     DateTime     @default(now())
+
+  reporter   User         @relation("Reporter", fields: [reporterId], references: [id], onDelete: Cascade)
+  post       Post?        @relation(fields: [postId], references: [id], onDelete: SetNull)
+  correction Correction?  @relation(fields: [correctionId], references: [id], onDelete: SetNull)
+  resolvedBy User?        @relation("Resolver", fields: [resolvedById], references: [id], onDelete: SetNull)
+
+  @@index([reporterId])
+  @@index([status])
+  @@index([postId])
+  @@index([correctionId])
+}
+
+model AdminActionLog {
+  id         String   @id @default(cuid())
+  adminId    String
+  action     String
+  targetType String
+  targetId   String?
+  details    String?
+  createdAt  DateTime @default(now())
+
+  admin User @relation(fields: [adminId], references: [id], onDelete: Cascade)
+
+  @@index([adminId])
+  @@index([targetType, targetId])
+  @@index([createdAt])
+}

@@ -1,6 +1,4 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
-
-# dependencies
+# ─── Dependencies ──────────────────────────────
 /node_modules
 /.pnp
 .pnp.*
@@ -10,32 +8,81 @@
 !.yarn/releases
 !.yarn/versions
 
-# testing
-/coverage
-
-# next.js
+# ─── Next.js ───────────────────────────────────
 /.next/
 /out/
 
-# production
-/build
+# ─── TypeScript ────────────────────────────────
+*.tsbuildinfo
+next-env.d.ts
 
-# misc
+# ─── Environment ───────────────────────────────
+.env
+.env.*
+!.env.example
+
+# ─── IDE / Editor ──────────────────────────────
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.idea/
+*.swp
+*.swo
+*~
+
+# ─── OS ────────────────────────────────────────
 .DS_Store
-*.pem
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Thumbs.db
+ehthumbs.db
+Desktop.ini
 
-# debug
+# ─── AI / Claude ───────────────────────────────
+.claude/
+
+# ─── Logs ──────────────────────────────────────
+*.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
+.next/dev/logs/
 
-# env files (can opt-in for committing if needed)
-.env*
+# ─── Testing ───────────────────────────────────
+/coverage
+/playwright-report
+/test-results
 
-# vercel
+# ─── Build / Production ────────────────────────
+/build
+/dist
+
+# ─── Deploy ────────────────────────────────────
 .vercel
 
-# typescript
-*.tsbuildinfo
-next-env.d.ts
+# ─── Security ──────────────────────────────────
+*.pem
+*.key
+*.cert
+
+# ─── Temp / Cache ──────────────────────────────
+*.tmp
+*.temp
+.cache/
+.turbo/
+
+# ─── Docker ────────────────────────────────────
+# docker-compose.yml is tracked (infrastructure as code)
+# .env already covered above
+
+# ─── Prisma ────────────────────────────────────
+# migrations/ is tracked (schema history)
+# schema.prisma is tracked (source of truth)
+
+# ─── Prompt Designs (archive old versions) ─────
+.prompt/version-*/
