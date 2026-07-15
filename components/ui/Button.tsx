@@ -8,6 +8,8 @@ const variantClasses = {
   ghost: "btn-ghost",
   success:
     "bg-success text-success-content hover:opacity-90 border-success",
+  warning:
+    "bg-warning text-warning-content hover:opacity-90 border-warning",
   danger:
     "bg-error text-error-content hover:opacity-90 border-error",
 } as const;

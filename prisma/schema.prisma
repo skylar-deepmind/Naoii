@@ -227,6 +227,9 @@ model ExpressionCollectionItem {
   explanationSnapshot    String?
   toneNoteSnapshot       String?
   tags                   Json     @default("[]")
+  lastReviewedAt         DateTime?
+  reviewStatus           String?
+  reviewCount            Int      @default(0)
   createdAt              DateTime @default(now())
 
   user       User        @relation(fields: [userId], references: [id], onDelete: Cascade)
