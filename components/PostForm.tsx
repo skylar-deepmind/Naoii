@@ -5,6 +5,7 @@ import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { createPostAction } from "@/server/actions/post";
+import { TemplateSelector } from "@/components/TemplateSelector";
 import { Input } from "@/components/ui/Input";
 import { Textarea } from "@/components/ui/Textarea";
 import { Select } from "@/components/ui/Select";
@@ -13,9 +14,9 @@ import { Alert } from "@/components/ui/Alert";
 import type { Dictionary } from "@/locales";
 
 interface Language { id: string; name: string; nativeName: string; }
-interface Props { languages: Language[]; dict: Dictionary; intent?: string | null; }
+interface Props { languages: Language[]; dict: Dictionary; locale: string; intent?: string | null; }
 
-export function PostForm({ languages, dict, intent }: Props) {
+export function PostForm({ languages, dict, locale, intent }: Props) {
   const [serverErrors, setServerErrors] = useState<Record<string, string[]>>({});
 
   const completenessOptions = useMemo(() => [
@@ -85,6 +86,22 @@ export function PostForm({ languages, dict, intent }: Props) {
       <Controller name="completeness" control={control} render={({ field, fieldState }) => (
         <Select label={dict.completeness.label} options={completenessOptions} error={fieldState.error?.message} {...field} />
       )} />
+
+      <TemplateSelector
+        dict={dict}
+        locale={locale as "zh" | "en" | "ja"}
+        currentContent={control._formValues?.content || ""}
+        onInsert={(text) => {
+          const input = document.querySelector("[name='content']") as HTMLTextAreaElement;
+          if (input) {
+            const nativeInputValueSetter = Object.getOwnPropertyDescriptor(
+              window.HTMLTextAreaElement.prototype, "value"
+            )?.set;
+            nativeInputValueSetter?.call(input, text);
+            input.dispatchEvent(new Event("input", { bubbles: true }));
+          }
+        }}
+      />
 
       <Controller name="title" control={control} render={({ field, fieldState }) => (
         <Input label={dict.post.title} placeholder={dict.post.titlePlaceholder} error={fieldState.error?.message} {...field} />

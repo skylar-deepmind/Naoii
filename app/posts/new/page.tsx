@@ -1,9 +1,9 @@
 import { AppShell } from "@/components/ui/AppShell";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { Card } from "@/components/ui/Card";
-import { PostForm } from "@/components/PostForm";
+import { PostWizard } from "@/components/PostWizard";
 import { getLanguages } from "@/server/queries/user";
-import { getDict } from "@/lib/i18n";
+import { getLocale, getDict } from "@/lib/i18n";
 
 interface Props {
   searchParams: Promise<{ intent?: string }>;
@@ -12,6 +12,7 @@ interface Props {
 export default async function NewPostPage({ searchParams }: Props) {
   const languages = await getLanguages();
   const dict = await getDict();
+  const locale = await getLocale();
   const { intent } = await searchParams;
 
   return (
@@ -21,7 +22,7 @@ export default async function NewPostPage({ searchParams }: Props) {
         description={intent === "ask" ? dict.entry.askQuestionDesc : dict.post.newDesc}
       />
       <div className="max-w-2xl pb-8">
-        <Card><PostForm languages={languages} dict={dict} intent={intent || null} /></Card>
+        <PostWizard languages={languages} dict={dict} locale={locale} intent={intent || null} />
       </div>
     </AppShell>
   );

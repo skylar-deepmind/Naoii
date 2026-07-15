@@ -55,6 +55,7 @@ export async function saveToLibraryAction(
         correctedTextSnapshot: correction.correctedText,
         explanationSnapshot: correction.explanation,
         toneNoteSnapshot: correction.toneNote,
+        tags: parseTags(formData.get("tags") as string),
       },
     });
 
@@ -100,4 +101,40 @@ export async function removeFromLibraryAction(
     console.error("removeFromLibraryAction error:", e);
     return { errors: { _form: ["取消收藏失败，请稍后再试"] } };
   }
+}
+
+export async function updateLibraryTagsAction(
+  _prev: unknown,
+  formData: FormData
+): Promise<{ errors?: Record<string, string[]>; success?: boolean }> {
+  const user = await getCurrentUser();
+  if (!user) return { errors: { _form: ["请先登录"] } };
+
+  const itemId = formData.get("itemId") as string;
+  if (!itemId) return { errors: { _form: ["参数错误"] } };
+
+  try {
+    const item = await prisma.expressionCollectionItem.findUnique({ where: { id: itemId } });
+    if (!item || item.userId !== user.id) return { errors: { _form: ["收藏不存在"] } };
+
+    await prisma.expressionCollectionItem.update({
+      where: { id: itemId },
+      data: { tags: parseTags(formData.get("tags") as string) },
+    });
+
+    revalidatePath("/library");
+    return { success: true };
+  } catch (e: any) {
+    console.error("updateLibraryTagsAction error:", e);
+    return { errors: { _form: ["更新标签失败"] } };
+  }
+}
+
+function parseTags(input: string | null): string[] {
+  if (!input) return [];
+  return input
+    .split(/[,，、]/)
+    .map((t) => t.trim())
+    .filter((t) => t.length > 0 && t.length <= 20)
+    .slice(0, 10);
 }

@@ -27,21 +27,28 @@ export async function createPostAction(
   const { title, content, sourceLanguage, targetLanguage, expressionType, tone, visibility, completeness } =
     parsed.data;
 
-  const post = await prisma.post.create({
-    data: {
-      authorId: user.id,
-      title: title || null,
-      content,
-      sourceLanguageId: sourceLanguage,
-      targetLanguageId: targetLanguage,
-      expressionType,
-      tone,
-      visibility,
-      completeness,
-      status: "PUBLISHED",
-    },
-  });
+  try {
+    const post = await prisma.post.create({
+      data: {
+        authorId: user.id,
+        title: title || null,
+        content: content || "",
+        sourceLanguageId: sourceLanguage,
+        targetLanguageId: targetLanguage,
+        expressionType,
+        tone,
+        visibility,
+        completeness,
+        status: "PUBLISHED",
+      },
+    });
 
-  revalidatePath("/feed");
-  redirect(`/posts/${post.id}`);
+    revalidatePath("/feed");
+    redirect(`/posts/${post.id}`);
+  } catch (e: any) {
+    // If it's a Next.js redirect, re-throw it
+    if (e?.digest?.startsWith?.("NEXT_REDIRECT")) throw e;
+    console.error("createPostAction error:", e);
+    return { errors: { _form: ["发布失败，请稍后再试"] } };
+  }
 }

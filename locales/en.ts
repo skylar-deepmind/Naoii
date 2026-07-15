@@ -42,6 +42,23 @@ export const en: typeof zh = {
     ideaOnlyDesc: "Only have the idea, need help forming the expression",
     all: "All",
   },
+  templates: {
+    toggleLabel: "Need some writing prompts?",
+    insertButton: "Insert Skeleton",
+    insertTip: "Click a suggestion above to insert writing structure",
+    noOverwrite: "Existing content will not be overwritten",
+    scenes: {
+      daily_life: { name: "Daily Life", desc: "Describe everyday events or plans" },
+      work: { name: "Work Communication", desc: "Professional communication with colleagues or clients" },
+      request_help: { name: "Requesting Help", desc: "Asking someone for assistance or support" },
+      apology: { name: "Apology", desc: "Expressing regret for something" },
+      gratitude: { name: "Gratitude", desc: "Thanking someone for their help or gift" },
+      invitation: { name: "Invitation", desc: "Inviting someone to an event or gathering" },
+      refusal: { name: "Refusal", desc: "Politely declining an invitation or request" },
+      self_intro: { name: "Self Introduction", desc: "Introducing yourself to new people" },
+      social_media: { name: "Social Media Post", desc: "Sharing updates on social platforms" },
+    } as Record<string, { name: string; desc: string }>,
+  },
   nav: {
     home: "Home",
     features: "Features",

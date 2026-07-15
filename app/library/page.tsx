@@ -8,6 +8,7 @@ import { getCurrentUser } from "@/lib/auth";
 import { getDict } from "@/lib/i18n";
 import { getLibraryItems } from "@/server/queries/library";
 import { RemoveFromLibraryButton } from "@/components/RemoveFromLibraryButton";
+import { EditTagsButton } from "@/components/EditTagsButton";
 
 export default async function LibraryPage() {
   const user = await getCurrentUser();
@@ -33,10 +34,14 @@ export default async function LibraryPage() {
               )}
               <div className="flex flex-wrap items-center gap-2 mb-3">
                 {item.toneNoteSnapshot && <Badge variant="default" size="sm">{dict.library.tone}: {item.toneNoteSnapshot}</Badge>}
+                {((item.tags as string[]) || []).map((t: string) => (
+                  <Badge key={t} variant="primary" size="sm">{t}</Badge>
+                ))}
                 <span className="text-xs text-base-content/30">{dict.library.savedAt} {new Date(item.createdAt).toLocaleDateString("zh-CN")}</span>
               </div>
-              <div className="flex items-center gap-3 pt-3 border-t border-base-200">
+              <div className="flex items-center gap-3 pt-3 border-t border-base-200 flex-wrap">
                 {item.post && <Link href={`/posts/${item.post.id}`} className="text-xs text-primary hover:underline">{dict.library.viewPost}</Link>}
+                <EditTagsButton itemId={item.id} currentTags={(item.tags as string[]) || []} />
                 <RemoveFromLibraryButton itemId={item.id} dict={dict} />
               </div>
             </Card>

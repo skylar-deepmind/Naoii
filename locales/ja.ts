@@ -42,6 +42,23 @@ export const ja: typeof zh = {
     ideaOnlyDesc: "伝えたい意味はあるが、まだ目標言語の表現になっていない",
     all: "すべて",
   },
+  templates: {
+    toggleLabel: "書き方のヒントが必要ですか？",
+    insertButton: "骨組みを挿入",
+    insertTip: "上のヒントをクリックすると、書き方の構造を挿入できます",
+    noOverwrite: "既存の内容は上書きされません",
+    scenes: {
+      daily_life: { name: "日常会話", desc: "日常の出来事や予定を説明する" },
+      work: { name: "仕事の連絡", desc: "同僚やクライアントとの職場コミュニケーション" },
+      request_help: { name: "助けを求める", desc: "誰かに支援や協力を依頼する" },
+      apology: { name: "謝罪", desc: "何かについて謝る" },
+      gratitude: { name: "感謝", desc: "助けや贈り物に対してお礼を伝える" },
+      invitation: { name: "招待", desc: "イベントや集まりに招待する" },
+      refusal: { name: "断り", desc: "招待や依頼を丁寧に断る" },
+      self_intro: { name: "自己紹介", desc: "新しい人に自分を紹介する" },
+      social_media: { name: "SNS投稿", desc: "ソーシャルメディアで近況をシェアする" },
+    } as Record<string, { name: string; desc: string }>,
+  },
   nav: {
     home: "ホーム",
     features: "機能",
