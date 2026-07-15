@@ -93,7 +93,7 @@ export async function acceptCorrectionAction(
     });
 
     revalidatePath(`/posts/${postId}`);
-    revalidatePath("/app");
+    revalidatePath("/feed");
     return { success: true };
   } catch (e: any) {
     const message = e?.message || "";

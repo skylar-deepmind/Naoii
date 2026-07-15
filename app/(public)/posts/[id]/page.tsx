@@ -52,7 +52,7 @@ export default async function PostDetailPage({ params }: Props) {
   return (
     <AppShell>
       <div className="py-8 max-w-3xl">
-        <Link href="/app" className="text-sm text-base-content/50 hover:text-base-content mb-6 inline-block">← {dict.post.backToFeed}</Link>
+        <Link href="/feed" className="text-sm text-base-content/50 hover:text-base-content mb-6 inline-block">← {dict.post.backToFeed}</Link>
 
         <div className="flex items-start gap-4 mb-6">
           <Link href={`/profile/${post.author.username}`}><UserAvatar username={post.author.profile?.displayName || post.author.username} size="md" /></Link>
@@ -68,6 +68,7 @@ export default async function PostDetailPage({ params }: Props) {
 
         <div className="flex flex-wrap items-center gap-2 mt-4">
           {post.targetLanguage && <Badge variant="primary" size="sm">{post.targetLanguage.nativeName}</Badge>}
+          {post.completeness && dict.completeness[post.completeness as keyof typeof dict.completeness] && <Badge variant={post.completeness === "PARTIAL" ? "warning" : post.completeness === "IDEA_ONLY" ? "error" : "default"} size="sm">{dict.completeness[post.completeness as keyof typeof dict.completeness]}</Badge>}
           {post.expressionType && dict.typeLabels[post.expressionType] && <Badge variant="default" size="sm">{dict.typeLabels[post.expressionType]}</Badge>}
           {post.tone && dict.toneLabels[post.tone] && <Badge variant="default" size="sm">{dict.toneLabels[post.tone]}</Badge>}
           <Badge variant="default" size="sm">{dict.visibilityLabels[post.visibility] || post.visibility}</Badge>

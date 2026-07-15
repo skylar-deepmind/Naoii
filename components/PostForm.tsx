@@ -13,10 +13,16 @@ import { Alert } from "@/components/ui/Alert";
 import type { Dictionary } from "@/locales";
 
 interface Language { id: string; name: string; nativeName: string; }
-interface Props { languages: Language[]; dict: Dictionary; }
+interface Props { languages: Language[]; dict: Dictionary; intent?: string | null; }
 
-export function PostForm({ languages, dict }: Props) {
+export function PostForm({ languages, dict, intent }: Props) {
   const [serverErrors, setServerErrors] = useState<Record<string, string[]>>({});
+
+  const completenessOptions = useMemo(() => [
+    { value: "COMPLETE", label: `${dict.completeness.complete} — ${dict.completeness.completeDesc}` },
+    { value: "PARTIAL", label: `${dict.completeness.partial} — ${dict.completeness.partialDesc}` },
+    { value: "IDEA_ONLY", label: `${dict.completeness.ideaOnly} — ${dict.completeness.ideaOnlyDesc}` },
+  ], [dict]);
 
   const expressionTypes = useMemo(() => [
     { value: "diary", label: dict.typeLabels.diary }, { value: "thought", label: dict.typeLabels.thought },
@@ -35,6 +41,8 @@ export function PostForm({ languages, dict }: Props) {
     { value: "PRIVATE", label: dict.post.visibilityPrivate },
   ], [dict]);
 
+  const defaultCompleteness = intent === "ask" ? "PARTIAL" : "COMPLETE";
+
   const schema = useMemo(() => z.object({
     title: z.string().max(200).optional(),
     content: z.string().min(1, dict.auth.passwordMin).max(5000),
@@ -43,13 +51,14 @@ export function PostForm({ languages, dict }: Props) {
     expressionType: z.string().min(1, dict.post.selectType),
     tone: z.string().min(1, dict.post.selectTone),
     visibility: z.enum(["PUBLIC", "UNLISTED", "PRIVATE"]),
+    completeness: z.enum(["COMPLETE", "PARTIAL", "IDEA_ONLY"]),
   }), [dict]);
 
   type FV = z.infer<typeof schema>;
 
   const { control, handleSubmit, formState: { isSubmitting }, setError } = useForm<FV>({
     resolver: zodResolver(schema),
-    defaultValues: { title: "", content: "", sourceLanguage: "", targetLanguage: "", expressionType: "", tone: "", visibility: "PUBLIC" },
+    defaultValues: { title: "", content: "", sourceLanguage: "", targetLanguage: "", expressionType: intent === "ask" ? "daily_expression" : "", tone: "", visibility: "PUBLIC", completeness: defaultCompleteness },
   });
 
   const langOptions = languages.map(l => ({ value: l.id, label: `${l.nativeName} (${l.name})` }));
@@ -61,18 +70,22 @@ export function PostForm({ languages, dict }: Props) {
     fd.append("content", data.content); fd.append("sourceLanguage", data.sourceLanguage);
     fd.append("targetLanguage", data.targetLanguage); fd.append("expressionType", data.expressionType);
     fd.append("tone", data.tone); fd.append("visibility", data.visibility);
+    fd.append("completeness", data.completeness);
     const result = await createPostAction({}, fd);
     if (result?.errors) {
       setServerErrors(result.errors);
-      for (const [f, ms] of Object.entries(result.errors)) {
-        if (f !== "_form" && ms?.length) setError(f as keyof FV, { type: "server", message: ms[0] });
-      }
+      for (const [f, ms] of Object.entries(result.errors)) { if (f !== "_form" && ms?.length) setError(f as keyof FV, { type: "server", message: ms[0] }); }
     }
   };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
       {serverErrors?._form && <Alert variant="error">{serverErrors._form[0]}</Alert>}
+
+      <Controller name="completeness" control={control} render={({ field, fieldState }) => (
+        <Select label={dict.completeness.label} options={completenessOptions} error={fieldState.error?.message} {...field} />
+      )} />
+
       <Controller name="title" control={control} render={({ field, fieldState }) => (
         <Input label={dict.post.title} placeholder={dict.post.titlePlaceholder} error={fieldState.error?.message} {...field} />
       )} />

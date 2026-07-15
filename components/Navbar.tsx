@@ -25,7 +25,7 @@ export async function Navbar({ user }: NavbarProps) {
 
   const authenticatedLinks = [
     { label: dict.nav.home, href: "/app" },
-    { label: dict.nav.community, href: "/app" },
+    { label: dict.nav.community, href: "/feed" },
     { label: dict.nav.library, href: "/library" },
   ];
 

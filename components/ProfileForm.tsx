@@ -5,6 +5,7 @@ import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { updateProfileAction } from "@/server/actions/profile";
+import { useToast } from "@/lib/toast";
 import { Input } from "@/components/ui/Input";
 import { Textarea } from "@/components/ui/Textarea";
 import { Select } from "@/components/ui/Select";
@@ -19,6 +20,7 @@ interface Props { user: SessionUser; profile: { displayName: string | null; bio:
 export function ProfileForm({ user, profile, languages, dict }: Props) {
   const [serverErrors, setServerErrors] = useState<Record<string, string[]>>({});
   const [success, setSuccess] = useState(false);
+  const { addToast } = useToast();
 
   const levelOptions = useMemo(() => [
     { value: "BEGINNER", label: dict.level.BEGINNER }, { value: "ELEMENTARY", label: dict.level.ELEMENTARY },
@@ -52,7 +54,7 @@ export function ProfileForm({ user, profile, languages, dict }: Props) {
     if (result?.errors) {
       setServerErrors(result.errors);
       for (const [f, ms] of Object.entries(result.errors)) { if (f !== "_form" && ms?.length) setError(f as keyof FV, { type: "server", message: ms[0] }); }
-    } else if (result?.success) setSuccess(true);
+    } else if (result?.success) { setSuccess(true); addToast(dict.settings.saved); }
   };
 
   return (

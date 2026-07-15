@@ -24,6 +24,8 @@ interface PostCardProps {
   } | null;
   correctionCount: number;
   hasAdoptedCorrection: boolean;
+  completeness?: string | null;
+  completenessLabels?: Record<string, string>;
   // Translation labels
   typeLabels?: Record<string, string>;
   correctionLabel?: string;
@@ -40,6 +42,8 @@ export function PostCard({
   targetLanguage,
   correctionCount,
   hasAdoptedCorrection,
+  completeness,
+  completenessLabels = {},
   typeLabels = {},
   correctionLabel = "修改",
   adoptedLabel = "已采纳",
@@ -59,6 +63,7 @@ export function PostCard({
               <span className="text-xs text-base-content/30">·</span>
               <span className="text-xs text-base-content/50">{timeAgo}</span>
               {targetLanguage && <><span className="text-xs text-base-content/30">·</span><Badge variant="default" size="sm">{targetLanguage.nativeName}</Badge></>}
+              {completeness && completenessLabels[completeness] && <Badge variant={completeness === "PARTIAL" ? "warning" : completeness === "IDEA_ONLY" ? "error" : "default"} size="sm">{completenessLabels[completeness]}</Badge>}
               {expressionType && typeLabels[expressionType] && <Badge variant="default" size="sm">{typeLabels[expressionType]}</Badge>}
               {correctionCount > 0 && <Badge variant="primary" size="sm">{correctionCount} {correctionLabel}</Badge>}
               {hasAdoptedCorrection && <Badge variant="success" size="sm">{adoptedLabel}</Badge>}

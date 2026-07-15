@@ -24,7 +24,7 @@ export async function createPostAction(
     return { errors: parsed.error.flatten().fieldErrors as ActionErrors };
   }
 
-  const { title, content, sourceLanguage, targetLanguage, expressionType, tone, visibility } =
+  const { title, content, sourceLanguage, targetLanguage, expressionType, tone, visibility, completeness } =
     parsed.data;
 
   const post = await prisma.post.create({
@@ -37,10 +37,11 @@ export async function createPostAction(
       expressionType,
       tone,
       visibility,
+      completeness,
       status: "PUBLISHED",
     },
   });
 
-  revalidatePath("/app");
+  revalidatePath("/feed");
   redirect(`/posts/${post.id}`);
 }

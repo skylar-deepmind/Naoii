@@ -49,6 +49,7 @@ export const createPostSchema = z.object({
   expressionType: z.string().min(1, "请选择表达类型"),
   tone: z.string().min(1, "请选择语气"),
   visibility: z.enum(["PUBLIC", "UNLISTED", "PRIVATE"]),
+  completeness: z.enum(["COMPLETE", "PARTIAL", "IDEA_ONLY"]),
 });
 
 // ─── Types ──────────────────────────────────────────

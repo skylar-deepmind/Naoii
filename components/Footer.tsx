@@ -17,7 +17,7 @@ export async function Footer() {
     {
       title: dict.footer.community,
       links: [
-        { label: dict.footer.feed, href: "/app" },
+        { label: dict.footer.feed, href: "/feed" },
         { label: dict.nav.postNew, href: "/posts/new" },
         { label: dict.footer.library, href: "/library" },
       ],

@@ -1,83 +1,68 @@
 import Link from "next/link";
 import { AppShell } from "@/components/ui/AppShell";
-import { PageHeader } from "@/components/ui/PageHeader";
 import { Button } from "@/components/ui/Button";
-import { EmptyState } from "@/components/ui/EmptyState";
-import { Alert } from "@/components/ui/Alert";
-import { PostCard } from "@/components/PostCard";
-import { FeedTabs } from "@/components/FeedTabs";
+import { Card } from "@/components/ui/Card";
+import { WelcomeToast } from "@/components/WelcomeToast";
 import { getCurrentUser } from "@/lib/auth";
-import { getFeedPosts } from "@/server/queries/post";
 import { getDict } from "@/lib/i18n";
 
-type TabKey = "latest" | "awaiting" | "has_corrections" | "adopted";
-
-function isValidTab(tab: string): tab is TabKey {
-  return ["latest", "awaiting", "has_corrections", "adopted"].includes(tab);
-}
-
-interface Props {
-  searchParams: Promise<{ tab?: string; cursor?: string }>;
-}
-
-export default async function AppDashboardPage({ searchParams }: Props) {
+export default async function AppDashboardPage() {
   const user = await getCurrentUser();
   const dict = await getDict();
-  const { tab = "latest", cursor } = await searchParams;
-  const currentTab = isValidTab(tab) ? tab : "latest";
-
-  const { posts, nextCursor } = await getFeedPosts({ tab: currentTab, cursor });
 
   return (
     <AppShell>
-      {user && (
-        <Alert variant="success" className="mt-4">
-          {dict.feed.welcome}，{user.displayName || user.username}！
-        </Alert>
-      )}
+      {/* {user && (
+        <WelcomeToast message={`${dict.feed.welcome}，${user.displayName || user.username}！`} />
+      )} */}
 
-      <PageHeader
-        title={dict.feed.title}
-        description={dict.feed.desc}
-        action={
-          <Link href="/posts/new">
-            <Button variant="primary" size="sm">{dict.nav.postNew}</Button>
+      <section className="py-12 sm:py-20 flex flex-col items-center justify-center min-h-[60vh]">
+        <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-center mb-8">
+          {dict.entry.title}
+        </h1>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full max-w-2xl">
+          {/* Correct others → /feed */}
+          <Link href="/feed">
+            <Card hover padding="lg" className="h-full">
+              <div className="flex flex-col items-center text-center gap-3">
+                <div className="w-12 h-12 rounded-full bg-primary/10 text-primary flex items-center justify-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+                <h2 className="text-lg font-bold">{dict.entry.correctOthers}</h2>
+                <p className="text-sm text-base-content/60 leading-relaxed">
+                  {dict.entry.correctOthersDesc}
+                </p>
+                <Button variant="primary" size="sm" className="mt-1">
+                  {dict.entry.correctOthersAction}
+                </Button>
+              </div>
+            </Card>
           </Link>
-        }
-      />
 
-      <FeedTabs dict={dict} />
-
-      {posts.length === 0 ? (
-        <EmptyState
-          icon={<svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>}
-          title={dict.feed.empty}
-          description=""
-          action={{ label: dict.feed.emptyAction, href: "/posts/new" }}
-        />
-      ) : (
-        <>
-          <div className="space-y-3">
-            {posts.map((post) => (
-              <PostCard
-                key={post.id}
-                {...post}
-                typeLabels={dict.typeLabels}
-                correctionLabel={dict.correction.acceptedBadge === "已采纳" ? "修改" : "corrections"}
-                adoptedLabel={dict.post.accepted}
-              />
-            ))}
-          </div>
-
-          {nextCursor && (
-            <div className="mt-8 text-center">
-              <Link href={`/app?tab=${currentTab}&cursor=${nextCursor}`}>
-                <Button variant="outline" size="md">{dict.feed.loadMore}</Button>
-              </Link>
-            </div>
-          )}
-        </>
-      )}
+          {/* Ask question → /posts/new?intent=ask */}
+          <Link href="/posts/new?intent=ask">
+            <Card hover padding="lg" className="h-full">
+              <div className="flex flex-col items-center text-center gap-3">
+                <div className="w-12 h-12 rounded-full bg-secondary/10 text-secondary flex items-center justify-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+                <h2 className="text-lg font-bold">{dict.entry.askQuestion}</h2>
+                <p className="text-sm text-base-content/60 leading-relaxed">
+                  {dict.entry.askQuestionDesc}
+                </p>
+                <Button variant="secondary" size="sm" className="mt-1">
+                  {dict.entry.askQuestionAction}
+                </Button>
+              </div>
+            </Card>
+          </Link>
+        </div>
+      </section>
     </AppShell>
   );
 }

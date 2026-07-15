@@ -5,6 +5,7 @@ import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { createCorrectionAction } from "@/server/actions/correction";
+import { useToast } from "@/lib/toast";
 import { Textarea } from "@/components/ui/Textarea";
 import { Select } from "@/components/ui/Select";
 import { Button } from "@/components/ui/Button";
@@ -16,6 +17,7 @@ interface Props { postId: string; originalContent: string; dict: Dictionary; }
 export function CorrectionForm({ postId, originalContent, dict }: Props) {
   const [serverErrors, setServerErrors] = useState<Record<string, string[]>>({});
   const [success, setSuccess] = useState(false);
+  const { addToast } = useToast();
 
   const toneOptions = useMemo(() => [
     { value: "", label: dict.correction.notSpecified },
@@ -46,7 +48,7 @@ export function CorrectionForm({ postId, originalContent, dict }: Props) {
     if (result?.errors) {
       setServerErrors(result.errors);
       for (const [f, ms] of Object.entries(result.errors)) { if (f !== "_form" && ms?.length) setError(f as keyof FV, { type: "server", message: ms[0] }); }
-    } else if (result?.success) { setSuccess(true); reset(); }
+    } else if (result?.success) { setSuccess(true); reset(); addToast(dict.correction.successMessage); }
   };
 
   if (success) return <Alert variant="success" className="mt-4">{dict.correction.successMessage}</Alert>;

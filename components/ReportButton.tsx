@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/Button";
 import { Select } from "@/components/ui/Select";
 import { Alert } from "@/components/ui/Alert";
 import { createReportAction } from "@/server/actions/reports";
+import { useToast } from "@/lib/toast";
 import type { Dictionary } from "@/locales";
 
 interface Props { postId?: string; correctionId?: string; dict: Dictionary; }
@@ -15,6 +16,7 @@ export function ReportButton({ postId, correctionId, dict }: Props) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [done, setDone] = useState(false);
+  const { addToast } = useToast();
 
   if (done) return <span className="text-xs text-success">{dict.report.submitted}</span>;
 
@@ -31,7 +33,7 @@ export function ReportButton({ postId, correctionId, dict }: Props) {
     fd.append("reason", reason);
     const result = await createReportAction({}, fd);
     if (result?.errors?._form) setError(result.errors._form[0]);
-    else if (result?.success) { setDone(true); setOpen(false); }
+    else if (result?.success) { setDone(true); setOpen(false); addToast(dict.report.submitted); }
     setLoading(false);
   };
 

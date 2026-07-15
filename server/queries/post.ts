@@ -9,6 +9,7 @@ const postCardSelect = {
   title: true,
   content: true,
   expressionType: true,
+  completeness: true,
   visibility: true,
   status: true,
   createdAt: true,
@@ -35,10 +36,12 @@ type FeedTab = "latest" | "awaiting" | "has_corrections" | "adopted";
 
 export async function getFeedPosts({
   tab = "latest",
+  completeness,
   cursor,
   limit = POST_LIST_PAGE_SIZE,
 }: {
   tab?: FeedTab;
+  completeness?: string;
   cursor?: string;
   limit?: number;
 }) {
@@ -46,6 +49,10 @@ export async function getFeedPosts({
     status: { in: ["PUBLISHED", "ACCEPTED"] },
     visibility: "PUBLIC",
   };
+
+  if (completeness === "COMPLETE" || completeness === "PARTIAL" || completeness === "IDEA_ONLY") {
+    where.completeness = completeness;
+  }
 
   switch (tab) {
     case "awaiting":
@@ -100,6 +107,7 @@ const postDetailSelect = {
   title: true,
   content: true,
   expressionType: true,
+  completeness: true,
   tone: true,
   visibility: true,
   status: true,
@@ -164,6 +172,7 @@ function formatPostCard(post: PostCardData) {
         ? post.content.slice(0, 200) + "..."
         : post.content,
     expressionType: post.expressionType,
+    completeness: post.completeness,
     visibility: post.visibility,
     status: post.status,
     createdAt: post.createdAt.toISOString(),

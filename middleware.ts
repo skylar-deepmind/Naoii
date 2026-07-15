@@ -5,7 +5,7 @@ import { jwtVerify } from "jose";
 const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET!);
 const COOKIE_NAME = "naoii_session";
 
-const protectedPaths = ["/app", "/settings", "/posts/new", "/library", "/notifications", "/admin"];
+const protectedPaths = ["/app", "/feed", "/settings", "/posts/new", "/library", "/notifications", "/admin"];
 const authPaths = ["/login", "/register"];
 
 async function isAuthenticated(request: NextRequest): Promise<boolean> {
@@ -42,6 +42,8 @@ export async function middleware(request: NextRequest) {
 export const config = {
   matcher: [
     "/app/:path*",
+    "/feed",
+    "/feed/:path*",
     "/settings/:path*",
     "/posts/new",
     "/library",

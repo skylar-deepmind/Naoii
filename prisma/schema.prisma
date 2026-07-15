@@ -45,6 +45,12 @@ enum PostVisibility {
   PRIVATE
 }
 
+enum PostCompleteness {
+  COMPLETE
+  PARTIAL
+  IDEA_ONLY
+}
+
 enum CorrectionStatus {
   DRAFT
   PUBLISHED
@@ -141,8 +147,9 @@ model Post {
   content          String
   expressionType   String?
   tone             String?
-  visibility       PostVisibility @default(PUBLIC)
-  status           PostStatus     @default(PUBLISHED)
+  visibility       PostVisibility   @default(PUBLIC)
+  completeness     PostCompleteness @default(COMPLETE)
+  status           PostStatus       @default(PUBLISHED)
   createdAt        DateTime       @default(now())
   updatedAt        DateTime       @updatedAt
 
