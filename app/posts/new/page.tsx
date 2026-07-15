@@ -3,6 +3,7 @@ import { PageHeader } from "@/components/ui/PageHeader";
 import { Card } from "@/components/ui/Card";
 import { PostWizard } from "@/components/PostWizard";
 import { getLanguages } from "@/server/queries/user";
+import { getCurrentUser } from "@/lib/auth";
 import { getLocale, getDict } from "@/lib/i18n";
 
 interface Props {
@@ -13,6 +14,7 @@ export default async function NewPostPage({ searchParams }: Props) {
   const languages = await getLanguages();
   const dict = await getDict();
   const locale = await getLocale();
+  const user = await getCurrentUser();
   const { intent } = await searchParams;
 
   return (
@@ -22,7 +24,7 @@ export default async function NewPostPage({ searchParams }: Props) {
         description={intent === "ask" ? dict.entry.askQuestionDesc : dict.post.newDesc}
       />
       <div className="max-w-2xl pb-8">
-        <PostWizard languages={languages} dict={dict} locale={locale} intent={intent || null} />
+        <PostWizard languages={languages} dict={dict} locale={locale} intent={intent || null} userId={user?.id} />
       </div>
     </AppShell>
   );

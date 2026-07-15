@@ -12,6 +12,7 @@ import { Select } from "@/components/ui/Select";
 import { TemplateSelector } from "@/components/TemplateSelector";
 import { createPostAction } from "@/server/actions/post";
 import { useToast } from "@/lib/toast";
+import { RelatedReminder } from "@/components/RelatedReminder";
 import type { Dictionary, Locale } from "@/locales";
 
 // ── Types ───────────────────────────────────────
@@ -68,11 +69,12 @@ interface Props {
   dict: Dictionary;
   locale: Locale;
   intent: string | null;
+  userId?: string;
 }
 
 // ── Main Component ──────────────────────────────
 
-export function PostWizard({ languages, dict, locale, intent }: Props) {
+export function PostWizard({ languages, dict, locale, intent, userId }: Props) {
   const router = useRouter();
   const { addToast } = useToast();
   const initialised = useRef(false);
@@ -241,6 +243,19 @@ export function PostWizard({ languages, dict, locale, intent }: Props) {
               <Select label={dict.post.targetLanguage} options={langOptions} placeholder={dict.post.selectTarget} value={form.targetLanguage} onChange={(e) => update({ targetLanguage: e.target.value })} error={errors.targetLanguage} />
             </div>
             <Select label={dict.post.tone} options={toneOptions} placeholder={dict.post.selectTone} value={form.tone} onChange={(e) => update({ tone: e.target.value })} error={errors.tone} />
+
+            {userId && (form.expressionType || form.tone || form.targetLanguage) && (
+              <RelatedReminder
+                userId={userId}
+                expressionType={form.expressionType}
+                tone={form.tone}
+                targetLanguageId={form.targetLanguage}
+                dict={dict}
+                currentContent={form.content}
+                onInsert={(text) => update({ content: text })}
+              />
+            )}
+
             <div className="flex justify-end"><Button variant="primary" onClick={goNext}>下一步 →</Button></div>
           </div>
         </Card>
