@@ -12,6 +12,8 @@ import {
   getAllCorrections,
   getAdminLogs,
 } from "@/server/queries/admin";
+import { getAnalytics } from "@/server/queries/analytics";
+import Link from "next/link";
 import {
   resolveReportAction,
   dismissReportAction,
@@ -27,12 +29,13 @@ export default async function AdminPage() {
   const user = await getCurrentUser();
   if (!user || user.role !== "ADMIN") notFound();
 
-  const [reports, users, posts, corrections, logs] = await Promise.all([
+  const [reports, users, posts, corrections, logs, metrics] = await Promise.all([
     getPendingReports(),
     getAllUsers(),
     getAllPosts(),
     getAllCorrections(),
     getAdminLogs(),
+    getAnalytics("7d"),
   ]);
 
   const AdminBtn = ({
@@ -59,6 +62,28 @@ export default async function AdminPage() {
   return (
     <AppShell>
       <PageHeader title="管理员后台" description="举报 / 用户 / 帖子 / 修改建议 管理" />
+
+      {/* Summary stats */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-8">
+        {[
+          { label: "新增用户(7d)", value: metrics.newUsers },
+          { label: "活跃用户(7d)", value: metrics.activeUsers },
+          { label: "新增表达(7d)", value: metrics.newPosts },
+          { label: "新增修改(7d)", value: metrics.newCorrections },
+        ].map((m) => (
+          <Card key={m.label} padding="sm">
+            <div className="text-center">
+              <p className="text-xl font-bold text-primary">{m.value}</p>
+              <p className="text-xs text-base-content/50 mt-0.5">{m.label}</p>
+            </div>
+          </Card>
+        ))}
+      </div>
+      <div className="text-right mb-6">
+        <Link href="/admin/analytics" className="btn btn-sm btn-outline">
+          查看更多数据 →
+        </Link>
+      </div>
 
       <div className="space-y-10 pb-8">
         {/* Reports */}

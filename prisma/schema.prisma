@@ -175,6 +175,7 @@ model Correction {
   toneNote      String?
   status        CorrectionStatus @default(PUBLISHED)
   isAccepted    Boolean          @default(false)
+  acceptedAt    DateTime?
   createdAt     DateTime         @default(now())
   updatedAt     DateTime         @updatedAt
 
@@ -187,6 +188,8 @@ model Correction {
   @@index([postId])
   @@index([authorId])
   @@index([isAccepted])
+  @@index([acceptedAt])
+  @@index([createdAt])
 }
 
 model CorrectionSegment {

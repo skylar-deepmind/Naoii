@@ -10,6 +10,9 @@ export const metadata: Metadata = {
   },
   description:
     "面向语言学习者的自然表达训练社区。发布你的表达，获得母语者的修改建议，在交流中提升语言能力。",
+  icons: {
+    icon: "/naoii-favicon.svg",
+  },
 };
 
 export default async function RootLayout({

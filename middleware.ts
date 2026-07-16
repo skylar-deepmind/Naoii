@@ -49,6 +49,7 @@ export const config = {
     "/library",
     "/notifications",
     "/admin",
+    "/admin/:path*",
     "/login",
     "/register",
   ],

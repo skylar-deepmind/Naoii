@@ -55,8 +55,8 @@ export async function Navbar({ user }: NavbarProps) {
           </ul>
         </div>
 
-        <Link href={isAuthenticated ? "/app" : "/"} className="btn btn-ghost text-xl font-bold tracking-tight px-2">
-          {dict.common.siteName}
+        <Link href={isAuthenticated ? "/app" : "/"} className="btn btn-ghost px-2 h-auto">
+          <img src="/naoii-header-logo.svg" alt={dict.common.siteName} className="h-8 w-auto" />
         </Link>
       </div>
 
