@@ -1,0 +1,16 @@
+node_modules
+.git
+.gitignore
+.next
+.env
+.env.*
+!.env.example
+*.md
+README.md
+.prompt
+.claude
+.DS_Store
+*.log
+npm-debug.log*
+coverage
+.cache

@@ -1,0 +1,72 @@
+services:
+  # ── Caddy (HTTPS + Reverse Proxy) ──────────
+  caddy:
+    image: caddy:2-alpine
+    container_name: naoii-caddy
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    networks:
+      - naoii-net
+    depends_on:
+      - app
+
+  # ── Next.js App ─────────────────────────────
+  app:
+    build: .
+    container_name: naoii-app
+    restart: unless-stopped
+    env_file:
+      - .env.production
+    environment:
+      - NODE_ENV=production
+    networks:
+      - naoii-net
+    depends_on:
+      db:
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          memory: 1.5G
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  # ── PostgreSQL ──────────────────────────────
+  db:
+    image: postgres:16-alpine
+    container_name: naoii-db
+    restart: unless-stopped
+    env_file:
+      - .env.production
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./backups:/backups
+    networks:
+      - naoii-net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+
+volumes:
+  pgdata:
+  caddy_data:
+  caddy_config:
+
+networks:
+  naoii-net:
+    driver: bridge

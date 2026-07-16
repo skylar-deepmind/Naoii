@@ -1,0 +1,29 @@
+naoii.site {
+    # Reverse proxy to Next.js app (internal, not exposed to internet)
+    reverse_proxy app:3000
+
+    # Cloudflare Full (strict) — trust Cloudflare's forwarded headers
+    @cloudflare {
+        header X-Forwarded-For *
+    }
+
+    # Trust Cloudflare IPs for real client IP
+    header X-Real-IP {http.request.header.CF-Connecting-IP}
+
+    # Security headers
+    header Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+    header X-Content-Type-Options "nosniff"
+    header X-Frame-Options "DENY"
+    header Referrer-Policy "strict-origin-when-cross-origin"
+
+    # Gzip
+    encode gzip
+
+    # Logs
+    log {
+        output file /var/log/caddy/naoii.log {
+            roll_size 10mb
+            roll_keep 5
+        }
+    }
+}
