@@ -137,7 +137,7 @@ export function PostWizard({ languages, dict, locale, intent, userId }: Props) {
       if (!form.sourceLanguage) e.sourceLanguage = dict.auth.selectNative;
       if (!form.targetLanguage) e.targetLanguage = dict.auth.selectLearning;
       if (form.sourceLanguage && form.sourceLanguage === form.targetLanguage) {
-        e.targetLanguage = "源语言和目标语言不能相同";
+        e.targetLanguage = dict.auth.sameLanguageError || "源语言和目标语言不能相同";
       }
       if (!form.tone) e.tone = dict.post.selectTone;
     }
@@ -314,14 +314,14 @@ export function PostWizard({ languages, dict, locale, intent, userId }: Props) {
             {/* Action buttons */}
             <div className="flex flex-col gap-2">
               <Button variant="primary" className="w-full" loading={submitting} onClick={handleSubmit}>
-                {form.visibility === "PUBLIC" ? dict.post.submit : form.visibility === "UNLISTED" ? "发布（仅链接可见）" : "发布（仅自己可见）"}
+                {form.visibility === "PUBLIC" ? dict.post.submitPublic || dict.post.submit : form.visibility === "UNLISTED" ? dict.post.submitUnlisted || "发布（仅链接可见）" : dict.post.submitPrivate || "发布（仅自己可见）"}
               </Button>
               <div className="flex justify-between">
                 <Button variant="ghost" size="sm" onClick={goBack}>← 上一步</Button>
                 <Button variant="ghost" size="sm" onClick={handleClear}>清空草稿</Button>
               </div>
               <p className="text-xs text-base-content/40 text-center">
-                {form.visibility === "PUBLIC" ? "发布后所有人可见" : form.visibility === "UNLISTED" ? "仅通过链接访问" : "仅自己可见"}
+                {form.visibility === "PUBLIC" ? dict.post.hintPublic || "发布后所有人可见" : form.visibility === "UNLISTED" ? dict.post.hintUnlisted || "仅通过链接访问" : dict.post.hintPrivate || "仅自己可见"}
               </p>
             </div>
           </div>

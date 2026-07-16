@@ -3,6 +3,7 @@ import { AppShell } from "@/components/ui/AppShell";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
+import { DemoSection } from "@/components/DemoSection";
 import { getDict } from "@/lib/i18n";
 
 export default async function HomePage() {
@@ -59,20 +60,22 @@ export default async function HomePage() {
           <div className="text-center mb-12"><h2 className="text-3xl sm:text-4xl font-bold tracking-tight">{dict.home.stepsTitle}</h2></div>
           <div className="max-w-2xl mx-auto">
             <ul className="steps steps-vertical w-full">
-              {[
-                { title: dict.home.step1Title, desc: dict.home.step1Desc },
-                { title: dict.home.step2Title, desc: dict.home.step2Desc },
-                { title: dict.home.step3Title, desc: dict.home.step3Desc },
-                { title: dict.home.step4Title, desc: dict.home.step4Desc },
-              ].map((s, i) => (
-                <li key={i} className="step step-primary py-3">
-                  <div className="ml-2">
-                    <p className="font-semibold">{s.title}</p>
-                    <p className="text-sm text-base-content/60 mt-0.5">{s.desc}</p>
-                  </div>
-                </li>
-              ))}
-            </ul>
+  {[
+    { title: dict.home.step1Title, desc: dict.home.step1Desc },
+    { title: dict.home.step2Title, desc: dict.home.step2Desc },
+    { title: dict.home.step3Title, desc: dict.home.step3Desc },
+    { title: dict.home.step4Title, desc: dict.home.step4Desc },
+  ].map((s, i) => (
+    <li key={i} className="step step-primary py-3">
+      <div className="w-full min-w-0 text-left">
+        <p className="font-semibold leading-6">{s.title}</p>
+        <p className="mt-0.5 text-sm leading-5 text-base-content/60">
+          {s.desc}
+        </p>
+      </div>
+    </li>
+  ))}
+</ul>
           </div>
         </AppShell>
       </section>
@@ -80,19 +83,11 @@ export default async function HomePage() {
       {/* Correction Demo */}
       <section id="demo" className="py-16 sm:py-24 bg-base-200">
         <AppShell>
-          <div className="text-center mb-12"><h2 className="text-3xl sm:text-4xl font-bold tracking-tight">{dict.home.demoTitle}</h2><p className="mt-3 text-base-content/60 max-w-xl mx-auto">{dict.home.demoDesc}</p></div>
-          <div className="max-w-2xl mx-auto space-y-4">
-            <Card>
-              <div className="flex items-center gap-2 mb-2"><Badge variant="error" size="sm">{dict.home.demoOriginal}</Badge><span className="text-xs text-base-content/50">{dict.home.demoOriginalLabel}</span></div>
-              <p className="text-base leading-relaxed">{dict.home.demoOriginalText}</p>
-            </Card>
-            <div className="flex justify-center"><svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-base-content/30" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" /></svg></div>
-            <Card>
-              <div className="flex items-center gap-2 mb-2"><Badge variant="success" size="sm">{dict.home.demoCorrected}</Badge><span className="text-xs text-base-content/50">{dict.home.demoCorrectedLabel}</span></div>
-              <p className="text-base leading-relaxed text-success font-medium">{dict.home.demoCorrectedText}</p>
-              <div className="mt-3 bg-base-200 rounded-box p-3"><p className="text-xs text-base-content/50 mb-1">{dict.home.demoReason}</p><p className="text-sm text-base-content/70">{dict.home.demoReasonText}</p></div>
-            </Card>
+          <div className="text-center mb-12">
+            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">{dict.home.demoTitle}</h2>
+            <p className="mt-3 text-base-content/60 max-w-xl mx-auto">{dict.home.demoDesc}</p>
           </div>
+          <DemoSection dict={dict} />
         </AppShell>
       </section>
 
