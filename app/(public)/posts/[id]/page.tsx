@@ -33,7 +33,7 @@ export default async function PostDetailPage({ params }: Props) {
   if (!post) notFound();
 
   const isAuthor = currentUser?.id === post.author.id;
-  if (post.visibility !== "PUBLIC" && !isAuthor) notFound();
+  if (post.visibility === "PRIVATE" && !isAuthor) notFound();
 
   let savedCorrectionIds = new Set<string>();
   if (currentUser) {
