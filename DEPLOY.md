@@ -46,12 +46,17 @@ cd ~/naoii
 DB_PASSWORD=$(openssl rand -base64 32)
 JWT_SECRET=$(openssl rand -base64 32)
 
+ADMIN_EMAIL=admin@naoii.site
+ADMIN_PASSWORD=$(openssl rand -base64 16)
+
 cat > .env.production << EOF
 POSTGRES_USER=naoii
 POSTGRES_PASSWORD=${DB_PASSWORD}
 POSTGRES_DB=naoii
 DATABASE_URL=postgresql://naoii:${DB_PASSWORD}@db:5432/naoii
 JWT_SECRET=${JWT_SECRET}
+ADMIN_EMAIL=${ADMIN_EMAIL}
+ADMIN_PASSWORD=${ADMIN_PASSWORD}
 EOF
 
 chmod 600 .env.production
@@ -67,27 +72,27 @@ echo "你的PAT" | docker login ghcr.io -u skylar-deepmind --password-stdin
 ### 6. 拉取镜像并启动
 
 ```bash
-docker compose -f docker-compose.prod.yml pull
-docker compose -f docker-compose.prod.yml up -d
+docker compose -f docker-compose.prod.yml --env-file .env.production pull
+docker compose -f docker-compose.prod.yml --env-file .env.production up -d
 ```
 
 ### 7. 运行数据库迁移
 
 ```bash
-docker compose -f docker-compose.prod.yml exec app npx prisma migrate deploy
+docker compose -f docker-compose.prod.yml --env-file .env.production exec app npx prisma migrate deploy
 ```
 
 ### 8. 初始化种子数据（仅首次）
 
 ```bash
-docker compose -f docker-compose.prod.yml exec app npx tsx prisma/seed.ts
+docker compose -f docker-compose.prod.yml --env-file .env.production exec app npx tsx prisma/seed.ts
 ```
 
 ### 9. 验证
 
 ```bash
-docker compose -f docker-compose.prod.yml ps
-curl http://localhost:3000/api/health
+docker compose -f docker-compose.prod.yml --env-file .env.production ps
+docker compose -f docker-compose.prod.yml --env-file .env.production exec app node -e "fetch('http://localhost:3000/api/health').then(r=>r.json()).then(d=>console.log(d))"
 ```
 
 ---
@@ -191,4 +196,5 @@ docker system prune -a --filter "until=168h"
 - [ ] GitHub Actions 成功构建过至少一次
 - [ ] `docker login ghcr.io` 已执行
 - [ ] 备份 cron 已配置
-- [ ] `curl https://naoii.site/api/health` → `{"status":"ok"}`
+- [ ] `ssh` 到服务器，`docker compose -f docker-compose.prod.yml --env-file .env.production exec app node -e "fetch('http://localhost:3000/api/health').then(r=>r.json()).then(d=>console.log(d))"` → `{"status":"ok"}`
+- [ ] 浏览器访问 `https://naoii.site/api/health` → `{"status":"ok"}`

@@ -33,7 +33,7 @@ export default async function LibraryPage({ searchParams }: Props) {
   if (tag) filtered = filtered.filter((i) => ((i.tags as string[]) || []).includes(tag));
 
   // Collect all unique tags
-  const allTags = [...new Set(items.flatMap((i) => (i.tags as string[]) || []))];
+  const allTags: string[] = [...new Set(items.flatMap((i) => ((i.tags as unknown as string[]) || [])))] as string[];
 
   return (
     <AppShell>

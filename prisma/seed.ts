@@ -27,27 +27,42 @@ async function main() {
     console.log(`   ✓ ${lang.nativeName} (${lang.code})`);
   }
 
-  // ─── Demo admin user ──────────────────────────────
-  console.log("\n👤 Seeding demo admin user...");
-  const admin = await prisma.user.upsert({
-    where: { email: "admin@naoii.dev" },
-    update: {},
-    create: {
-      username: "admin",
-      email: "admin@naoii.dev",
-      passwordHash: "$2b$10$placeholder_hash_for_dev_only",
-      role: "ADMIN",
-      profile: {
+  // ─── Admin user ────────────────────────────────────
+  const adminEmail = process.env.ADMIN_EMAIL;
+  const adminPassword = process.env.ADMIN_PASSWORD;
+  const adminUsername = process.env.ADMIN_USERNAME || "admin";
+
+  if (adminEmail && adminPassword) {
+    const existing = await prisma.user.findUnique({ where: { email: adminEmail } });
+    if (existing) {
+      console.log(`\n👤 Admin user already exists: ${existing.email}`);
+    } else {
+      console.log(`\n👤 Creating admin user: ${adminEmail}...`);
+      const bcrypt = await import("bcryptjs");
+      const hash = await bcrypt.hash(adminPassword, 12);
+      await prisma.user.upsert({
+        where: { email: adminEmail },
+        update: {},
         create: {
-          displayName: "Naoii Admin",
-          bio: "平台管理员",
-          level: "MASTERY",
-          reputationScore: 1000,
+          username: adminUsername,
+          email: adminEmail,
+          passwordHash: hash,
+          role: "ADMIN",
+          profile: {
+            create: {
+              displayName: "Admin",
+              level: "MASTERY",
+              reputationScore: 0,
+            },
+          },
         },
-      },
-    },
-  });
-  console.log(`   ✓ admin (id: ${admin.id})`);
+      });
+      console.log(`   ✓ Admin created: ${adminEmail}`);
+    }
+  } else {
+    console.log("\n⚠ ADMIN_EMAIL / ADMIN_PASSWORD not set, skipping admin creation.");
+    console.log("  Set these env vars and re-run 'npx tsx prisma/seed.ts' to create an admin.");
+  }
 
   // ─── Summary ──────────────────────────────────────
   const langCount = await prisma.language.count();

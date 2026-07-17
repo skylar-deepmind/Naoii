@@ -41,12 +41,13 @@ export default async function PostDetailPage({ params }: Props) {
       where: { userId: currentUser.id, postId: post.id },
       select: { correctionId: true },
     });
-    savedCorrectionIds = new Set(saved.map(s => s.correctionId).filter(Boolean) as string[]);
+    savedCorrectionIds = new Set(saved.map((s: { correctionId: string | null }) => s.correctionId).filter(Boolean) as string[]);
   }
 
   const timeStr = new Date(post.createdAt).toLocaleString("zh-CN", { year: "numeric", month: "long", day: "numeric", hour: "2-digit", minute: "2-digit" });
-  const visibleCorrections = post.corrections.filter(c => isAuthor ? true : c.status === "PUBLISHED");
-  const postHasAccepted = post.corrections.some(c => c.isAccepted);
+  type CorrectionItem = typeof post.corrections[number];
+  const visibleCorrections = post.corrections.filter((c: CorrectionItem) => isAuthor ? true : c.status === "PUBLISHED");
+  const postHasAccepted = post.corrections.some((c: CorrectionItem) => c.isAccepted);
   const showCorrectionForm = currentUser && !isAuthor && post.status === "PUBLISHED";
 
   return (
@@ -86,7 +87,7 @@ export default async function PostDetailPage({ params }: Props) {
             <p className="text-sm text-base-content/50 py-8 text-center">{showCorrectionForm ? dict.post.noCorrections : dict.post.noCorrectionsYet}</p>
           ) : (
             <div className="space-y-4">
-              {visibleCorrections.map(correction => (
+              {visibleCorrections.map((correction: CorrectionItem) => (
                 <div key={correction.id}>
                   <CorrectionCard id={correction.id} correctedText={correction.correctedText} explanation={correction.explanation} toneNote={correction.toneNote} isAccepted={correction.isAccepted} createdAt={correction.createdAt} author={{ username: correction.author.username, displayName: correction.author.profile?.displayName ?? null, avatarUrl: correction.author.profile?.avatarUrl ?? null }} originalContent={post.content} dict={dict} />
                   <div className="flex items-center gap-3 mt-2 ml-2">

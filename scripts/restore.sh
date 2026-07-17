@@ -1,8 +1,11 @@
 #!/bin/bash
 set -euo pipefail
 
-# ── Naoii 数据库恢复脚本 ──────────────────────
-# 用法: ./scripts/restore.sh backups/naoii_20260716_030000.sql.gz
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+PROJECT_DIR="$(dirname "$SCRIPT_DIR")"
+cd "$PROJECT_DIR"
+
+COMPOSE="docker compose -f docker-compose.prod.yml --env-file .env.production"
 
 if [ $# -ne 1 ]; then
     echo "用法: $0 <备份文件路径>"
@@ -26,13 +29,12 @@ if [ "$confirm" != "yes" ]; then
 fi
 
 echo ">>> 停止应用..."
-docker compose -f docker-compose.prod.yml stop app
+$COMPOSE stop app
 
 echo ">>> 恢复数据库..."
-gunzip -c "$BACKUP_FILE" | docker compose -f docker-compose.prod.yml exec -T db \
-  psql -U naoii -d naoii
+gunzip -c "$BACKUP_FILE" | $COMPOSE exec -T db psql -U naoii -d naoii
 
 echo ">>> 启动应用..."
-docker compose -f docker-compose.prod.yml start app
+$COMPOSE start app
 
 echo ">>> 恢复完成!"
