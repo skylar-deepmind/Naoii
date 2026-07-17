@@ -51,7 +51,7 @@ const navItems = [
 
 export function MobileBottomNav() {
   return (
-    <nav className="btm-nav btm-nav-sm lg:hidden border-t border-base-200 bg-base-100 z-40">
+    <nav className="btm-nav btm-nav-sm md:hidden border-t border-base-200 bg-base-100 z-40">
       {navItems.map((item) => (
         <Link
           key={item.label}

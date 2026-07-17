@@ -7,7 +7,7 @@ export default async function FeedLayout({ children }: { children: React.ReactNo
   return (
     <>
       <Navbar user={user} />
-      <main className="flex-1 pb-16 lg:pb-0">{children}</main>
+      <main className="flex-1 pb-16 md:pb-0">{children}</main>
       <MobileBottomNav />
     </>
   );
