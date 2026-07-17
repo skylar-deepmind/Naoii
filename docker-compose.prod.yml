@@ -16,9 +16,9 @@ services:
     depends_on:
       - app
 
-  # ── Next.js App ─────────────────────────────
+  # ── Next.js App (从 GHCR 拉取预构建镜像) ───
   app:
-    build: .
+    image: ghcr.io/skylar-deepmind/naoii:latest
     container_name: naoii-app
     restart: unless-stopped
     env_file:
