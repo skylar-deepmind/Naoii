@@ -28,8 +28,9 @@ ENV NEXT_TELEMETRY_DISABLED=1
 RUN addgroup --system --gid 1001 nodejs && \
     adduser --system --uid 1001 nextjs
 
-# Copy production deps from deps stage
+# Copy production deps from deps stage, then overlay generated Prisma client from builder
 COPY --from=deps /app/node_modules ./node_modules
+COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
 COPY --from=deps /app/package.json ./
 
 # Copy built output from builder stage
