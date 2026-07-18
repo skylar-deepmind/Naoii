@@ -85,4 +85,6 @@ yarn-error.log*
 # schema.prisma is tracked (source of truth)
 
 # ─── Prompt Designs (archive old versions) ─────
-.prompt/version-*/
+# .prompt/version-*/
+.prompt/*
+DEPLOY.md

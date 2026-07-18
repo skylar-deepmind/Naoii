@@ -248,6 +248,7 @@ export const ja: typeof zh = {
     PRIVATE: "プライベート",
   },
   correction: {
+    label: "修正",
     submitTitle: "修正を提案する",
     correctedText: "修正後のテキスト",
     correctedPlaceholder: "あなたが提案する表現を入力してください...",

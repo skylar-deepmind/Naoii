@@ -265,6 +265,7 @@ export const zh = {
     PRIVATE: "私密",
   } as Record<string, string>,
   correction: {
+    label: "修改",
     submitTitle: "提交修改建议",
     correctedText: "修改后的文本",
     correctedPlaceholder: "输入你建议的表达方式...",

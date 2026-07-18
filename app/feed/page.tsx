@@ -48,7 +48,7 @@ export default async function FeedPage({ searchParams }: Props) {
         <>
           <div className="space-y-3">
             {posts.map((post) => (
-              <PostCard key={post.id} {...post} typeLabels={dict.typeLabels} completenessLabels={dict.completeness} adoptedLabel={dict.post.accepted} />
+              <PostCard key={post.id} {...post} typeLabels={dict.typeLabels} completenessLabels={dict.completeness} correctionLabel={dict.correction.label} adoptedLabel={dict.post.accepted} timeLabels={dict.time} />
             ))}
           </div>
           {nextCursor && (

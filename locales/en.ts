@@ -248,6 +248,7 @@ export const en: typeof zh = {
     PRIVATE: "Private",
   },
   correction: {
+    label: "corrections",
     submitTitle: "Submit Correction",
     correctedText: "Corrected Text",
     correctedPlaceholder: "Enter your suggested expression...",

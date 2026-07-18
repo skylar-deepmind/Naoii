@@ -10,12 +10,13 @@ interface Props {
   id: string; correctedText: string; explanation: string | null; toneNote: string | null;
   isAccepted: boolean; createdAt: Date | string;
   author: { username: string; displayName: string | null; avatarUrl: string | null; };
-  originalContent: string; dict: Dictionary;
+  originalContent: string; dict: Dictionary; locale?: string;
 }
 
-export function CorrectionCard({ correctedText, explanation, toneNote, isAccepted, createdAt, author, originalContent, dict }: Props) {
+export function CorrectionCard({ correctedText, explanation, toneNote, isAccepted, createdAt, author, originalContent, dict, locale }: Props) {
   const diff = computeDiff(originalContent, correctedText);
-  const timeStr = new Date(createdAt).toLocaleDateString("zh-CN");
+  const loc = locale === "ja" ? "ja-JP" : locale === "en" ? "en-US" : "zh-CN";
+  const timeStr = new Date(createdAt).toLocaleDateString(loc);
 
   return (
     <Card>

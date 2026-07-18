@@ -11,7 +11,7 @@ import { SaveToLibraryButton } from "@/components/SaveToLibraryButton";
 import { ReportButton } from "@/components/ReportButton";
 import { getPostById } from "@/server/queries/post";
 import { getCurrentUser } from "@/lib/auth";
-import { getDict } from "@/lib/i18n";
+import { getLocale, getDict } from "@/lib/i18n";
 import { prisma } from "@/lib/prisma";
 import type { Metadata } from "next";
 
@@ -29,6 +29,7 @@ export default async function PostDetailPage({ params }: Props) {
   const post = await getPostById(id);
   const currentUser = await getCurrentUser();
   const dict = await getDict();
+  const locale = await getLocale();
 
   if (!post) notFound();
 
@@ -44,7 +45,7 @@ export default async function PostDetailPage({ params }: Props) {
     savedCorrectionIds = new Set(saved.map((s: { correctionId: string | null }) => s.correctionId).filter(Boolean) as string[]);
   }
 
-  const timeStr = new Date(post.createdAt).toLocaleString("zh-CN", { year: "numeric", month: "long", day: "numeric", hour: "2-digit", minute: "2-digit" });
+  const timeStr = new Date(post.createdAt).toLocaleString(locale === "ja" ? "ja-JP" : locale === "en" ? "en-US" : "zh-CN", { year: "numeric", month: "long", day: "numeric", hour: "2-digit", minute: "2-digit" });
   type CorrectionItem = typeof post.corrections[number];
   const visibleCorrections = post.corrections.filter((c: CorrectionItem) => isAuthor ? true : c.status === "PUBLISHED");
   const postHasAccepted = post.corrections.some((c: CorrectionItem) => c.isAccepted);
@@ -89,7 +90,7 @@ export default async function PostDetailPage({ params }: Props) {
             <div className="space-y-4">
               {visibleCorrections.map((correction: CorrectionItem) => (
                 <div key={correction.id}>
-                  <CorrectionCard id={correction.id} correctedText={correction.correctedText} explanation={correction.explanation} toneNote={correction.toneNote} isAccepted={correction.isAccepted} createdAt={correction.createdAt} author={{ username: correction.author.username, displayName: correction.author.profile?.displayName ?? null, avatarUrl: correction.author.profile?.avatarUrl ?? null }} originalContent={post.content} dict={dict} />
+                  <CorrectionCard id={correction.id} correctedText={correction.correctedText} explanation={correction.explanation} toneNote={correction.toneNote} isAccepted={correction.isAccepted} createdAt={correction.createdAt} author={{ username: correction.author.username, displayName: correction.author.profile?.displayName ?? null, avatarUrl: correction.author.profile?.avatarUrl ?? null }} originalContent={post.content} dict={dict} locale={locale} />
                   <div className="flex items-center gap-3 mt-2 ml-2">
                     {isAuthor && <AcceptButton correctionId={correction.id} postId={post.id} isAlreadyAccepted={correction.isAccepted} postHasAccepted={postHasAccepted} dict={dict} />}
                     {currentUser && currentUser.id !== correction.author.id && <ReportButton postId={post.id} correctionId={correction.id} dict={dict} />}

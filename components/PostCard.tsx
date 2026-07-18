@@ -30,6 +30,7 @@ interface PostCardProps {
   typeLabels?: Record<string, string>;
   correctionLabel?: string;
   adoptedLabel?: string;
+  timeLabels?: Record<string, string>;
 }
 
 export function PostCard({
@@ -45,10 +46,11 @@ export function PostCard({
   completeness,
   completenessLabels = {},
   typeLabels = {},
+  timeLabels = {},
   correctionLabel = "修改",
   adoptedLabel = "已采纳",
 }: PostCardProps) {
-  const timeAgo = formatTimeAgo(createdAt);
+  const timeAgo = formatTimeAgo(createdAt, timeLabels);
 
   return (
     <Link href={`/posts/${id}`}>
@@ -75,15 +77,16 @@ export function PostCard({
   );
 }
 
-function formatTimeAgo(dateStr: string): string {
+function formatTimeAgo(dateStr: string, timeLabels?: Record<string, string>): string {
+  const t = timeLabels || {};
   const now = Date.now();
   const diff = now - new Date(dateStr).getTime();
   const minutes = Math.floor(diff / 60000);
   const hours = Math.floor(diff / 3600000);
   const days = Math.floor(diff / 86400000);
-  if (minutes < 1) return "刚刚";
-  if (minutes < 60) return `${minutes} 分钟前`;
-  if (hours < 24) return `${hours} 小时前`;
-  if (days < 30) return `${days} 天前`;
-  return new Date(dateStr).toLocaleDateString("zh-CN");
+  if (minutes < 1) return t.justNow || "刚刚";
+  if (minutes < 60) return `${minutes}${t.minuteAgo || " 分钟前"}`;
+  if (hours < 24) return `${hours}${t.hourAgo || " 小时前"}`;
+  if (days < 30) return `${days}${t.dayAgo || " 天前"}`;
+  return new Date(dateStr).toLocaleDateString();
 }
