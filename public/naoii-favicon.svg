@@ -2,9 +2,14 @@
 <svg xmlns="http://www.w3.org/2000/svg"
      width="512" height="512" viewBox="0 0 512 512"
      role="img" aria-labelledby="title desc">
-  <title id="title">Naoii app icon</title>
-  <desc id="desc">Rounded-square Naoii icon with a navy N motif, slate block, and orange square.</desc>
+  <title id="title">Naoii universal app icon</title>
+  <desc id="desc">Naoii icon on a fixed light rounded badge for reliable contrast on light and dark themes.</desc>
 
+  <!-- Universal light badge -->
+  <rect x="16" y="16" width="480" height="480" rx="104"
+        fill="#F7F8FA" stroke="#D8DEE5" stroke-width="10"/>
+
+  <!-- Brand icon -->
   <rect x="72" y="72" width="368" height="368" rx="72"
         fill="none" stroke="#172738" stroke-width="24"
         stroke-linecap="round" stroke-linejoin="round"/>

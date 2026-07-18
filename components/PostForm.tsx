@@ -20,9 +20,9 @@ export function PostForm({ languages, dict, locale, intent }: Props) {
   const [serverErrors, setServerErrors] = useState<Record<string, string[]>>({});
 
   const completenessOptions = useMemo(() => [
-    { value: "COMPLETE", label: `${dict.completeness.complete} — ${dict.completeness.completeDesc}` },
-    { value: "PARTIAL", label: `${dict.completeness.partial} — ${dict.completeness.partialDesc}` },
-    { value: "IDEA_ONLY", label: `${dict.completeness.ideaOnly} — ${dict.completeness.ideaOnlyDesc}` },
+    { value: "COMPLETE", label: dict.completeness.complete },
+    { value: "PARTIAL", label: dict.completeness.partial },
+    { value: "IDEA_ONLY", label: dict.completeness.ideaOnly },
   ], [dict]);
 
   const expressionTypes = useMemo(() => [

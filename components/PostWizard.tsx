@@ -118,10 +118,16 @@ export function PostWizard({ languages, dict, locale, intent, userId }: Props) {
   ];
 
   const completenessOptions = [
-    { value: "COMPLETE", label: `${dict.completeness.complete} — ${dict.completeness.completeDesc}` },
-    { value: "PARTIAL", label: `${dict.completeness.partial} — ${dict.completeness.partialDesc}` },
-    { value: "IDEA_ONLY", label: `${dict.completeness.ideaOnly} — ${dict.completeness.ideaOnlyDesc}` },
+    { value: "COMPLETE", label: dict.completeness.complete },
+    { value: "PARTIAL", label: dict.completeness.partial },
+    { value: "IDEA_ONLY", label: dict.completeness.ideaOnly },
   ];
+
+  const completenessHints: Record<string, string> = {
+    COMPLETE: dict.completeness.completeDesc,
+    PARTIAL: dict.completeness.partialDesc,
+    IDEA_ONLY: dict.completeness.ideaOnlyDesc,
+  };
 
   const visOptions = [
     { value: "PUBLIC", label: dict.post.visibilityPublic },
@@ -198,7 +204,7 @@ export function PostWizard({ languages, dict, locale, intent, userId }: Props) {
     setForm({ ...DEFAULT_STATE, completeness: intent === "ask" ? "PARTIAL" : "COMPLETE" });
     clearDraft();
     setStep(0);
-    addToast("草稿已清空", "info");
+    addToast(dict.post.draftCleared, "info");
   };
 
   // ── Visibility label ─────────────────────────
@@ -212,7 +218,7 @@ export function PostWizard({ languages, dict, locale, intent, userId }: Props) {
     <div className="flex flex-col gap-4">
       {/* Step Progress */}
       <div className="flex items-center justify-center gap-0 mb-2">
-        {[dict.entry.correctOthers || "方向", dict.post.content, dict.post.submit].map((label, i) => (
+        {[dict.post.stepDirection, dict.post.content, dict.post.submit].map((label, i) => (
           <button
             key={i}
             type="button"
@@ -235,7 +241,7 @@ export function PostWizard({ languages, dict, locale, intent, userId }: Props) {
       {/* ── Step 0: Direction ─────────────────── */}
       {step === 0 && (
         <Card>
-          <h2 className="text-lg font-bold mb-4">{dict.entry.correctOthers || "表达方向"}</h2>
+          <h2 className="text-lg font-bold mb-4">{dict.post.stepDirection}</h2>
           <div className="flex flex-col gap-4">
             <Select label={dict.post.expressionType} options={expressionTypeOptions} placeholder={dict.post.selectType} value={form.expressionType} onChange={(e) => update({ expressionType: e.target.value })} error={errors.expressionType} />
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -256,7 +262,7 @@ export function PostWizard({ languages, dict, locale, intent, userId }: Props) {
               />
             )}
 
-            <div className="flex justify-end"><Button variant="primary" onClick={goNext}>下一步 →</Button></div>
+            <div className="flex justify-end"><Button variant="primary" onClick={goNext}>{dict.post.nextStep}</Button></div>
           </div>
         </Card>
       )}
@@ -276,8 +282,8 @@ export function PostWizard({ languages, dict, locale, intent, userId }: Props) {
               <p className="text-xs text-base-content/40 mt-1 text-right">{form.content.length} / 5000</p>
             </div>
             <div className="flex justify-between">
-              <Button variant="ghost" onClick={goBack}>← 上一步</Button>
-              <Button variant="primary" onClick={goNext}>下一步 →</Button>
+              <Button variant="ghost" onClick={goBack}>{dict.post.prevStep}</Button>
+              <Button variant="primary" onClick={goNext}>{dict.post.nextStep}</Button>
             </div>
           </div>
         </Card>
@@ -290,6 +296,7 @@ export function PostWizard({ languages, dict, locale, intent, userId }: Props) {
           <div className="flex flex-col gap-4">
             {/* Completeness */}
             <Select label={dict.completeness.label} options={completenessOptions} value={form.completeness} onChange={(e) => update({ completeness: e.target.value })} />
+            <p className="text-xs text-base-content/50 -mt-3">{completenessHints[form.completeness]}</p>
 
             {/* Visibility */}
             <Select label={dict.post.visibility} options={visOptions} value={form.visibility} onChange={(e) => update({ visibility: e.target.value })} />
@@ -305,7 +312,7 @@ export function PostWizard({ languages, dict, locale, intent, userId }: Props) {
                   <Badge variant="default" size="sm">{visLabel}</Badge>
                 </div>
                 {form.title && <p className="font-semibold">{form.title}</p>}
-                <p className="whitespace-pre-wrap text-base-content/70">{form.content || "(无内容)"}</p>
+                <p className="whitespace-pre-wrap text-base-content/70">{form.content || dict.post.noContent}</p>
               </div>
             </div>
 
@@ -317,8 +324,8 @@ export function PostWizard({ languages, dict, locale, intent, userId }: Props) {
                 {form.visibility === "PUBLIC" ? dict.post.submitPublic || dict.post.submit : form.visibility === "UNLISTED" ? dict.post.submitUnlisted || "发布（仅链接可见）" : dict.post.submitPrivate || "发布（仅自己可见）"}
               </Button>
               <div className="flex justify-between">
-                <Button variant="ghost" size="sm" onClick={goBack}>← 上一步</Button>
-                <Button variant="ghost" size="sm" onClick={handleClear}>清空草稿</Button>
+                <Button variant="ghost" size="sm" onClick={goBack}>{dict.post.prevStep}</Button>
+                <Button variant="ghost" size="sm" onClick={handleClear}>{dict.post.clearDraft}</Button>
               </div>
               <p className="text-xs text-base-content/40 text-center">
                 {form.visibility === "PUBLIC" ? dict.post.hintPublic || "发布后所有人可见" : form.visibility === "UNLISTED" ? dict.post.hintUnlisted || "仅通过链接访问" : dict.post.hintPrivate || "仅自己可见"}

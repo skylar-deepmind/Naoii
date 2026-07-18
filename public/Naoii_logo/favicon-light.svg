@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="Naoii">
+  <defs>
+    <linearGradient id="tileLight" x1="18" y1="16" x2="112" y2="116" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#8B5CF6"/>
+      <stop offset="1" stop-color="#6D4AFF"/>
+    </linearGradient>
+    <linearGradient id="nDark" x1="27" y1="30" x2="91" y2="93" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#A78BFA"/>
+      <stop offset="1" stop-color="#7C5CFF"/>
+    </linearGradient>
+    <filter id="softShadow" x="-20%" y="-20%" width="140%" height="150%">
+      <feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="#0B1020" flood-opacity=".22"/>
+    </filter>
+  </defs>
+  
+  <rect x="10" y="10" width="108" height="108" rx="28" fill="url(#tileLight)" filter="url(#softShadow)"/>
+  <path d="M37 83V39L79 83V39" fill="none" stroke="#FFFFFF" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="53" cy="83" r="3.8" fill="#2DD4D7"/>
+  <circle cx="66" cy="83" r="3.8" fill="#2DD4D7"/>
+  <path d="M48 94C55 102 66 102 73 94" fill="none" stroke="#FFFFFF" stroke-width="6" stroke-linecap="round"/>
+  <path d="M84 78L103 98L94 99L90 109L84 78Z" fill="#C7F04A" stroke="#C7F04A" stroke-linejoin="round"/>
+  <g stroke="#D8FF55" stroke-width="4" stroke-linecap="round">
+    <path d="M88 70V62"/>
+    <path d="M97 73L103 67"/>
+    <path d="M100 82H108"/>
+    <path d="M80 72L75 66"/>
+  </g>
+</svg>

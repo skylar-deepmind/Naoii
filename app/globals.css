@@ -31,9 +31,45 @@
   --radius-field: 0.5rem;
 }
 
+/* ─── Dark theme ────────────────────────────── */
+@plugin "daisyui/theme" {
+  name: "naoii-dark";
+  default: false;
+  prefersdark: true;
+  color-scheme: "dark";
+  --color-base-100: #1a1b23;
+  --color-base-200: #23242e;
+  --color-base-300: #2e303b;
+  --color-base-content: #e1e2e8;
+  --color-primary: #818cf8;
+  --color-primary-content: #0f0f17;
+  --color-secondary: #38bdf8;
+  --color-secondary-content: #0f0f17;
+  --color-accent: #fbbf24;
+  --color-accent-content: #0f0f17;
+  --color-neutral: #374151;
+  --color-neutral-content: #d1d5db;
+  --color-info: #60a5fa;
+  --color-info-content: #0f0f17;
+  --color-success: #4ade80;
+  --color-success-content: #0f0f17;
+  --color-warning: #fbbf24;
+  --color-warning-content: #0f0f17;
+  --color-error: #f87171;
+  --color-error-content: #0f0f17;
+  --radius-box: 0.5rem;
+  --radius-btn: 0.5rem;
+  --radius-field: 0.5rem;
+}
+
 :root {
   --background: #fafafa;
   --foreground: #1a1a2e;
+}
+
+[data-theme="naoii-dark"] {
+  --background: #1a1b23;
+  --foreground: #e1e2e8;
 }
 
 @theme inline {

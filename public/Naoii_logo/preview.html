@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Naoii 方案二 Logo 预览</title>
+<link rel="icon" type="image/svg+xml" href="favicon-adaptive.svg">
+<style>
+:root{font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+*{box-sizing:border-box}
+body{margin:0;background:#eef1f8;color:#11182f}
+header{padding:32px;text-align:center}
+main{display:grid;grid-template-columns:1fr 1fr;min-height:calc(100vh - 110px)}
+section{padding:56px 7vw;display:flex;flex-direction:column;gap:48px;align-items:flex-start}
+.light{background:#fff}
+.dark{background:#0b1020;color:#fff}
+.card{width:100%;padding:32px;border-radius:24px;border:1px solid rgba(127,127,127,.18)}
+.light .card{background:#f8f9fd}
+.dark .card{background:#11182f}
+.favicon{width:128px;height:128px}
+.logo{width:min(440px,100%);height:auto}
+h2{margin:0 0 18px;font-size:18px}
+p{opacity:.72;margin:0}
+@media(max-width:780px){main{grid-template-columns:1fr}section{padding:40px 24px}}
+</style>
+</head>
+<body>
+<header>
+  <h1>Naoii · 方案二资源预览</h1>
+  <p>Playful N Face · 亮暗模式</p>
+</header>
+<main>
+  <section class="light">
+    <div class="card">
+      <h2>亮色标签页图标</h2>
+      <img class="favicon" src="favicon-light.svg" alt="Naoii light favicon">
+    </div>
+    <div class="card">
+      <h2>亮色网页左上角 Logo</h2>
+      <img class="logo" src="naoii-logo-light.svg" alt="Naoii light logo">
+    </div>
+  </section>
+  <section class="dark">
+    <div class="card">
+      <h2>暗色标签页图标</h2>
+      <img class="favicon" src="favicon-dark.svg" alt="Naoii dark favicon">
+    </div>
+    <div class="card">
+      <h2>暗色网页左上角 Logo</h2>
+      <img class="logo" src="naoii-logo-dark.svg" alt="Naoii dark logo">
+    </div>
+  </section>
+</main>
+</body>
+</html>

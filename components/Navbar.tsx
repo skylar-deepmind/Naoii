@@ -2,6 +2,8 @@ import Link from "next/link";
 import { UserAvatar } from "@/components/ui/UserAvatar";
 import { Button } from "@/components/ui/Button";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import { ThemeSwitcher } from "@/components/ThemeSwitcher";
+import { ThemeLogo } from "@/components/ThemeLogo";
 import { logoutAction } from "@/server/actions/auth";
 import { getUnreadCount } from "@/server/queries/notifications";
 import { getLocale, getDict } from "@/lib/i18n";
@@ -56,7 +58,7 @@ export async function Navbar({ user }: NavbarProps) {
         </div>
 
         <Link href={isAuthenticated ? "/app" : "/"} className="btn btn-ghost px-2 h-auto">
-          <img src="/naoii-header-logo.svg" alt={dict.common.siteName} className="h-8 w-auto" />
+          <ThemeLogo alt={dict.common.siteName} />
         </Link>
       </div>
 
@@ -73,6 +75,7 @@ export async function Navbar({ user }: NavbarProps) {
 
       {/* Right side */}
       <div className="navbar-end gap-1">
+        <ThemeSwitcher />
         <LanguageSwitcher currentLocale={locale} />
 
         {isAuthenticated ? (

@@ -71,7 +71,7 @@ export function RelatedReminder({
         <div className="flex items-center gap-2">
           <span className="text-lg">💡</span>
           <p className="text-sm text-base-content/70">
-            你之前收藏过 {items.length} 条相关表达，要看看吗？
+            {dict.relatedReminder?.youSaved?.replace("{count}", String(items.length)) || `你之前收藏过 ${items.length} 条相关表达，要看看吗？`}
           </p>
         </div>
         <button
@@ -79,7 +79,7 @@ export function RelatedReminder({
           onClick={() => setDismissed(true)}
           className="text-xs text-base-content/30 hover:text-base-content shrink-0"
         >
-          ✕ 关闭
+          ✕ {dict.relatedReminder?.close || "关闭"}
         </button>
       </div>
 
@@ -89,7 +89,7 @@ export function RelatedReminder({
           onClick={() => setExpanded(true)}
           className="text-xs text-primary hover:underline mt-2"
         >
-          展开查看 →
+          {dict.relatedReminder?.expand || "展开查看 →"}
         </button>
       )}
 
@@ -121,7 +121,7 @@ export function RelatedReminder({
                   className="mt-2"
                   onClick={() => handleInsert(item.correctedTextSnapshot!)}
                 >
-                  📋 插入作为参考
+                  📋 {dict.relatedReminder?.insertRef || "插入作为参考"}
                 </Button>
               )}
             </div>
@@ -131,7 +131,7 @@ export function RelatedReminder({
             onClick={() => setExpanded(false)}
             className="text-xs text-base-content/30 hover:text-base-content"
           >
-            收起
+            {dict.relatedReminder?.collapse || "收起"}
           </button>
         </div>
       )}

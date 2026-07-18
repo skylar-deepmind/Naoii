@@ -1,11 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg"
-     width="580" height="170" viewBox="0 0 580 170"
+     width="620" height="190" viewBox="0 0 620 190"
      role="img" aria-labelledby="title desc">
-  <title id="title">Naoii header logo</title>
-  <desc id="desc">Naoii icon and outlined Naoii wordmark for use at the top-left of a web application.</desc>
+  <title id="title">Naoii universal header logo</title>
+  <desc id="desc">Naoii header logo on a fixed light rounded badge for reliable contrast on light and dark themes.</desc>
 
-  <!-- Open-corner icon frame -->
+  <!-- Universal light badge -->
+  <rect x="4" y="4" width="612" height="182" rx="32"
+        fill="#F7F8FA" stroke="#D8DEE5" stroke-width="4"/>
+
+  <!-- Original vector logo, inset from the badge edge -->
+  <g transform="translate(20 10)">
+<!-- Open-corner icon frame -->
   <path d="
     M 146 118
     V 31
@@ -43,5 +49,6 @@
       <path d="M61 273Q61 352 97.0 416.0Q133 480 196.5 516.0Q260 552 339 552Q418 552 481.0 516.0Q544 480 580.5 416.0Q617 352 617 273Q617 194 581.0 130.5Q545 67 481.5 31.0Q418 -5 339 -5Q260 -5 196.5 31.0Q133 67 97.0 130.5Q61 194 61 273ZM541 273Q541 333 515.0 380.5Q489 428 443.0 455.0Q397 482 339 482Q282 482 235.5 455.0Q189 428 162.5 380.5Q136 333 136 273Q136 214 162.5 166.5Q189 119 235.5 92.0Q282 65 339 65Q397 65 443.0 92.0Q489 119 515.0 166.5Q541 214 541 273Z" transform="translate(1502 0)"/>
       <path d="M106 39V508Q106 525 117.0 536.0Q128 547 145 547Q162 547 172.5 536.0Q183 525 183 508V39Q183 22 172.5 11.0Q162 0 145 0Q128 0 117.0 11.0Q106 22 106 39ZM90 706Q90 730 106.0 745.0Q122 760 145 760Q167 760 183.0 745.0Q199 730 199 706Q199 683 183.0 667.0Q167 651 144 651Q121 651 105.5 667.0Q90 683 90 706Z" transform="translate(2179 0)"/>
       <path d="M106 39V508Q106 525 117.0 536.0Q128 547 145 547Q162 547 172.5 536.0Q183 525 183 508V39Q183 22 172.5 11.0Q162 0 145 0Q128 0 117.0 11.0Q106 22 106 39ZM90 706Q90 730 106.0 745.0Q122 760 145 760Q167 760 183.0 745.0Q199 730 199 706Q199 683 183.0 667.0Q167 651 144 651Q121 651 105.5 667.0Q90 683 90 706Z" transform="translate(2468 0)"/>
+  </g>
   </g>
 </svg>
