@@ -462,6 +462,23 @@ export const en: typeof zh = {
     intro: "Naoii is still growing. This is where we keep track of what it has learned lately—and the occasional time it has tripped over its own feet.",
     versions: [
       {
+version: "v0.2.1", date: "2026-07-18",
+intro: "This time, Naoii changed into a new outfit and picked up a few translations that had wandered off.",
+sections: [
+{ heading: "New", items: [
+"Added dark mode, so late-night expression no longer has to compete with the brightness of your screen",
+]},
+{ heading: "Languages & Interface", items: [
+"Fixed several internationalization issues we previously missed, so text hiding in the corners now switches languages properly",
+"Updated the site icon, making Naoii easier to recognize among your browser tabs",
+]},
+{ heading: "Behind the Scenes", items: [
+"Listened to instrumental music all morning and somehow got all of this done",
+]},
+],
+}
+
+      ,{
         version: "v0.2.0", date: "2026-07-16",
         intro: "This release finally made posting an expression feel less like filling out a form.",
         sections: [
