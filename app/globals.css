@@ -85,6 +85,40 @@ body {
   font-family: var(--font-sans);
 }
 
+.theme-logo {
+  display: inline-flex;
+  flex-shrink: 0;
+  height: 2rem;
+  width: 5.75rem;
+  align-items: center;
+}
+
+.theme-logo-image {
+  display: block;
+  height: 2rem;
+  width: 5.75rem;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.theme-logo-image-light {
+  background-image: url("/Naoii_logo/naoii-logo-light.svg");
+}
+
+.theme-logo-image-dark {
+  display: none;
+  background-image: url("/Naoii_logo/naoii-logo-dark.svg");
+}
+
+[data-theme="naoii-dark"] .theme-logo-image-light {
+  display: none;
+}
+
+[data-theme="naoii-dark"] .theme-logo-image-dark {
+  display: block;
+}
+
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(-8px); }
   to   { opacity: 1; transform: translateY(0); }

@@ -11,7 +11,24 @@ export const metadata: Metadata = {
   description:
     "面向语言学习者的自然表达训练社区。发布你的表达，获得母语者的修改建议，在交流中提升语言能力。",
   icons: {
-    icon: "/Naoii_logo/favicon-adaptive.svg",
+    icon: [
+      {
+        url: "/Naoii_logo/favicon-light.svg",
+        media: "(prefers-color-scheme: light)",
+        type: "image/svg+xml",
+      },
+      {
+        url: "/Naoii_logo/favicon-dark.svg",
+        media: "(prefers-color-scheme: dark)",
+        type: "image/svg+xml",
+      },
+      {
+        url: "/Naoii_logo/favicon-light.png",
+        sizes: "512x512",
+        type: "image/png",
+      },
+    ],
+    shortcut: "/Naoii_logo/favicon-light.png",
   },
 };
 
