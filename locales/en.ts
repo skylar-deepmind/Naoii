@@ -86,6 +86,9 @@ export const en: typeof zh = {
     feed: "Feed",
     library: "Library",
     copyright: "Multilingual natural expression training community",
+    feedback: "Feedback & Community",
+    joinKeet: "Join Keet group",
+    joinDiscord: "Join Discord server",
   },
   home: {
     badge: "Multilingual Natural Expression Training Community",

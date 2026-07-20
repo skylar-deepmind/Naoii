@@ -52,3 +52,37 @@ export async function getUserProfileStats(username: string) {
 export async function getLanguages() {
   return prisma.language.findMany({ orderBy: { code: "asc" } });
 }
+
+export async function getUserPosts(userId: string) {
+  return prisma.post.findMany({
+    where: { authorId: userId, status: { notIn: ["HIDDEN", "DELETED"] } },
+    orderBy: { createdAt: "desc" },
+    include: {
+      targetLanguage: { select: { nativeName: true } },
+      _count: { select: { corrections: { where: { status: { notIn: ["DELETED"] } } } } },
+    },
+    take: 20,
+  });
+}
+
+export async function getUserCorrections(userId: string) {
+  return prisma.correction.findMany({
+    where: { authorId: userId, status: { notIn: ["HIDDEN", "DELETED"] } },
+    orderBy: { createdAt: "desc" },
+    include: {
+      post: { select: { id: true, title: true, content: true } },
+    },
+    take: 20,
+  });
+}
+
+export async function getUserAdoptedCorrections(userId: string) {
+  return prisma.correction.findMany({
+    where: { authorId: userId, isAccepted: true, status: { notIn: ["HIDDEN", "DELETED"] } },
+    orderBy: { createdAt: "desc" },
+    include: {
+      post: { select: { id: true, title: true, content: true } },
+    },
+    take: 20,
+  });
+}

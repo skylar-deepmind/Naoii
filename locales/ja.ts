@@ -86,6 +86,9 @@ export const ja: typeof zh = {
     feed: "フィード",
     library: "ライブラリ",
     copyright: "多言語自然表現トレーニングコミュニティ",
+    feedback: "フィードバック＆交流",
+    joinKeet: "Keetグループに参加",
+    joinDiscord: "Discordサーバーに参加",
   },
   home: {
     badge: "多言語自然表現トレーニングコミュニティ",

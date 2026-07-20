@@ -193,8 +193,11 @@ export function PostWizard({ languages, dict, locale, intent, userId }: Props) {
         clearDraft();
       }
     } catch (e: any) {
-      // redirect() throws NEXT_REDIRECT — let Next.js handle it
-      if (e?.digest?.startsWith?.("NEXT_REDIRECT")) return;
+      // redirect() throws NEXT_REDIRECT — clear draft then let Next.js handle redirect
+      if (e?.digest?.startsWith?.("NEXT_REDIRECT")) {
+        clearDraft();
+        return;
+      }
       setErrors({ _form: "发布失败" });
       setSubmitting(false);
     }
@@ -205,6 +208,7 @@ export function PostWizard({ languages, dict, locale, intent, userId }: Props) {
     clearDraft();
     setStep(0);
     addToast(dict.post.draftCleared, "info");
+    initialised.current = false;
   };
 
   // ── Visibility label ─────────────────────────

@@ -84,6 +84,9 @@ export const zh = {
     feed: "广场",
     library: "表达库",
     copyright: "多语言自然表达训练社区",
+    feedback: "反馈与交流",
+    joinKeet: "加入 Keet 群组",
+    joinDiscord: "加入 Discord 服务器",
   },
   home: {
     badge: "多语言自然表达训练社区",
