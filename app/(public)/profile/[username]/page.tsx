@@ -60,7 +60,7 @@ export default async function ProfilePage({ params, searchParams }: Props) {
     <AppShell>
       <div className="py-8 sm:py-12">
         <div className="flex flex-col sm:flex-row items-start gap-5 mb-8">
-          <UserAvatar username={user.username} size="lg" />
+          <UserAvatar username={user.username} src={profile.avatarUrl} size="lg" />
           <div className="flex-1 min-w-0">
             <h1 className="text-2xl font-bold">{profile.displayName || user.username}</h1>
             <p className="text-base-content/60 text-sm">@{user.username}</p>

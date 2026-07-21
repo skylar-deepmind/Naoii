@@ -11,11 +11,12 @@ import { Textarea } from "@/components/ui/Textarea";
 import { Select } from "@/components/ui/Select";
 import { Button } from "@/components/ui/Button";
 import { Alert } from "@/components/ui/Alert";
+import { AvatarUpload } from "@/components/AvatarUpload";
 import type { SessionUser } from "@/lib/auth";
 import type { Dictionary } from "@/locales";
 
 interface Language { id: string; name: string; nativeName: string; }
-interface Props { user: SessionUser; profile: { displayName: string | null; bio: string | null; nativeLanguageId: string | null; learningLanguageId: string | null; level: string | null; }; languages: Language[]; dict: Dictionary; }
+interface Props { user: SessionUser; profile: { displayName: string | null; bio: string | null; nativeLanguageId: string | null; learningLanguageId: string | null; level: string | null; avatarUrl: string | null; }; languages: Language[]; dict: Dictionary; }
 
 export function ProfileForm({ user, profile, languages, dict }: Props) {
   const [serverErrors, setServerErrors] = useState<Record<string, string[]>>({});
@@ -61,6 +62,17 @@ export function ProfileForm({ user, profile, languages, dict }: Props) {
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
       {serverErrors?._form && <Alert variant="error">{serverErrors._form[0]}</Alert>}
       {success && <Alert variant="success">{dict.settings.saved}</Alert>}
+
+      <AvatarUpload
+        username={user.username}
+        currentUrl={profile.avatarUrl}
+        onSave={async (base64) => {
+          const fd = new FormData();
+          fd.append("avatarUrl", base64);
+          await updateProfileAction({}, fd);
+          addToast(dict.settings.saved);
+        }}
+      />
       <Controller name="displayName" control={control} render={({ field, fieldState }) => <Input label={dict.settings.displayName} placeholder={dict.settings.displayNamePlaceholder} hint={dict.settings.displayNameHint} error={fieldState.error?.message} {...field} />} />
       <Controller name="bio" control={control} render={({ field, fieldState }) => <Textarea label={dict.settings.bio} placeholder={dict.settings.bioPlaceholder} hint={dict.settings.bioHint} rows={3} error={fieldState.error?.message} {...field} />} />
       <Controller name="nativeLanguage" control={control} render={({ field, fieldState }) => <Select label={dict.auth.nativeLanguage} options={languageOptions} placeholder={dict.auth.selectNativeLanguage} error={fieldState.error?.message} {...field} />} />

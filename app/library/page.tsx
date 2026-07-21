@@ -42,10 +42,10 @@ export default async function LibraryPage({ searchParams }: Props) {
       {/* ── Stats Dashboard ──────────────────────── */}
       {stats && (
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-8">
-          <Card padding="sm"><div className="text-center"><p className="text-2xl font-bold text-primary">{stats.total}</p><p className="text-xs text-base-content/50 mt-1">收藏总数</p></div></Card>
-          <Card padding="sm"><div className="text-center"><p className="text-2xl font-bold text-secondary">{stats.weekNew}</p><p className="text-xs text-base-content/50 mt-1">本周新增</p></div></Card>
-          <Card padding="sm"><div className="text-center"><p className="text-2xl font-bold text-success">{stats.reviewed}</p><p className="text-xs text-base-content/50 mt-1">已复习</p></div></Card>
-          <Card padding="sm"><div className="text-center"><p className="text-2xl font-bold text-warning">{stats.pending}</p><p className="text-xs text-base-content/50 mt-1">待复习</p></div></Card>
+          <Card padding="sm"><div className="text-center"><p className="text-2xl font-bold text-primary">{stats.total}</p><p className="text-xs text-base-content/50 mt-1">{dict.library.total}</p></div></Card>
+          <Card padding="sm"><div className="text-center"><p className="text-2xl font-bold text-secondary">{stats.weekNew}</p><p className="text-xs text-base-content/50 mt-1">{dict.library.weekNew}</p></div></Card>
+          <Card padding="sm"><div className="text-center"><p className="text-2xl font-bold text-success">{stats.reviewed}</p><p className="text-xs text-base-content/50 mt-1">{dict.library.reviewed}</p></div></Card>
+          <Card padding="sm"><div className="text-center"><p className="text-2xl font-bold text-warning">{stats.pending}</p><p className="text-xs text-base-content/50 mt-1">{dict.library.pendingReview}</p></div></Card>
         </div>
       )}
 
@@ -55,7 +55,7 @@ export default async function LibraryPage({ searchParams }: Props) {
           <h2 className="text-lg font-bold mb-3">📚 今日复习</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {reviews.map((r) => (
-              <ReviewCard key={r.id} {...r} typeLabels={dict.typeLabels} toneLabels={dict.toneLabels} />
+              <ReviewCard key={r.id} {...r} typeLabels={dict.typeLabels} toneLabels={dict.toneLabels} dict={dict} />
             ))}
           </div>
         </section>
@@ -63,11 +63,11 @@ export default async function LibraryPage({ searchParams }: Props) {
 
       {/* ── Filters ──────────────────────────────── */}
       <div className="flex flex-wrap items-center gap-2 mb-6">
-        <span className="text-xs text-base-content/40">筛选:</span>
-        <Link href="/library" className={`btn btn-xs ${!filter ? "btn-primary" : "btn-ghost"}`}>全部</Link>
-        <Link href="/library?filter=mastered" className={`btn btn-xs ${filter === "mastered" ? "btn-primary" : "btn-ghost"}`}>已掌握</Link>
-        <Link href="/library?filter=pending" className={`btn btn-xs ${filter === "pending" ? "btn-primary" : "btn-ghost"}`}>待复习</Link>
-        <Link href="/library?filter=recent" className={`btn btn-xs ${filter === "recent" ? "btn-primary" : "btn-ghost"}`}>最近收藏</Link>
+        <span className="text-xs text-base-content/40">{dict.library.filter}:</span>
+        <Link href="/library" className={`btn btn-xs ${!filter ? "btn-primary" : "btn-ghost"}`}>{dict.library.all}</Link>
+        <Link href="/library?filter=mastered" className={`btn btn-xs ${filter === "mastered" ? "btn-primary" : "btn-ghost"}`}>{dict.library.mastered}</Link>
+        <Link href="/library?filter=pending" className={`btn btn-xs ${filter === "pending" ? "btn-primary" : "btn-ghost"}`}>{dict.library.pending}</Link>
+        <Link href="/library?filter=recent" className={`btn btn-xs ${filter === "recent" ? "btn-primary" : "btn-ghost"}`}>{dict.library.recent}</Link>
         {allTags.length > 0 && (
           <div className="flex flex-wrap gap-1">
             {allTags.map((t) => (
@@ -99,13 +99,13 @@ export default async function LibraryPage({ searchParams }: Props) {
               <div className="flex flex-wrap items-center gap-2 mb-3">
                 {item.reviewStatus && (
                   <Badge variant={item.reviewStatus === "mastered" ? "success" : item.reviewStatus === "review" ? "warning" : "default"} size="sm">
-                    {item.reviewStatus === "mastered" ? "已掌握" : item.reviewStatus === "review" ? "复习中" : "已跳过"}
+                    {item.reviewStatus === "mastered" ? dict.review.masteredLabel : item.reviewStatus === "review" ? dict.review.reviewingLabel : dict.review.skippedLabel}
                   </Badge>
                 )}
                 {((item.tags as string[]) || []).map((t: string) => (
                   <Badge key={t} variant="primary" size="sm">{t}</Badge>
                 ))}
-                <span className="text-xs text-base-content/30 ml-auto">{dict.library.savedAt} {new Date(item.createdAt).toLocaleDateString("zh-CN")}</span>
+                <span className="text-xs text-base-content/30 ml-auto">{dict.library.savedAt} {new Date(item.createdAt).toLocaleDateString()}</span>
               </div>
               <div className="flex items-center gap-3 pt-3 border-t border-base-200 flex-wrap">
                 {item.post && (

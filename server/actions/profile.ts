@@ -25,12 +25,14 @@ export async function updateProfileAction(
 
   const { displayName, bio, nativeLanguage, learningLanguage, level } =
     parsed.data;
+  const avatarUrl = formData.get("avatarUrl") as string | null;
 
   await prisma.userProfile.update({
     where: { userId: currentUser.id },
     data: {
       displayName: displayName || null,
       bio: bio || null,
+      avatarUrl: avatarUrl || undefined,
       ...(nativeLanguage ? { nativeLanguageId: nativeLanguage } : {}),
       ...(learningLanguage ? { learningLanguageId: learningLanguage } : {}),
       ...(level ? { level: level as any } : {}),
@@ -39,6 +41,7 @@ export async function updateProfileAction(
 
   revalidatePath("/settings/profile");
   revalidatePath(`/profile/${currentUser.username}`);
+  revalidatePath("/", "layout");
 
   return { success: true };
 }

@@ -57,7 +57,7 @@ export default async function PostDetailPage({ params }: Props) {
         <Link href="/feed" className="text-sm text-base-content/50 hover:text-base-content mb-6 inline-block">← {dict.post.backToFeed}</Link>
 
         <div className="flex items-start gap-4 mb-6">
-          <Link href={`/profile/${post.author.username}`}><UserAvatar username={post.author.profile?.displayName || post.author.username} size="md" /></Link>
+          <Link href={`/profile/${post.author.username}`}><UserAvatar username={post.author.profile?.displayName || post.author.username} src={post.author.profile?.avatarUrl} size="md" /></Link>
           <div className="min-w-0">
             <Link href={`/profile/${post.author.username}`} className="font-semibold hover:underline">{post.author.profile?.displayName || post.author.username}</Link>
             <p className="text-sm text-base-content/50">@{post.author.username}</p>

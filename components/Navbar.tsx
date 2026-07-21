@@ -97,7 +97,7 @@ export async function Navbar({ user }: NavbarProps) {
             {/* User menu */}
             <div className="dropdown dropdown-end">
               <label tabIndex={0} className="btn btn-ghost btn-circle">
-                <UserAvatar username={user.displayName || user.username} size="sm" />
+                <UserAvatar username={user.displayName || user.username} src={user.avatarUrl} size="sm" />
               </label>
               <ul tabIndex={0} className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-48">
                 <li className="menu-title"><span>{user.displayName || user.username}</span></li>

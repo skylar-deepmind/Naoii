@@ -11,7 +11,7 @@ interface Props { id: string; type: string; title: string; body: string | null; 
 
 export function NotificationItem({ id, type, title, body, isRead, relatedPostId, createdAt, dict }: Props) {
   const [read, setRead] = useState(isRead);
-  const timeStr = new Date(createdAt).toLocaleDateString("zh-CN");
+  const timeStr = new Date(createdAt).toLocaleDateString();
 
   const handleClick = async () => {
     if (!read) { setRead(true); const fd = new FormData(); fd.append("id", id); await markOneReadAction(fd); }

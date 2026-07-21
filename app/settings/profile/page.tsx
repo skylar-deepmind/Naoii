@@ -22,7 +22,7 @@ export default async function SettingsProfilePage() {
       } />
       <div className="max-w-lg">
         <Card>
-          <ProfileForm user={currentUser!} profile={{ displayName: profile?.displayName ?? null, bio: profile?.bio ?? null, nativeLanguageId: profile?.nativeLanguageId ?? null, learningLanguageId: profile?.learningLanguageId ?? null, level: profile?.level ?? null }} languages={languages} dict={dict} />
+          <ProfileForm user={currentUser!} profile={{ displayName: profile?.displayName ?? null, bio: profile?.bio ?? null, nativeLanguageId: profile?.nativeLanguageId ?? null, learningLanguageId: profile?.learningLanguageId ?? null, level: profile?.level ?? null, avatarUrl: profile?.avatarUrl ?? null }} languages={languages} dict={dict} />
         </Card>
       </div>
     </AppShell>

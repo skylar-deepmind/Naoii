@@ -18,19 +18,12 @@ interface Props {
   postTone: string | null | undefined;
   typeLabels: Record<string, string>;
   toneLabels: Record<string, string>;
+  dict: { library: { original: string; corrected: string; reason: string }; correction: { correctedFull: string; reason: string }; review: { reviewCount: string; clickToReveal: string; mastered: string; keepReviewing: string; skip: string } };
 }
 
 export function ReviewCard({
-  id,
-  originalTextSnapshot,
-  correctedTextSnapshot,
-  explanationSnapshot,
-  tags,
-  reviewCount,
-  postExpressionType,
-  postTone,
-  typeLabels,
-  toneLabels,
+  id, originalTextSnapshot, correctedTextSnapshot, explanationSnapshot,
+  tags, reviewCount, postExpressionType, postTone, typeLabels, toneLabels, dict,
 }: Props) {
   const [revealed, setRevealed] = useState(false);
   const [done, setDone] = useState(false);
@@ -51,7 +44,7 @@ export function ReviewCard({
   return (
     <Card padding="sm">
       <div className="text-xs text-base-content/30 mb-2">
-        复习次数: {reviewCount}
+        {dict.review.reviewCount}: {reviewCount}
       </div>
 
       {/* Original expression (always shown) */}
@@ -75,19 +68,19 @@ export function ReviewCard({
       {/* Reveal area */}
       {!revealed ? (
         <Button variant="outline" size="sm" onClick={() => setRevealed(true)}>
-          📝 点击查看答案
+          📝 {dict.review.clickToReveal}
         </Button>
       ) : (
         <div className="space-y-2">
           {correctedTextSnapshot && (
             <div className="bg-success/5 border border-success/20 rounded-box p-3">
-              <p className="text-xs text-base-content/40 mb-1">修改后的表达</p>
+              <p className="text-xs text-base-content/40 mb-1">{dict.correction.correctedFull}</p>
               <p className="text-sm leading-relaxed whitespace-pre-wrap">{correctedTextSnapshot}</p>
             </div>
           )}
           {explanationSnapshot && (
             <div className="bg-base-200 rounded-box p-3">
-              <p className="text-xs text-base-content/40 mb-1">修改理由</p>
+              <p className="text-xs text-base-content/40 mb-1">{dict.correction.reason}</p>
               <p className="text-sm text-base-content/70 leading-relaxed">{explanationSnapshot}</p>
             </div>
           )}
@@ -98,13 +91,13 @@ export function ReviewCard({
       {revealed && (
         <div className="flex gap-2 mt-3">
           <Button variant="success" size="sm" loading={loading} onClick={() => handleMark("mastered")}>
-            ✓ 已掌握
+            ✓ {dict.review.mastered}
           </Button>
           <Button variant="warning" size="sm" loading={loading} onClick={() => handleMark("review")}>
-            🔄 继续复习
+            🔄 {dict.review.keepReviewing}
           </Button>
           <Button variant="ghost" size="sm" loading={loading} onClick={() => handleMark("skip")}>
-            跳过
+            {dict.review.skip}
           </Button>
         </div>
       )}
