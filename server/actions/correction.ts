@@ -7,7 +7,7 @@ import { revalidatePath } from "next/cache";
 
 const correctionSchema = z.object({
   postId: z.string().min(1),
-  correctedText: z.string().min(1, "请输入修改后的文本").max(5000),
+  correctedText: z.string().min(1, "请输入修改后的文本").max(3000),
   explanation: z.string().max(1000).optional(),
   toneNote: z.string().max(100).optional(),
 });

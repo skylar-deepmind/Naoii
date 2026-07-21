@@ -46,7 +46,7 @@ export function PostForm({ languages, dict, locale, intent }: Props) {
 
   const schema = useMemo(() => z.object({
     title: z.string().max(200).optional(),
-    content: z.string().min(1, dict.auth.passwordMin).max(5000),
+    content: z.string().min(1, dict.auth.passwordMin).max(3000),
     sourceLanguage: z.string().min(1, dict.auth.selectNative),
     targetLanguage: z.string().min(1, dict.auth.selectLearning),
     expressionType: z.string().min(1, dict.post.selectType),

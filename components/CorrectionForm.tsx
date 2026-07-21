@@ -27,7 +27,7 @@ export function CorrectionForm({ postId, originalContent, dict }: Props) {
   ], [dict]);
 
   const schema = useMemo(() => z.object({
-    correctedText: z.string().min(1, dict.auth.passwordMin).max(5000),
+    correctedText: z.string().min(1, dict.auth.passwordMin).max(3000),
     explanation: z.string().max(1000).optional(),
     toneNote: z.string().optional(),
   }), [dict]);

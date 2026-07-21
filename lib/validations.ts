@@ -43,7 +43,7 @@ export const updateProfileSchema = z.object({
 
 export const createPostSchema = z.object({
   title: z.string().max(200, "标题最多 200 个字符").optional(),
-  content: z.string().min(1, "请输入内容").max(5000, "内容最多 5000 个字符"),
+  content: z.string().min(1, "请输入内容").max(3000, "内容最多 3000 个字符"),
   sourceLanguage: z.string().min(1, "请选择源语言"),
   targetLanguage: z.string().min(1, "请选择目标语言"),
   expressionType: z.string().min(1, "请选择表达类型"),

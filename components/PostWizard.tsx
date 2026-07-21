@@ -283,7 +283,7 @@ export function PostWizard({ languages, dict, locale, intent, userId }: Props) {
             </div>
             <div>
               <Textarea label="" placeholder={dict.post.contentPlaceholder} rows={6} value={form.content} onChange={(e) => update({ content: e.target.value })} error={errors.content} />
-              <p className="text-xs text-base-content/40 mt-1 text-right">{form.content.length} / 5000</p>
+              <p className="text-xs text-base-content/40 mt-1 text-right">{form.content.length} / 3000</p>
             </div>
             <div className="flex justify-between">
               <Button variant="ghost" onClick={goBack}>{dict.post.prevStep}</Button>
