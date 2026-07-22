@@ -52,7 +52,7 @@ export default async function LibraryPage({ searchParams }: Props) {
       {/* ── Today's Review ───────────────────────── */}
       {reviews.length > 0 && (
         <section className="mb-8">
-          <h2 className="text-lg font-bold mb-3">📚 今日复习</h2>
+          <h2 className="text-lg font-bold mb-3">📚 {dict.library.todayReview}</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {reviews.map((r) => (
               <ReviewCard key={r.id} {...r} typeLabels={dict.typeLabels} toneLabels={dict.toneLabels} dict={dict} />
@@ -111,10 +111,10 @@ export default async function LibraryPage({ searchParams }: Props) {
                 {item.post && (
                   <>
                     <Link href={`/posts/${item.post.id}`} className="text-xs text-primary hover:underline">{dict.library.viewPost}</Link>
-                    <Link href={`/posts/new?ref=${item.id}`} className="text-xs text-secondary hover:underline">📝 以此创建新表达</Link>
+                    <Link href={`/posts/new?ref=${item.id}`} className="text-xs text-secondary hover:underline">📝 {dict.library.createNewFrom}</Link>
                   </>
                 )}
-                <EditTagsButton itemId={item.id} currentTags={(item.tags as string[]) || []} />
+                <EditTagsButton itemId={item.id} currentTags={(item.tags as string[]) || []} dict={dict.library as Record<string, string>} />
                 <RemoveFromLibraryButton itemId={item.id} dict={dict} />
               </div>
             </Card>

@@ -66,6 +66,7 @@ export function ProfileForm({ user, profile, languages, dict }: Props) {
       <AvatarUpload
         username={user.username}
         currentUrl={profile.avatarUrl}
+        dict={dict.settings as Record<string, string>}
         onSave={async (base64) => {
           const fd = new FormData();
           fd.append("avatarUrl", base64);

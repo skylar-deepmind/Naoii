@@ -112,6 +112,9 @@ model User {
   profile       UserProfile?
   posts         Post[]
   entries       Entry[]
+  entryLikes    EntryLike[]
+  comments      Comment[]
+  commentLikes  CommentLike[]
   corrections   Correction[]
   reputationLog ReputationLog[]
   collections   ExpressionCollectionItem[]
@@ -199,6 +202,7 @@ model Entry {
   completeness     String?
   visibility       EntryVisibility @default(PUBLIC)
   status           EntryStatus     @default(PUBLISHED)
+  tags             Json            @default("[]")
   isPinned         Boolean         @default(false)
   viewCount        Int             @default(0)
   createdAt        DateTime        @default(now())
@@ -208,6 +212,8 @@ model Entry {
   author         User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
   sourceLanguage Language? @relation("EntrySourceLanguage", fields: [sourceLanguageId], references: [id], onDelete: SetNull)
   targetLanguage Language? @relation("EntryTargetLanguage", fields: [targetLanguageId], references: [id], onDelete: SetNull)
+  likes          EntryLike[]
+  comments       Comment[]
 
   @@index([authorId])
   @@index([type, status, visibility])
@@ -232,6 +238,7 @@ model Correction {
   segments    CorrectionSegment[]
   collections ExpressionCollectionItem[]
   reports     Report[]
+  comments    Comment[]
 
   @@index([postId])
   @@index([authorId])
@@ -346,4 +353,53 @@ model AdminActionLog {
   @@index([adminId])
   @@index([targetType, targetId])
   @@index([createdAt])
+}
+
+model EntryLike {
+  id        String   @id @default(cuid())
+  entryId   String
+  userId    String
+  createdAt DateTime @default(now())
+
+  entry Entry @relation(fields: [entryId], references: [id], onDelete: Cascade)
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([entryId, userId])
+  @@index([entryId])
+}
+
+model Comment {
+  id           String    @id @default(cuid())
+  entryId      String
+  correctionId String?
+  authorId     String
+  parentId  String?
+  body      String
+  likeCount Int       @default(0)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  entry    Entry      @relation(fields: [entryId], references: [id], onDelete: Cascade)
+  correction Correction? @relation(fields: [correctionId], references: [id], onDelete: SetNull)
+  author   User       @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  parent   Comment?  @relation("CommentReplies", fields: [parentId], references: [id], onDelete: Cascade)
+  children Comment[] @relation("CommentReplies")
+  likes    CommentLike[]
+
+  @@index([entryId])
+  @@index([authorId])
+  @@index([parentId])
+}
+
+model CommentLike {
+  id        String   @id @default(cuid())
+  commentId String
+  userId    String
+  createdAt DateTime @default(now())
+
+  comment Comment @relation(fields: [commentId], references: [id], onDelete: Cascade)
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([commentId, userId])
+  @@index([commentId])
 }

@@ -10,11 +10,14 @@ const entryCardSelect = {
   type: true,
   title: true,
   content: true,
+  coverImage: true,
   expressionType: true,
   completeness: true,
   visibility: true,
   status: true,
+  tags: true,
   createdAt: true,
+  publishedAt: true,
   author: {
     select: {
       id: true,
@@ -28,51 +31,68 @@ const entryCardSelect = {
 export type EntryCardData = Prisma.EntryGetPayload<{ select: typeof entryCardSelect }>;
 
 type FeedTab = "latest" | "awaiting" | "has_corrections" | "adopted";
+type ContentType = "all" | "moment" | "article";
 
 export async function getFeedEntries({
   tab = "latest",
+  contentType = "all",
   completeness,
+  tag,
   cursor,
+  sort = "latest",
   limit = ENTRY_LIST_PAGE_SIZE,
 }: {
   tab?: FeedTab;
+  contentType?: ContentType;
   completeness?: string;
+  tag?: string;
   cursor?: string;
+  sort?: string;
   limit?: number;
 }) {
   const where: Prisma.EntryWhereInput = {
-    type: "MOMENT",
     status: "PUBLISHED",
     visibility: "PUBLIC",
   };
 
-  if (completeness === "COMPLETE" || completeness === "PARTIAL" || completeness === "IDEA_ONLY") {
-    where.completeness = completeness;
+  // Content type filter
+  if (contentType === "moment") {
+    where.type = "MOMENT";
+  } else if (contentType === "article") {
+    where.type = "ARTICLE";
   }
 
-  // For filtered tabs, we need to join with Correction via shared IDs
-  // Since Entry.id == Post.id for mirrored records, we check corrections by postId == entryId
-  if (tab !== "latest") {
-    // Fetch entries + corrections count via raw or two-step query
-    // For simplicity: fetch all entries matching basic filter, then filter in JS
+  if (completeness === "COMPLETE" || completeness === "PARTIAL" || completeness === "IDEA_ONLY") {
+    where.completeness = completeness;
   }
 
   const entries = await prisma.entry.findMany({
     where,
     select: entryCardSelect,
     orderBy: { createdAt: "desc" },
-    take: limit + 1,
+    take: tag ? limit * 3 : limit + 1,
     ...(cursor ? { cursor: { id: cursor }, skip: 1 } : {}),
   });
 
-  // Fetch correction counts/lookups using the shared IDs (Entry.id == Post.id for mirrored records)
-  const entryIds = entries.map((e) => e.id);
+  // Tag filter (PostgreSQL JSON array)
+  let filtered = entries;
+  if (tag) {
+    // Simple substring match for JSON tags array
+    filtered = entries.filter((e) => {
+      const tags = e.tags as string[] | null;
+      return tags && Array.isArray(tags) && tags.includes(tag);
+    });
+    // Re-apply limit after filtering
+    if (filtered.length > limit) filtered.length = limit;
+  }
 
-  // Count corrections for each entry (via Correction.postId which matches Entry.id)
+  // Fetch correction counts (only for MOMENT type entries)
+  const momentIds = filtered.filter((e) => e.type === "MOMENT").map((e) => e.id);
+
   const correctionCounts = await prisma.correction.groupBy({
     by: ["postId"],
     where: {
-      postId: { in: entryIds },
+      postId: { in: momentIds },
       status: { notIn: ["DELETED"] },
     },
     _count: { id: true },
@@ -80,39 +100,51 @@ export async function getFeedEntries({
 
   const adoptedIds = new Set<string>();
   const correctableIds = new Set<string>();
-  const correctedIds = new Set<string>();
 
-  const corrections = await prisma.correction.findMany({
-    where: {
-      postId: { in: entryIds },
-      status: { notIn: ["DELETED"] },
-    },
-    select: { postId: true, isAccepted: true },
-  });
+  if (momentIds.length > 0) {
+    const corrections = await prisma.correction.findMany({
+      where: {
+        postId: { in: momentIds },
+        status: { notIn: ["DELETED"] },
+      },
+      select: { postId: true, isAccepted: true },
+    });
 
-  for (const c of corrections) {
-    correctableIds.add(c.postId);
-    if (c.isAccepted) adoptedIds.add(c.postId);
-    else correctedIds.add(c.postId);
+    for (const c of corrections) {
+      correctableIds.add(c.postId);
+      if (c.isAccepted) adoptedIds.add(c.postId);
+    }
   }
 
-  // Apply tab filter
-  let filtered = entries;
-  switch (tab) {
-    case "awaiting":
-      filtered = entries.filter((e) => !correctableIds.has(e.id));
-      break;
-    case "has_corrections":
-      filtered = entries.filter((e) => correctableIds.has(e.id) && !adoptedIds.has(e.id));
-      break;
-    case "adopted":
-      filtered = entries.filter((e) => adoptedIds.has(e.id));
-      break;
-    default:
-      break;
+  // Apply tab filter (only for moments tab types)
+  if (contentType !== "article") {
+    switch (tab) {
+      case "awaiting":
+        filtered = filtered.filter((e) => e.type === "ARTICLE" || !correctableIds.has(e.id));
+        break;
+      case "has_corrections":
+        filtered = filtered.filter((e) => e.type === "ARTICLE" || (correctableIds.has(e.id) && !adoptedIds.has(e.id)));
+        break;
+      case "adopted":
+        filtered = filtered.filter((e) => e.type === "ARTICLE" || adoptedIds.has(e.id));
+        break;
+      default:
+        break;
+    }
   }
 
   const countMap = new Map(correctionCounts.map((c) => [c.postId, c._count.id]));
+
+  // Hottest sort: fetch like counts and sort descending
+  if (sort === "hottest" && filtered.length > 0) {
+    const likeCounts = await prisma.entryLike.groupBy({
+      by: ["entryId"],
+      where: { entryId: { in: filtered.map((e) => e.id) } },
+      _count: { id: true },
+    });
+    const likeMap = new Map(likeCounts.map((l) => [l.entryId, l._count.id]));
+    filtered.sort((a, b) => (likeMap.get(b.id) ?? 0) - (likeMap.get(a.id) ?? 0));
+  }
 
   const hasMore = filtered.length > limit;
   if (hasMore) filtered.pop();
@@ -157,7 +189,6 @@ export async function getEntryById(id: string) {
     where: { id },
     select: entryDetailSelect,
   });
-  if (!entry || entry.status !== "PUBLISHED") return null;
   return entry;
 }
 
@@ -207,11 +238,14 @@ function formatEntryCard(
       entry.content.length > 200
         ? entry.content.slice(0, 200) + "..."
         : entry.content,
+    coverImage: entry.coverImage,
     expressionType: entry.expressionType,
     completeness: entry.completeness,
     visibility: entry.visibility,
     status: entry.status,
+    tags: entry.tags as string[] | null,
     createdAt: entry.createdAt.toISOString(),
+    publishedAt: entry.publishedAt?.toISOString() ?? null,
     author: {
       id: entry.author.id,
       username: entry.author.username,

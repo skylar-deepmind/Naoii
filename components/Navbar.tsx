@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/Button";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { ThemeSwitcher } from "@/components/ThemeSwitcher";
 import { ThemeLogo } from "@/components/ThemeLogo";
+import { CreateButton } from "@/components/CreateButton";
 import { logoutAction } from "@/server/actions/auth";
 import { getUnreadCount } from "@/server/queries/notifications";
 import { getLocale, getDict } from "@/lib/i18n";
@@ -11,10 +12,12 @@ import type { SessionUser } from "@/lib/auth";
 
 interface NavbarProps {
   user?: SessionUser | null;
+  variant?: "default" | "app";
 }
 
-export async function Navbar({ user }: NavbarProps) {
+export async function Navbar({ user, variant = "default" }: NavbarProps) {
   const isAuthenticated = !!user;
+  const isApp = variant === "app";
   const locale = await getLocale();
   const dict = await getDict();
 
@@ -64,13 +67,15 @@ export async function Navbar({ user }: NavbarProps) {
 
       {/* Desktop nav */}
       <div className="navbar-center hidden lg:flex">
-        <ul className="menu menu-horizontal px-1 gap-1">
-          {navLinks.map((link) => (
-            <li key={link.href + link.label}>
-              <Link href={link.href} className="text-sm">{link.label}</Link>
-            </li>
-          ))}
-        </ul>
+        {!isApp && (
+          <ul className="menu menu-horizontal px-1 gap-1">
+            {navLinks.map((link) => (
+              <li key={link.href + link.label}>
+                <Link href={link.href} className="text-sm">{link.label}</Link>
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
 
       {/* Right side */}
@@ -80,6 +85,8 @@ export async function Navbar({ user }: NavbarProps) {
 
         {isAuthenticated ? (
           <>
+            {!isApp && <CreateButton dict={dict.nav as Record<string, string>} />}
+
             {/* Notification bell */}
             <Link href="/notifications" className="btn btn-ghost btn-circle">
               <div className="indicator">

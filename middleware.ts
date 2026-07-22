@@ -5,7 +5,7 @@ import { jwtVerify } from "jose";
 const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET!);
 const COOKIE_NAME = "naoii_session";
 
-const protectedPaths = ["/app", "/feed", "/settings", "/posts/new", "/library", "/notifications", "/admin"];
+const protectedPaths = ["/app", "/feed", "/settings", "/posts/new", "/articles/new", "/library", "/notifications", "/admin"];
 const authPaths = ["/login", "/register"];
 
 async function isAuthenticated(request: NextRequest): Promise<boolean> {
@@ -46,6 +46,8 @@ export const config = {
     "/feed/:path*",
     "/settings/:path*",
     "/posts/new",
+    "/articles/new",
+    "/articles/:path*/edit",
     "/library",
     "/notifications",
     "/admin",

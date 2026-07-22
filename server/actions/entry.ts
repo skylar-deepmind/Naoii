@@ -13,7 +13,7 @@ type ActionErrors = Record<string, string[]>;
 export async function createEntryAction(
   _prev: unknown,
   formData: FormData
-): Promise<{ errors?: ActionErrors }> {
+): Promise<{ errors?: ActionErrors; success?: boolean }> {
   const user = await getCurrentUser();
   if (!user) {
     return { errors: { _form: ["请先登录"] } };
@@ -26,24 +26,26 @@ export async function createEntryAction(
     return { errors: parsed.error.flatten().fieldErrors as ActionErrors };
   }
 
-  const { type, title, content, coverImage, sourceLanguage, targetLanguage, expressionType, tone, completeness, visibility, status } =
+  const { type, title, content, coverImage, tags, sourceLanguage, targetLanguage, expressionType, tone, completeness, visibility, status } =
     parsed.data;
 
   try {
     const entry = await prisma.$transaction(async (tx) => {
       const now = new Date();
+      const isArticle = type === "ARTICLE";
       const e = await tx.entry.create({
         data: {
           authorId: user.id,
-          type: type === "ARTICLE" ? "ARTICLE" : "MOMENT",
+          type: isArticle ? "ARTICLE" : "MOMENT",
           title: title || null,
           content: content || "",
           coverImage: coverImage || null,
-          sourceLanguageId: sourceLanguage || null,
-          targetLanguageId: targetLanguage || null,
-          expressionType: expressionType || null,
-          tone: tone || null,
-          completeness: completeness || null,
+          tags: parseTags(tags || ""),
+          sourceLanguageId: isArticle ? null : (sourceLanguage || null),
+          targetLanguageId: isArticle ? null : (targetLanguage || null),
+          expressionType: isArticle ? null : (expressionType || null),
+          tone: isArticle ? null : (tone || null),
+          completeness: isArticle ? null : (completeness || null),
           visibility,
           status,
           publishedAt: status === "PUBLISHED" ? now : null,
@@ -71,7 +73,8 @@ export async function createEntryAction(
     });
 
     revalidatePath("/feed");
-    redirect(`/posts/${entry.id}`);
+    const redirectPath = entry.type === "ARTICLE" ? `/articles/${entry.id}` : `/posts/${entry.id}`;
+    redirect(redirectPath);
   } catch (e: any) {
     if (e?.digest?.startsWith?.("NEXT_REDIRECT")) throw e;
     console.error("createEntryAction error:", e);
@@ -97,17 +100,14 @@ export async function updateEntryAction(
     return { errors: parsed.error.flatten().fieldErrors as ActionErrors };
   }
 
-  const { entryId, title, content, coverImage, sourceLanguage, targetLanguage, expressionType, tone, completeness, visibility } =
+  const { entryId, title, content, coverImage, tags, sourceLanguage, targetLanguage, expressionType, tone, completeness, visibility } =
     parsed.data;
 
   try {
     await prisma.$transaction(async (tx) => {
-      const entry = await tx.entry.findUnique({ where: { id: entryId }, select: { authorId: true, status: true } });
+      const entry = await tx.entry.findUnique({ where: { id: entryId }, select: { authorId: true, status: true, type: true } });
       if (!entry) throw new Error("ENTRY_NOT_FOUND");
       if (entry.authorId !== user.id) throw new Error("NOT_AUTHOR");
-      if (entry.status === "PUBLISHED" && content) {
-        // Content can still be edited after publish
-      }
 
       await tx.entry.update({
         where: { id: entryId },
@@ -115,6 +115,7 @@ export async function updateEntryAction(
           ...(title !== undefined ? { title: title || null } : {}),
           ...(content !== undefined ? { content } : {}),
           ...(coverImage !== undefined ? { coverImage: coverImage || null } : {}),
+          ...(tags !== undefined ? { tags: parseTags(tags || "") } : {}),
           ...(sourceLanguage !== undefined ? { sourceLanguageId: sourceLanguage || null } : {}),
           ...(targetLanguage !== undefined ? { targetLanguageId: targetLanguage || null } : {}),
           ...(expressionType !== undefined ? { expressionType: expressionType || null } : {}),
@@ -144,15 +145,16 @@ export async function updateEntryAction(
     });
 
     revalidatePath(`/posts/${entryId}`);
+    revalidatePath(`/articles/${entryId}`);
     revalidatePath("/feed");
     return { success: true };
   } catch (e: any) {
     const message = e?.message || "";
     if (message === "ENTRY_NOT_FOUND") {
-      return { errors: { _form: ["瞬间不存在"] } };
+      return { errors: { _form: ["内容不存在"] } };
     }
     if (message === "NOT_AUTHOR") {
-      return { errors: { _form: ["只有作者可以编辑自己的瞬间"] } };
+      return { errors: { _form: ["只有作者可以编辑自己的内容"] } };
     }
     console.error("updateEntryAction error:", e);
     return { errors: { _form: ["更新失败，请稍后再试"] } };
@@ -201,12 +203,23 @@ export async function deleteEntryAction(
   } catch (e: any) {
     const message = e?.message || "";
     if (message === "ENTRY_NOT_FOUND") {
-      return { errors: { _form: ["瞬间不存在"] } };
+      return { errors: { _form: ["内容不存在"] } };
     }
     if (message === "NOT_AUTHOR") {
-      return { errors: { _form: ["只有作者可以删除自己的瞬间"] } };
+      return { errors: { _form: ["只有作者可以删除自己的内容"] } };
     }
     console.error("deleteEntryAction error:", e);
     return { errors: { _form: ["删除失败，请稍后再试"] } };
   }
+}
+
+// ─── Helpers ─────────────────────────────────────────
+
+function parseTags(input: string | null): string[] {
+  if (!input) return [];
+  return input
+    .split(/[,，、\s]+/)
+    .map((t) => t.trim())
+    .filter((t) => t.length > 0 && t.length <= 30)
+    .slice(0, 10);
 }

@@ -9,6 +9,7 @@ interface Props {
   username: string;
   currentUrl: string | null;
   onSave: (base64: string) => Promise<void>;
+  dict: Record<string, string>;
 }
 
 const MAX_SIZE = 200;
@@ -40,7 +41,7 @@ function resizeImage(file: File): Promise<string> {
   });
 }
 
-export function AvatarUpload({ username, currentUrl, onSave }: Props) {
+export function AvatarUpload({ username, currentUrl, onSave, dict }: Props) {
   const [preview, setPreview] = useState<string | null>(currentUrl);
   const [loading, setLoading] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -70,11 +71,11 @@ export function AvatarUpload({ username, currentUrl, onSave }: Props) {
         type="button"
         onClick={() => inputRef.current?.click()}
         className="relative group cursor-pointer"
-        title="点击更换头像"
+        title={dict.clickToChange || "点击更换头像"}
       >
         <UserAvatar username={username} src={preview} size="lg" />
         <div className="absolute inset-0 rounded-full bg-black/30 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-          <span className="text-white text-xs font-medium">更换</span>
+          <span className="text-white text-xs font-medium">{dict.changeAvatar || "更换"}</span>
         </div>
       </button>
       <input
@@ -85,9 +86,9 @@ export function AvatarUpload({ username, currentUrl, onSave }: Props) {
         onChange={handleFile}
       />
       <div className="text-xs text-base-content/50">
-        <p>点击头像上传</p>
-        <p>支持 JPG、PNG、WebP，最大 5MB</p>
-        {loading && <p className="text-primary mt-1">处理中...</p>}
+        <p>{dict.clickToUpload || "点击头像上传"}</p>
+        <p>{dict.uploadHint || "支持 JPG、PNG、WebP，最大 5MB"}</p>
+        {loading && <p className="text-primary mt-1">{dict.processing || "处理中..."}</p>}
       </div>
     </div>
   );

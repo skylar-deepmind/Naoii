@@ -6,6 +6,7 @@ import { Card } from "@/components/ui/Card";
 import { UserAvatar } from "@/components/ui/UserAvatar";
 import { CorrectionForm } from "@/components/CorrectionForm";
 import { CorrectionCard } from "@/components/CorrectionCard";
+import { CorrectionComments } from "@/components/CorrectionComments";
 import { AcceptButton } from "@/components/AcceptButton";
 import { SaveToLibraryButton } from "@/components/SaveToLibraryButton";
 import { ReportButton } from "@/components/ReportButton";
@@ -99,6 +100,13 @@ export default async function PostDetailPage({ params }: Props) {
                     {isAuthor && <AcceptButton correctionId={correction.id} postId={id} isAlreadyAccepted={correction.isAccepted} postHasAccepted={postHasAccepted} dict={dict} />}
                     {currentUser && currentUser.id !== correction.author.id && <ReportButton postId={id} correctionId={correction.id} dict={dict} />}
                     <SaveToLibraryButton correctionId={correction.id} postId={id} isAccepted={correction.isAccepted} isSaved={savedCorrectionIds.has(correction.id)} dict={dict} />
+                    <CorrectionComments
+                      entryId={id}
+                      correctionId={correction.id}
+                      currentUserId={currentUser?.id}
+                      dict={dict as Record<string, any>}
+                      triggerLabel={dict.correction?.discuss || "讨论"}
+                    />
                   </div>
                 </div>
               ))}
