@@ -81,6 +81,22 @@ enum ReportReason {
   OTHER
 }
 
+enum EntryType {
+  MOMENT
+  ARTICLE
+}
+
+enum EntryVisibility {
+  PUBLIC
+  UNLISTED
+  PRIVATE
+}
+
+enum EntryStatus {
+  DRAFT
+  PUBLISHED
+}
+
 // ─── Models ────────────────────────────────────────────
 
 model User {
@@ -95,6 +111,7 @@ model User {
 
   profile       UserProfile?
   posts         Post[]
+  entries       Entry[]
   corrections   Correction[]
   reputationLog ReputationLog[]
   collections   ExpressionCollectionItem[]
@@ -136,6 +153,8 @@ model Language {
   learningProfiles UserProfile[] @relation("LearningLanguage")
   sourcePosts      Post[]        @relation("SourceLanguage")
   targetPosts      Post[]        @relation("TargetLanguage")
+  sourceEntries    Entry[]       @relation("EntrySourceLanguage")
+  targetEntries    Entry[]       @relation("EntryTargetLanguage")
 }
 
 model Post {
@@ -163,6 +182,35 @@ model Post {
 
   @@index([authorId])
   @@index([status, visibility])
+  @@index([createdAt])
+}
+
+model Entry {
+  id               String         @id @default(cuid())
+  authorId         String
+  type             EntryType      @default(MOMENT)
+  title            String?
+  content          String
+  coverImage       String?
+  sourceLanguageId String?
+  targetLanguageId String?
+  expressionType   String?
+  tone             String?
+  completeness     String?
+  visibility       EntryVisibility @default(PUBLIC)
+  status           EntryStatus     @default(PUBLISHED)
+  isPinned         Boolean         @default(false)
+  viewCount        Int             @default(0)
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
+  publishedAt      DateTime?
+
+  author         User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  sourceLanguage Language? @relation("EntrySourceLanguage", fields: [sourceLanguageId], references: [id], onDelete: SetNull)
+  targetLanguage Language? @relation("EntryTargetLanguage", fields: [targetLanguageId], references: [id], onDelete: SetNull)
+
+  @@index([authorId])
+  @@index([type, status, visibility])
   @@index([createdAt])
 }
 

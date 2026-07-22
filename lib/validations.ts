@@ -52,9 +52,40 @@ export const createPostSchema = z.object({
   completeness: z.enum(["COMPLETE", "PARTIAL", "IDEA_ONLY"]),
 });
 
+// ─── Entry (unified content model) ──────────────────
+
+export const createEntrySchema = z.object({
+  type: z.enum(["MOMENT", "ARTICLE"]).default("MOMENT"),
+  title: z.string().max(200, "标题最多 200 个字符").optional(),
+  content: z.string().min(1, "请输入内容").max(30000, "内容最多 30000 个字符"),
+  coverImage: z.string().max(500).optional(),
+  sourceLanguage: z.string().optional(),
+  targetLanguage: z.string().optional(),
+  expressionType: z.string().optional(),
+  tone: z.string().optional(),
+  completeness: z.string().optional(),
+  visibility: z.enum(["PUBLIC", "UNLISTED", "PRIVATE"]).default("PUBLIC"),
+  status: z.enum(["DRAFT", "PUBLISHED"]).default("PUBLISHED"),
+});
+
+export const updateEntrySchema = z.object({
+  entryId: z.string().min(1),
+  title: z.string().max(200, "标题最多 200 个字符").optional(),
+  content: z.string().min(1, "请输入内容").max(30000, "内容最多 30000 个字符").optional(),
+  coverImage: z.string().max(500).optional(),
+  sourceLanguage: z.string().optional(),
+  targetLanguage: z.string().optional(),
+  expressionType: z.string().optional(),
+  tone: z.string().optional(),
+  completeness: z.string().optional(),
+  visibility: z.enum(["PUBLIC", "UNLISTED", "PRIVATE"]).optional(),
+});
+
 // ─── Types ──────────────────────────────────────────
 
 export type LoginInput = z.infer<typeof loginSchema>;
 export type RegisterInput = z.infer<typeof registerSchema>;
 export type UpdateProfileInput = z.infer<typeof updateProfileSchema>;
 export type CreatePostInput = z.infer<typeof createPostSchema>;
+export type CreateEntryInput = z.infer<typeof createEntrySchema>;
+export type UpdateEntryInput = z.infer<typeof updateEntrySchema>;

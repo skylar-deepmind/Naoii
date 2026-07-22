@@ -10,7 +10,7 @@ import { Input } from "@/components/ui/Input";
 import { Textarea } from "@/components/ui/Textarea";
 import { Select } from "@/components/ui/Select";
 import { TemplateSelector } from "@/components/TemplateSelector";
-import { createPostAction } from "@/server/actions/post";
+import { createEntryAction } from "@/server/actions/entry";
 import { useToast } from "@/lib/toast";
 import { RelatedReminder } from "@/components/RelatedReminder";
 import type { Dictionary, Locale } from "@/locales";
@@ -176,6 +176,7 @@ export function PostWizard({ languages, dict, locale, intent, userId }: Props) {
     if (!validateStep(2)) return;
     setSubmitting(true);
     const fd = new FormData();
+    fd.append("type", "MOMENT");
     if (form.title) fd.append("title", form.title);
     fd.append("content", form.content);
     fd.append("sourceLanguage", form.sourceLanguage);
@@ -184,8 +185,9 @@ export function PostWizard({ languages, dict, locale, intent, userId }: Props) {
     fd.append("tone", form.tone);
     fd.append("visibility", form.visibility);
     fd.append("completeness", form.completeness);
+    fd.append("status", "PUBLISHED");
     try {
-      const result = await createPostAction({}, fd);
+      const result = await createEntryAction({}, fd);
       if (result?.errors) {
         setErrors((prev) => ({ ...prev, ...Object.fromEntries(Object.entries(result.errors!).map(([k, v]) => [k, v?.[0] || ""])) }));
         setSubmitting(false);

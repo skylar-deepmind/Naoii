@@ -9,6 +9,7 @@ export interface NavLink {
 
 export interface ExpressionCard {
   id: string;
+  type?: string;
   content: string;
   author: {
     id: string;
@@ -17,6 +18,31 @@ export interface ExpressionCard {
   };
   correctionCount: number;
   createdAt: string;
+}
+
+export interface MomentCard {
+  id: string;
+  type: string;
+  title: string | null;
+  content: string;
+  expressionType: string | null;
+  completeness: string | null;
+  visibility: string;
+  status: string;
+  createdAt: string;
+  author: {
+    id: string;
+    username: string;
+    displayName: string | null;
+    avatarUrl: string | null;
+  };
+  targetLanguage: {
+    id: string;
+    name: string;
+    nativeName: string;
+  } | null;
+  correctionCount: number;
+  hasAdoptedCorrection: boolean;
 }
 
 export interface CorrectionCard {
