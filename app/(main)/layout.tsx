@@ -103,6 +103,16 @@ export default async function MainLayout({ children }: { children: React.ReactNo
       key: "system",
       items: [
         {
+          key: "profile",
+          label: dict.nav?.myProfile || "我的主页",
+          href: user ? `/profile/${user.username}` : "#",
+          icon: (
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+            </svg>
+          ),
+        },
+        {
           key: "settings",
           label: dict.nav?.settings || "设置",
           href: "/settings/profile",
@@ -134,7 +144,7 @@ export default async function MainLayout({ children }: { children: React.ReactNo
         <Sidebar sections={sections} dict={dict.nav as Record<string, any>} />
         <main className="flex-1 min-w-0 pb-16 lg:pb-0">{children}</main>
       </div>
-      <MobileBottomNav />
+      <MobileBottomNav currentUsername={user?.username} />
     </>
   );
 }

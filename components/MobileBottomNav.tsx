@@ -57,7 +57,7 @@ const navItems = [
   },
 ];
 
-export function MobileBottomNav() {
+export function MobileBottomNav({ currentUsername }: { currentUsername?: string }) {
   const [createOpen, setCreateOpen] = useState(false);
 
   // Hide on desktop
@@ -102,7 +102,7 @@ export function MobileBottomNav() {
           );
         }
         return (
-          <Link key={item.key} href={item.href} className={item.highlight ? "text-primary" : ""}>
+          <Link key={item.key} href={item.key === "me" && currentUsername ? `/profile/${currentUsername}` : item.href} className={item.highlight ? "text-primary" : ""}>
             {item.icon}
             <span className="btm-nav-label text-xs">{item.label}</span>
           </Link>
