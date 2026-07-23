@@ -5,7 +5,7 @@ const ENTRY_LIST_PAGE_SIZE = 12;
 
 // ─── Feed query ──────────────────────────────────────
 
-const entryCardSelect = {
+export const entryCardSelect = {
   id: true,
   type: true,
   title: true,
@@ -223,7 +223,7 @@ export async function getEntryCorrectionCount(entryId: string) {
 
 // ─── Helpers ─────────────────────────────────────────
 
-function formatEntryCard(
+export function formatEntryCard(
   entry: EntryCardData,
   correctionCount: number,
   hasAdoptedCorrection: boolean
