@@ -3,6 +3,8 @@ name: Build and Publish Docker Image
 on:
   push:
     branches: [main]
+  pull_request:
+    branches: [main]
   workflow_dispatch:
 
 env:
@@ -29,6 +31,7 @@ jobs:
         run: npm run build
         env:
           NODE_ENV: production
+          DATABASE_URL: ${{ secrets.DATABASE_URL || '' }}
 
   build-and-push:
     needs: verify-build
