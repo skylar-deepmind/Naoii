@@ -67,6 +67,7 @@ export const createEntrySchema = z.object({
   completeness: z.string().optional(),
   visibility: z.enum(["PUBLIC", "UNLISTED", "PRIVATE"]).default("PUBLIC"),
   status: z.enum(["DRAFT", "PUBLISHED"]).default("PUBLISHED"),
+  topicId: z.string().optional(),
 });
 
 export const updateEntrySchema = z.object({
@@ -81,6 +82,7 @@ export const updateEntrySchema = z.object({
   tone: z.string().optional(),
   completeness: z.string().optional(),
   visibility: z.enum(["PUBLIC", "UNLISTED", "PRIVATE"]).optional(),
+  topicId: z.string().optional(),
 });
 
 // ─── Types ──────────────────────────────────────────

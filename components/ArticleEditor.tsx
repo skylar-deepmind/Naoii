@@ -8,6 +8,7 @@ import { Select } from "@/components/ui/Select";
 import { Alert } from "@/components/ui/Alert";
 import { Badge } from "@/components/ui/Badge";
 import { ImageCropper } from "@/components/ImageCropper";
+import { TopicSelector } from "@/components/TopicSelector";
 import { createEntryAction, updateEntryAction } from "@/server/actions/entry";
 import { useToast } from "@/lib/toast";
 import type { Dictionary } from "@/locales";
@@ -19,6 +20,7 @@ interface FormState {
   tags: string;
   visibility: string;
   status: string;
+  topicId: string;
 }
 
 const DRAFT_KEY = "naoii_article_draft";
@@ -32,7 +34,7 @@ function saveDraft(state: FormState) { try { localStorage.setItem(DRAFT_KEY, JSO
 function clearDraft() { try { localStorage.removeItem(DRAFT_KEY); } catch {} }
 
 const DEFAULT_STATE: FormState = {
-  title: "", content: "", coverImage: "", tags: "", visibility: "PUBLIC", status: "PUBLISHED",
+  title: "", content: "", coverImage: "", tags: "", visibility: "PUBLIC", status: "PUBLISHED", topicId: "",
 };
 
 interface Props {
@@ -45,7 +47,7 @@ export function ArticleEditor({ dict, editEntry }: Props) {
   const initialised = useRef(false);
 
   const [form, setForm] = useState<FormState>(() => {
-    if (editEntry) return { title: editEntry.title || "", content: editEntry.content, coverImage: editEntry.coverImage || "", tags: editEntry.tags.join("、"), visibility: editEntry.visibility, status: "PUBLISHED" };
+    if (editEntry) return { title: editEntry.title || "", content: editEntry.content, coverImage: editEntry.coverImage || "", tags: editEntry.tags.join("、"), visibility: editEntry.visibility, status: "PUBLISHED", topicId: "" };
     return loadDraft() || { ...DEFAULT_STATE };
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -109,6 +111,7 @@ export function ArticleEditor({ dict, editEntry }: Props) {
     if (form.tags) fd.append("tags", form.tags);
     fd.append("visibility", form.visibility);
     fd.append("status", isDraft ? "DRAFT" : "PUBLISHED");
+    if (form.topicId) fd.append("topicId", form.topicId);
     try {
       const action = editEntry ? updateEntryAction : createEntryAction;
       if (editEntry) fd.append("entryId", editEntry.id);
@@ -183,6 +186,8 @@ export function ArticleEditor({ dict, editEntry }: Props) {
             </div>
             <Select label={dict.post.visibility} options={visOptions} value={form.visibility} onChange={(e) => update({ visibility: e.target.value })} />
           </div>
+
+          <TopicSelector value={form.topicId} onChange={(id) => update({ topicId: id })} dict={dict} />
 
           {/* ── Feed Card Preview ─────── */}
           {(form.title || form.content || form.coverImage) && (

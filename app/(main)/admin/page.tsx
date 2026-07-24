@@ -4,7 +4,9 @@ import { PageHeader } from "@/components/ui/PageHeader";
 import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
+import { AdminNav } from "@/components/AdminNav";
 import { getCurrentUser } from "@/lib/auth";
+import { getDict } from "@/lib/i18n";
 import {
   getPendingReports,
   getAllUsers,
@@ -28,6 +30,8 @@ import {
 export default async function AdminPage() {
   const user = await getCurrentUser();
   if (!user || user.role !== "ADMIN") notFound();
+
+  const dict = await getDict();
 
   const [reports, users, posts, corrections, logs, metrics] = await Promise.all([
     getPendingReports(),
@@ -62,6 +66,11 @@ export default async function AdminPage() {
   return (
     <AppShell>
       <PageHeader title="管理员后台" description="举报 / 用户 / 帖子 / 修改建议 管理" />
+      <AdminNav
+        overview={dict.admin?.overview || "概览"}
+        analytics={dict.admin?.analytics || "数据看板"}
+        topics={dict.admin?.topics?.title || "话题管理"}
+      />
 
       {/* Summary stats */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-8">

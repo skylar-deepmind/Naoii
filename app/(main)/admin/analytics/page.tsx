@@ -3,6 +3,8 @@ import { AppShell } from "@/components/ui/AppShell";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { Card } from "@/components/ui/Card";
 import { getCurrentUser } from "@/lib/auth";
+import { getDict } from "@/lib/i18n";
+import { AdminNav } from "@/components/AdminNav";
 import { getAnalytics, getDailyTrend, getFunnel } from "@/server/queries/analytics";
 import { TimeRangeTabs } from "@/components/TimeRangeTabs";
 import { TrendChart } from "@/components/TrendChart";
@@ -15,6 +17,8 @@ interface Props {
 export default async function AnalyticsPage({ searchParams }: Props) {
   const user = await getCurrentUser();
   if (!user || user.role !== "ADMIN") notFound();
+
+  const dict = await getDict();
 
   const { range: rangeParam } = await searchParams;
   const range = (rangeParam === "today" || rangeParam === "7d" || rangeParam === "30d") ? rangeParam : "7d";
@@ -31,6 +35,11 @@ export default async function AnalyticsPage({ searchParams }: Props) {
   return (
     <AppShell>
       <PageHeader title="数据看板" description="核心产品指标" />
+      <AdminNav
+        overview={dict.admin?.overview || "概览"}
+        analytics={dict.admin?.analytics || "数据看板"}
+        topics={dict.admin?.topics?.title || "话题管理"}
+      />
       <TimeRangeTabs current={range} />
 
       {/* Metric Cards */}

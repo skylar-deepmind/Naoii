@@ -57,12 +57,12 @@ const navItems = [
   },
 ];
 
-export function MobileBottomNav({ currentUsername }: { currentUsername?: string }) {
+export function MobileBottomNav() {
   const [createOpen, setCreateOpen] = useState(false);
 
   // Hide on desktop
   return (
-    <nav className="btm-nav btm-nav-sm lg:hidden border-t border-base-200 bg-base-100 z-40">
+    <nav className="dock dock-sm lg:hidden border-t border-base-200 bg-base-100 z-40">
       {navItems.map((item) => {
         if (item.key === "create") {
           return (
@@ -76,7 +76,7 @@ export function MobileBottomNav({ currentUsername }: { currentUsername?: string 
                 <div className="bg-primary text-primary-content rounded-full p-1.5 -mt-5 shadow-lg">
                   {item.icon}
                 </div>
-                <span className="btm-nav-label text-xs mt-0.5">{item.label}</span>
+                <span className="dock-label text-xs mt-0.5">{item.label}</span>
               </button>
               {createOpen && (
                 <div className="absolute bottom-full right-0 mb-2 w-36 bg-base-100 rounded-box shadow-lg border border-base-200 z-50 p-1">
@@ -102,9 +102,9 @@ export function MobileBottomNav({ currentUsername }: { currentUsername?: string 
           );
         }
         return (
-          <Link key={item.key} href={item.key === "me" && currentUsername ? `/profile/${currentUsername}` : item.href} className={item.highlight ? "text-primary" : ""}>
+          <Link key={item.key} href={item.href} className={item.highlight ? "text-primary" : ""}>
             {item.icon}
-            <span className="btm-nav-label text-xs">{item.label}</span>
+            <span className="dock-label text-xs">{item.label}</span>
           </Link>
         );
       })}
