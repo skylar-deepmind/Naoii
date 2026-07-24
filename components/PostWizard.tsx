@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/Input";
 import { Textarea } from "@/components/ui/Textarea";
 import { Select } from "@/components/ui/Select";
 import { TemplateSelector } from "@/components/TemplateSelector";
+import { TopicSelector } from "@/components/TopicSelector";
 import { createEntryAction } from "@/server/actions/entry";
 import { useToast } from "@/lib/toast";
 import { RelatedReminder } from "@/components/RelatedReminder";
@@ -28,6 +29,7 @@ interface FormState {
   title: string;
   content: string;
   visibility: string;
+  topicId: string;
 }
 
 const DRAFT_KEY = "naoii_post_draft";
@@ -60,6 +62,7 @@ const DEFAULT_STATE: FormState = {
   title: "",
   content: "",
   visibility: "PUBLIC",
+  topicId: "",
 };
 
 // ── Props ───────────────────────────────────────
@@ -186,6 +189,7 @@ export function PostWizard({ languages, dict, locale, intent, userId }: Props) {
     fd.append("visibility", form.visibility);
     fd.append("completeness", form.completeness);
     fd.append("status", "PUBLISHED");
+    if (form.topicId) fd.append("topicId", form.topicId);
     try {
       const result = await createEntryAction({}, fd);
       if (result?.errors) {
@@ -255,6 +259,8 @@ export function PostWizard({ languages, dict, locale, intent, userId }: Props) {
               <Select label={dict.post.targetLanguage} options={langOptions} placeholder={dict.post.selectTarget} value={form.targetLanguage} onChange={(e) => update({ targetLanguage: e.target.value })} error={errors.targetLanguage} />
             </div>
             <Select label={dict.post.tone} options={toneOptions} placeholder={dict.post.selectTone} value={form.tone} onChange={(e) => update({ tone: e.target.value })} error={errors.tone} />
+
+            <TopicSelector value={form.topicId} onChange={(id) => update({ topicId: id })} dict={dict} />
 
             {userId && (form.expressionType || form.tone || form.targetLanguage) && (
               <RelatedReminder

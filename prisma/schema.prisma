@@ -122,6 +122,7 @@ model User {
   reports         Report[]         @relation("Reporter")
   resolvedReports Report[]         @relation("Resolver")
   adminActions    AdminActionLog[]
+  createdTopics   Topic[]
 
   @@index([status])
   @@index([role])
@@ -205,6 +206,7 @@ model Entry {
   tags             Json            @default("[]")
   isPinned         Boolean         @default(false)
   viewCount        Int             @default(0)
+  topicId          String?
   createdAt        DateTime        @default(now())
   updatedAt        DateTime        @updatedAt
   publishedAt      DateTime?
@@ -212,12 +214,14 @@ model Entry {
   author         User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
   sourceLanguage Language? @relation("EntrySourceLanguage", fields: [sourceLanguageId], references: [id], onDelete: SetNull)
   targetLanguage Language? @relation("EntryTargetLanguage", fields: [targetLanguageId], references: [id], onDelete: SetNull)
+  topic          Topic?    @relation(fields: [topicId], references: [id], onDelete: SetNull)
   likes          EntryLike[]
   comments       Comment[]
 
   @@index([authorId])
   @@index([type, status, visibility])
   @@index([createdAt])
+  @@index([topicId])
 }
 
 model Correction {
@@ -402,4 +406,28 @@ model CommentLike {
 
   @@unique([commentId, userId])
   @@index([commentId])
+}
+
+// ─── Topic ────────────────────────────────────────────
+
+model Topic {
+  id               String    @id @default(cuid())
+  name             String
+  slug             String    @unique
+  coverImage       String?
+  description      String
+  isPermanent      Boolean   @default(true)
+  startTime        DateTime?
+  endTime          DateTime?
+  eventDescription String?
+  closedAt         DateTime?
+  createdById      String
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  createdBy User    @relation(fields: [createdById], references: [id])
+  entries   Entry[]
+
+  @@index([slug])
+  @@index([startTime, endTime])
 }

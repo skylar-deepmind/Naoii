@@ -16,6 +16,7 @@ export const entryCardSelect = {
   visibility: true,
   status: true,
   tags: true,
+  topicId: true,
   createdAt: true,
   publishedAt: true,
   author: {
@@ -25,6 +26,7 @@ export const entryCardSelect = {
       profile: { select: { displayName: true, avatarUrl: true } },
     },
   },
+  topic: { select: { id: true, slug: true, name: true } },
   targetLanguage: { select: { id: true, name: true, nativeName: true } },
 } satisfies Prisma.EntrySelect;
 
@@ -244,6 +246,10 @@ export function formatEntryCard(
     visibility: entry.visibility,
     status: entry.status,
     tags: entry.tags as string[] | null,
+    topicId: entry.topicId,
+    topic: entry.topic
+      ? { id: entry.topic.id, slug: entry.topic.slug, name: entry.topic.name }
+      : null,
     createdAt: entry.createdAt.toISOString(),
     publishedAt: entry.publishedAt?.toISOString() ?? null,
     author: {

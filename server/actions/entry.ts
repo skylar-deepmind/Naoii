@@ -26,7 +26,7 @@ export async function createEntryAction(
     return { errors: parsed.error.flatten().fieldErrors as ActionErrors };
   }
 
-  const { type, title, content, coverImage, tags, sourceLanguage, targetLanguage, expressionType, tone, completeness, visibility, status } =
+  const { type, title, content, coverImage, tags, sourceLanguage, targetLanguage, expressionType, tone, completeness, visibility, status, topicId } =
     parsed.data;
 
   try {
@@ -48,6 +48,7 @@ export async function createEntryAction(
           completeness: isArticle ? null : (completeness || null),
           visibility,
           status,
+          topicId: topicId || null,
           publishedAt: status === "PUBLISHED" ? now : null,
         },
       });
@@ -100,7 +101,7 @@ export async function updateEntryAction(
     return { errors: parsed.error.flatten().fieldErrors as ActionErrors };
   }
 
-  const { entryId, title, content, coverImage, tags, sourceLanguage, targetLanguage, expressionType, tone, completeness, visibility } =
+  const { entryId, title, content, coverImage, tags, sourceLanguage, targetLanguage, expressionType, tone, completeness, visibility, topicId } =
     parsed.data;
 
   try {
@@ -122,6 +123,7 @@ export async function updateEntryAction(
           ...(tone !== undefined ? { tone: tone || null } : {}),
           ...(completeness !== undefined ? { completeness: completeness || null } : {}),
           ...(visibility !== undefined ? { visibility: visibility as any } : {}),
+          ...(topicId !== undefined ? { topicId: topicId || null } : {}),
         },
       });
 

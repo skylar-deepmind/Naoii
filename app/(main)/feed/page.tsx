@@ -162,6 +162,11 @@ function MomentCard({ entry, typeLabels, completenessLabels, correctionLabel, ad
               {entry.expressionType && typeLabels[entry.expressionType] && <Badge variant="default" size="sm">{typeLabels[entry.expressionType]}</Badge>}
               {entry.correctionCount > 0 && <Badge variant="primary" size="sm">{entry.correctionCount} {correctionLabel}</Badge>}
               {entry.hasAdoptedCorrection && <Badge variant="success" size="sm">{adoptedLabel}</Badge>}
+            {entry.topic && (
+              <Link href={`/topics/${entry.topic.slug}`} onClick={(e) => e.stopPropagation()}>
+                <Badge variant="default" size="sm">#{entry.topic.name}</Badge>
+              </Link>
+            )}
             </div>
           </div>
         </div>
@@ -204,6 +209,11 @@ function ArticleCard({ entry, typeLabels, timeLabels, dict }: {
                     <Badge key={tag} variant="default" size="sm">{tag}</Badge>
                   ))}
                 </>
+              )}
+              {entry.topic && (
+                <Link href={`/topics/${entry.topic.slug}`} onClick={(e) => e.stopPropagation()}>
+                  <Badge variant="default" size="sm">#{entry.topic.name}</Badge>
+                </Link>
               )}
             </div>
           </div>

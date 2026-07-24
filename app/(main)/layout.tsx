@@ -3,35 +3,10 @@ import { Sidebar } from "@/components/Sidebar";
 import { MobileBottomNav } from "@/components/MobileBottomNav";
 import { getCurrentUser } from "@/lib/auth";
 import { getDict } from "@/lib/i18n";
-import { prisma } from "@/lib/prisma";
 
 export default async function MainLayout({ children }: { children: React.ReactNode }) {
   const user = await getCurrentUser();
   const dict = await getDict();
-
-  const [todayMoments, weekArticles, pendingReviews] = await Promise.all([
-    prisma.entry.count({
-      where: {
-        type: "MOMENT",
-        status: "PUBLISHED",
-        visibility: "PUBLIC",
-        createdAt: { gte: new Date(Date.now() - 24 * 60 * 60 * 1000) },
-      },
-    }),
-    prisma.entry.count({
-      where: {
-        type: "ARTICLE",
-        status: "PUBLISHED",
-        visibility: "PUBLIC",
-        createdAt: { gte: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000) },
-      },
-    }),
-    user
-      ? prisma.expressionCollectionItem.count({
-          where: { userId: user.id, reviewStatus: null },
-        })
-      : Promise.resolve(0),
-  ]);
 
   const sections = [
     {
@@ -51,7 +26,6 @@ export default async function MainLayout({ children }: { children: React.ReactNo
           key: "moments",
           label: dict.nav?.moments || "瞬间",
           href: "/app/moments",
-          badge: todayMoments,
           icon: (
             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
@@ -62,7 +36,6 @@ export default async function MainLayout({ children }: { children: React.ReactNo
           key: "articles",
           label: dict.nav?.articles || "篇章",
           href: "/app/articles",
-          badge: weekArticles,
           icon: (
             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
@@ -70,14 +43,12 @@ export default async function MainLayout({ children }: { children: React.ReactNo
           ),
         },
         {
-          key: "activities",
-          label: dict.nav?.activities || "活动",
-          href: "#",
-          disabled: true,
-          disabledTooltip: dict.nav?.comingSoon || "即将推出",
+          key: "topics",
+          label: dict.nav?.topics || "话题",
+          href: "/topics",
           icon: (
             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
             </svg>
           ),
         },
@@ -90,7 +61,6 @@ export default async function MainLayout({ children }: { children: React.ReactNo
           key: "library",
           label: dict.nav?.library || "语料库",
           href: "/library",
-          badge: pendingReviews,
           icon: (
             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
@@ -102,16 +72,16 @@ export default async function MainLayout({ children }: { children: React.ReactNo
     {
       key: "system",
       items: [
-        {
-          key: "profile",
-          label: dict.nav?.myProfile || "我的主页",
-          href: user ? `/profile/${user.username}` : "#",
-          icon: (
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-            </svg>
-          ),
-        },
+        // {
+        //   key: "profile",
+        //   label: dict.nav?.myProfile || "我的主页",
+        //   href: user ? `/profile/${user.username}` : "#",
+        //   icon: (
+        //     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        //       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+        //     </svg>
+        //   ),
+        // },
         {
           key: "settings",
           label: dict.nav?.settings || "设置",
@@ -144,7 +114,7 @@ export default async function MainLayout({ children }: { children: React.ReactNo
         <Sidebar sections={sections} dict={dict.nav as Record<string, any>} />
         <main className="flex-1 min-w-0 pb-16 lg:pb-0">{children}</main>
       </div>
-      <MobileBottomNav currentUsername={user?.username} />
+      <MobileBottomNav />
     </>
   );
 }
