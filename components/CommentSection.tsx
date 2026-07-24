@@ -49,7 +49,7 @@ export function CommentSection({ entryId, correctionId, initialComments, current
   return (
     <div>
       <div className="flex items-center gap-2 mb-4">
-        <span className="text-xs text-base-content/50">{dict.comment?.sort || "排序"}：</span>
+        <span className="text-xs text-ink-muted">{dict.comment?.sort || "排序"}：</span>
         {([
           { value: "time_desc" as const, label: dict.comment?.newest || "最新" },
           { value: "time_asc" as const, label: dict.comment?.oldest || "最早" },
@@ -72,7 +72,7 @@ export function CommentSection({ entryId, correctionId, initialComments, current
       )}
 
       {sorted.length === 0 ? (
-        <p className="text-sm text-base-content/40 text-center py-8">
+        <p className="text-sm text-ink-faint text-center py-8">
           {dict.comment?.empty || "暂无评论"}
         </p>
       ) : (

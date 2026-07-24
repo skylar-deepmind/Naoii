@@ -1,82 +1,128 @@
 @import "tailwindcss";
 @plugin "daisyui";
 
+/* ─── Naoii light theme (Notion-inspired warm paper) ─── */
 @plugin "daisyui/theme" {
   name: "naoii";
   default: true;
   prefersdark: false;
   color-scheme: "light";
-  --color-base-100: #fafafa;
-  --color-base-200: #f0f0f0;
-  --color-base-300: #e0e0e0;
-  --color-base-content: #1a1a2e;
-  --color-primary: #4f46e5;
+  --color-base-100: #f6f5f4;
+  --color-base-200: #f0eeed;
+  --color-base-300: #e6e6e6;
+  --color-base-content: #000000;
+  --color-primary: #0075de;
   --color-primary-content: #ffffff;
-  --color-secondary: #0ea5e9;
+  --color-secondary: #213183;
   --color-secondary-content: #ffffff;
-  --color-accent: #f59e0b;
-  --color-accent-content: #ffffff;
-  --color-neutral: #1e293b;
-  --color-neutral-content: #f8fafc;
-  --color-info: #3b82f6;
+  --color-accent: #d6b6f6;
+  --color-accent-content: #391c57;
+  --color-neutral: #31302e;
+  --color-neutral-content: #ffffff;
+  --color-info: #62aef0;
   --color-info-content: #ffffff;
-  --color-success: #22c55e;
+  --color-success: #1aae39;
   --color-success-content: #ffffff;
-  --color-warning: #f59e0b;
+  --color-warning: #dd5b00;
   --color-warning-content: #ffffff;
   --color-error: #ef4444;
   --color-error-content: #ffffff;
-  --radius-box: 0.5rem;
-  --radius-btn: 0.5rem;
-  --radius-field: 0.5rem;
+  --radius-btn: 8px;
+  --radius-box: 12px;
+  --radius-field: 4px;
 }
 
-/* ─── Dark theme ────────────────────────────── */
+/* ─── Naoii dark theme ────────────────────────── */
 @plugin "daisyui/theme" {
   name: "naoii-dark";
   default: false;
   prefersdark: true;
   color-scheme: "dark";
-  --color-base-100: #1a1b23;
-  --color-base-200: #23242e;
-  --color-base-300: #2e303b;
-  --color-base-content: #e1e2e8;
-  --color-primary: #818cf8;
-  --color-primary-content: #0f0f17;
-  --color-secondary: #38bdf8;
-  --color-secondary-content: #0f0f17;
-  --color-accent: #fbbf24;
-  --color-accent-content: #0f0f17;
-  --color-neutral: #374151;
-  --color-neutral-content: #d1d5db;
-  --color-info: #60a5fa;
-  --color-info-content: #0f0f17;
+  --color-base-100: #191918;
+  --color-base-200: #1f1e1d;
+  --color-base-300: #2d2c2a;
+  --color-base-content: #e8e6e3;
+  --color-primary: #3390e8;
+  --color-primary-content: #0a0a0a;
+  --color-secondary: #3b4fc0;
+  --color-secondary-content: #eae6f5;
+  --color-accent: #c4a0e8;
+  --color-accent-content: #1a0a2e;
+  --color-neutral: #a39e98;
+  --color-neutral-content: #191918;
+  --color-info: #62aef0;
+  --color-info-content: #0a0a0a;
   --color-success: #4ade80;
-  --color-success-content: #0f0f17;
-  --color-warning: #fbbf24;
-  --color-warning-content: #0f0f17;
+  --color-success-content: #0a0a0a;
+  --color-warning: #f59e0b;
+  --color-warning-content: #0a0a0a;
   --color-error: #f87171;
-  --color-error-content: #0f0f17;
-  --radius-box: 0.5rem;
-  --radius-btn: 0.5rem;
-  --radius-field: 0.5rem;
+  --color-error-content: #0a0a0a;
+  --radius-btn: 8px;
+  --radius-box: 12px;
+  --radius-field: 4px;
 }
 
 :root {
-  --background: #fafafa;
-  --foreground: #1a1a2e;
+  --background: #f6f5f4;
+  --foreground: #000000;
+  --surface: #ffffff;
+  --ink-muted: #615d59;
+  --ink-faint: #a39e98;
 }
 
 [data-theme="naoii-dark"] {
-  --background: #1a1b23;
-  --foreground: #e1e2e8;
+  --background: #191918;
+  --foreground: #e8e6e3;
+  --surface: #242321;
+  --ink-muted: #a39e98;
+  --ink-faint: #615d59;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-surface: var(--surface);
+  --color-ink-muted: var(--ink-muted);
+  --color-ink-faint: var(--ink-faint);
   --font-sans: "Inter", "Noto Sans SC", "Noto Sans JP", ui-sans-serif, system-ui, -apple-system, sans-serif;
   --font-mono: "JetBrains Mono", "SF Mono", ui-monospace, monospace;
+  --shadow-level-1: 0 0.175px 1.041px rgba(0,0,0,0.01), 0 0.8px 2.925px rgba(0,0,0,0.02), 0 2.025px 7.847px rgba(0,0,0,0.027), 0 4px 18px rgba(0,0,0,0.04);
+  --shadow-level-2: 0 0.5px 2px rgba(0,0,0,0.02), 0 2px 8px rgba(0,0,0,0.03), 0 6px 20px rgba(0,0,0,0.035), 0 12px 38px rgba(0,0,0,0.04), 0 23px 52px rgba(0,0,0,0.05);
+  --font-size-display-1: 64px;
+  --font-size-display-1--line-height: 1;
+  --font-size-display-1--letter-spacing: -2.125px;
+  --font-size-display-1--font-weight: 700;
+  --font-size-display-2: 54px;
+  --font-size-display-2--line-height: 1.04;
+  --font-size-display-2--letter-spacing: -1.875px;
+  --font-size-display-2--font-weight: 700;
+  --font-size-heading-1: 40px;
+  --font-size-heading-1--line-height: 1.1;
+  --font-size-heading-1--letter-spacing: -1px;
+  --font-size-heading-1--font-weight: 700;
+  --font-size-heading-2: 26px;
+  --font-size-heading-2--line-height: 1.23;
+  --font-size-heading-2--letter-spacing: -0.625px;
+  --font-size-heading-2--font-weight: 700;
+  --font-size-heading-3: 22px;
+  --font-size-heading-3--line-height: 1.27;
+  --font-size-heading-3--letter-spacing: -0.25px;
+  --font-size-heading-3--font-weight: 700;
+  --font-size-title: 20px;
+  --font-size-title--line-height: 1.4;
+  --font-size-title--letter-spacing: -0.125px;
+  --font-size-title--font-weight: 600;
+  --font-size-body-md: 16px;
+  --font-size-body-md--line-height: 1.5;
+  --font-size-body-sm: 15px;
+  --font-size-body-sm--line-height: 1.33;
+  --font-size-caption: 14px;
+  --font-size-caption--line-height: 1.43;
+  --font-size-eyebrow: 12px;
+  --font-size-eyebrow--line-height: 1.33;
+  --font-size-eyebrow--letter-spacing: 0.125px;
+  --font-size-eyebrow--font-weight: 600;
 }
 
 body {

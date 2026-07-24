@@ -25,14 +25,14 @@ export function CorrectionCard({ correctedText, explanation, toneNote, isAccepte
         <UserAvatar username={author.displayName || author.username} size="sm" />
         <div className="flex-1">
           <span className="text-sm font-medium">{author.displayName || author.username}</span>
-          <span className="text-xs text-base-content/40 ml-2">{timeStr}</span>
+          <span className="text-xs text-ink-faint ml-2">{timeStr}</span>
         </div>
         {isAccepted && <Badge variant="success" size="sm">{dict.correction.acceptedBadge}</Badge>}
       </div>
 
       {/* Diff view */}
       <div className="border border-base-200 rounded-box overflow-hidden">
-        <div className="text-xs text-base-content/40 px-3 py-1.5 bg-base-200 font-medium">
+        <div className="text-xs text-ink-faint px-3 py-1.5 bg-base-200 font-medium">
           {dict.correction.diffLabel}
         </div>
         <div className="p-3 text-sm leading-relaxed">
@@ -42,7 +42,7 @@ export function CorrectionCard({ correctedText, explanation, toneNote, isAccepte
 
       {/* Corrected full text */}
       <div className="mt-3">
-        <p className="text-xs text-base-content/40 mb-1">{dict.correction.correctedFull}</p>
+        <p className="text-xs text-ink-faint mb-1">{dict.correction.correctedFull}</p>
         <p className="text-sm text-base-content bg-success/10 border border-success/20 rounded-box p-3 leading-relaxed">
           {correctedText}
         </p>
@@ -51,8 +51,8 @@ export function CorrectionCard({ correctedText, explanation, toneNote, isAccepte
       {/* Explanation */}
       {explanation && (
         <div className="mt-3">
-          <p className="text-xs text-base-content/40 mb-1">{dict.correction.reason}</p>
-          <p className="text-sm text-base-content/70 leading-relaxed bg-base-200 rounded-box p-3">
+          <p className="text-xs text-ink-faint mb-1">{dict.correction.reason}</p>
+          <p className="text-sm text-foreground/70 leading-relaxed bg-base-200 rounded-box p-3">
             {explanation}
           </p>
         </div>
@@ -61,7 +61,7 @@ export function CorrectionCard({ correctedText, explanation, toneNote, isAccepte
       {/* Tone note */}
       {toneNote && (
         <div className="mt-3 flex items-center gap-2">
-          <span className="text-xs text-base-content/40">{dict.correction.tone}</span>
+          <span className="text-xs text-ink-faint">{dict.correction.tone}</span>
           <Badge variant="default" size="sm">
             {dict.toneLabels[toneNote] || toneNote}
           </Badge>

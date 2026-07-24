@@ -37,7 +37,7 @@ export function Select({
       <select
         id={selectId}
         className={cn(
-          "select select-bordered w-full",
+          "select select-bordered w-full bg-surface",
           error && "select-error",
           className
         )}
@@ -68,7 +68,7 @@ export function Select({
         </p>
       )}
       {!error && hint && (
-        <p id={`${selectId}-hint`} className="text-base-content/50 text-sm mt-1.5">
+        <p id={`${selectId}-hint`} className="text-ink-muted text-sm mt-1.5">
           {hint}
         </p>
       )}

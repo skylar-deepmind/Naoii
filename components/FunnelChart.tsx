@@ -27,7 +27,7 @@ export function FunnelChart({ data }: { data: FunnelData }) {
           >
             {s.label}
           </div>
-          <div className="text-xs text-base-content/50 mt-1">{s.value}</div>
+          <div className="text-xs text-ink-muted mt-1">{s.value}</div>
           {i < steps.length - 1 && (
             <div className="text-base-content/20 text-lg my-1">↓</div>
           )}

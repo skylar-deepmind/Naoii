@@ -26,7 +26,7 @@ export function Input({
       <input
         id={inputId}
         className={cn(
-          "input input-bordered w-full",
+          "input input-bordered w-full bg-surface",
           error && "input-error",
           className
         )}
@@ -40,9 +40,9 @@ export function Input({
         </p>
       )}
       {!error && hint && (
-        <p id={`${inputId}-hint`} className="text-base-content/50 text-sm mt-1.5">
-          {hint}
-        </p>
+          <p id={`${inputId}-hint`} className="text-ink-muted text-sm mt-1.5">
+            {hint}
+          </p>
       )}
     </div>
   );

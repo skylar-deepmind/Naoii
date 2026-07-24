@@ -27,7 +27,7 @@ export function Textarea({
       <textarea
         id={textareaId}
         className={cn(
-          "textarea textarea-bordered w-full",
+          "textarea textarea-bordered w-full bg-surface",
           error && "textarea-error",
           className
         )}
@@ -48,7 +48,7 @@ export function Textarea({
         </p>
       )}
       {!error && hint && (
-        <p id={`${textareaId}-hint`} className="text-base-content/50 text-sm mt-1.5">
+        <p id={`${textareaId}-hint`} className="text-ink-muted text-sm mt-1.5">
           {hint}
         </p>
       )}

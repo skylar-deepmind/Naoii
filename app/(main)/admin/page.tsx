@@ -83,7 +83,7 @@ export default async function AdminPage() {
           <Card key={m.label} padding="sm">
             <div className="text-center">
               <p className="text-xl font-bold text-primary">{m.value}</p>
-              <p className="text-xs text-base-content/50 mt-0.5">{m.label}</p>
+              <p className="text-xs text-ink-muted mt-0.5">{m.label}</p>
             </div>
           </Card>
         ))}
@@ -99,7 +99,7 @@ export default async function AdminPage() {
         <section>
           <h2 className="text-xl font-bold mb-3">待处理举报 ({reports.length})</h2>
           {reports.length === 0 ? (
-            <p className="text-sm text-base-content/50">暂无待处理举报</p>
+            <p className="text-sm text-ink-muted">暂无待处理举报</p>
           ) : (
             <div className="space-y-2">
               {reports.map((r) => (
@@ -107,11 +107,11 @@ export default async function AdminPage() {
                   <div className="flex flex-col sm:flex-row sm:items-center gap-2 text-sm">
                     <span>举报者: @{r.reporter.username}</span>
                     <Badge variant="default" size="sm">{r.reason}</Badge>
-                    <span className="text-base-content/50">
+                    <span className="text-ink-muted">
                       {r.postId ? `帖子: ${r.post?.title || r.postId}` : ""}
                       {r.correctionId ? `修改: ${r.correctionId.slice(0, 8)}...` : ""}
                     </span>
-                    <span className="text-xs text-base-content/30">
+                    <span className="text-xs text-ink-faint">
                       {new Date(r.createdAt).toLocaleDateString("zh-CN")}
                     </span>
                     <div className="flex gap-2 ml-auto">

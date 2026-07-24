@@ -235,11 +235,11 @@ export function PostWizard({ languages, dict, locale, intent, userId }: Props) {
             onClick={() => goStep(i)}
             disabled={i > step}
             className={`flex items-center gap-2 px-3 py-1.5 text-sm rounded-full transition-colors ${
-              i < step ? "text-success cursor-pointer" : i === step ? "bg-primary text-primary-content font-semibold" : "text-base-content/30"
+              i < step ? "text-success cursor-pointer" : i === step ? "bg-primary text-primary-content font-semibold" : "text-ink-faint"
             }`}
           >
             <span className={`w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold ${
-              i < step ? "bg-success text-success-content" : i === step ? "bg-primary-content text-primary" : "bg-base-300 text-base-content/40"
+              i < step ? "bg-success text-success-content" : i === step ? "bg-primary-content text-primary" : "bg-base-300 text-ink-faint"
             }`}>
               {i < step ? "✓" : i + 1}
             </span>
@@ -291,7 +291,7 @@ export function PostWizard({ languages, dict, locale, intent, userId }: Props) {
             </div>
             <div>
               <Textarea label="" placeholder={dict.post.contentPlaceholder} rows={6} value={form.content} onChange={(e) => update({ content: e.target.value })} error={errors.content} />
-              <p className="text-xs text-base-content/40 mt-1 text-right">{form.content.length} / 3000</p>
+              <p className="text-xs text-ink-faint mt-1 text-right">{form.content.length} / 3000</p>
             </div>
             <div className="flex justify-between">
               <Button variant="ghost" onClick={goBack}>{dict.post.prevStep}</Button>
@@ -308,14 +308,14 @@ export function PostWizard({ languages, dict, locale, intent, userId }: Props) {
           <div className="flex flex-col gap-4">
             {/* Completeness */}
             <Select label={dict.completeness.label} options={completenessOptions} value={form.completeness} onChange={(e) => update({ completeness: e.target.value })} />
-            <p className="text-xs text-base-content/50 -mt-3">{completenessHints[form.completeness]}</p>
+            <p className="text-xs text-ink-muted -mt-3">{completenessHints[form.completeness]}</p>
 
             {/* Visibility */}
             <Select label={dict.post.visibility} options={visOptions} value={form.visibility} onChange={(e) => update({ visibility: e.target.value })} />
 
             {/* Preview */}
             <div className="border border-base-200 rounded-box p-4 bg-base-100">
-              <p className="text-xs text-base-content/40 mb-2">预览</p>
+              <p className="text-xs text-ink-faint mb-2">预览</p>
               <div className="space-y-2 text-sm">
                 <div className="flex flex-wrap gap-1">
                   {form.expressionType && <Badge variant="default" size="sm">{dict.typeLabels[form.expressionType] || form.expressionType}</Badge>}
@@ -324,7 +324,7 @@ export function PostWizard({ languages, dict, locale, intent, userId }: Props) {
                   <Badge variant="default" size="sm">{visLabel}</Badge>
                 </div>
                 {form.title && <p className="font-semibold">{form.title}</p>}
-                <p className="whitespace-pre-wrap text-base-content/70">{form.content || dict.post.noContent}</p>
+                <p className="whitespace-pre-wrap text-foreground/70">{form.content || dict.post.noContent}</p>
               </div>
             </div>
 
@@ -339,7 +339,7 @@ export function PostWizard({ languages, dict, locale, intent, userId }: Props) {
                 <Button variant="ghost" size="sm" onClick={goBack}>{dict.post.prevStep}</Button>
                 <Button variant="ghost" size="sm" onClick={handleClear}>{dict.post.clearDraft}</Button>
               </div>
-              <p className="text-xs text-base-content/40 text-center">
+              <p className="text-xs text-ink-faint text-center">
                 {form.visibility === "PUBLIC" ? dict.post.hintPublic || "发布后所有人可见" : form.visibility === "UNLISTED" ? dict.post.hintUnlisted || "仅通过链接访问" : dict.post.hintPrivate || "仅自己可见"}
               </p>
             </div>

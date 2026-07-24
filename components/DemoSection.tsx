@@ -58,14 +58,14 @@ export function DemoSection({ dict }: Props) {
         <Card>
           <div className="flex items-center gap-2 mb-2">
             <Badge variant="error" size="sm">{dict.home.demoOriginal}</Badge>
-            {/* <span className="text-xs text-base-content/50">{dict.home.demoOriginalLabel}</span> */}
+            {/* <span className="text-xs text-ink-muted">{dict.home.demoOriginalLabel}</span> */}
           </div>
           <p className="text-base leading-relaxed">{current.original}</p>
         </Card>
 
         {/* Arrow */}
         <div className="flex justify-center">
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-base-content/30" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-ink-faint" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
           </svg>
         </div>
@@ -74,7 +74,7 @@ export function DemoSection({ dict }: Props) {
         <Card>
           <div className="flex items-center gap-2 mb-2">
             <Badge variant="success" size="sm">{dict.home.demoCorrected}</Badge>
-            {/* <span className="text-xs text-base-content/50">{dict.home.demoCorrectedLabel}</span> */}
+            {/* <span className="text-xs text-ink-muted">{dict.home.demoCorrectedLabel}</span> */}
           </div>
           <p className="text-base leading-relaxed text-success font-medium">
             {current.corrected}
@@ -83,10 +83,10 @@ export function DemoSection({ dict }: Props) {
           {/* Explanation with language toggle */}
           <div className="mt-3 bg-base-200 rounded-box p-3">
             <div className="flex items-center justify-between mb-2">
-              <p className="text-xs text-base-content/50">{dict.home.demoReason}</p>
+              <p className="text-xs text-ink-muted">{dict.home.demoReason}</p>
               {dict.home.demoReasonLang && (
                 <div className="flex items-center gap-1">
-                  {/* <span className="text-xs text-base-content/30">{dict.home.demoReasonLang}:</span> */}
+                  {/* <span className="text-xs text-ink-faint">{dict.home.demoReasonLang}:</span> */}
                   <div className="join join-horizontal">
                     {(["zh", "en", "ja"] as const).map((l) => (
                       <button
@@ -104,7 +104,7 @@ export function DemoSection({ dict }: Props) {
                 </div>
               )}
             </div>
-            <p className="text-sm text-base-content/70 leading-relaxed">
+            <p className="text-sm text-foreground/70 leading-relaxed">
               {reasonText}
             </p>
           </div>

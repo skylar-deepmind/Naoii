@@ -83,7 +83,7 @@ export function CommentItem({
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 mb-1">
               <span className="text-sm font-medium">{authorName}</span>
-              <span className="text-xs text-base-content/40">{timeStr}</span>
+              <span className="text-xs text-ink-faint">{timeStr}</span>
             </div>
             <p className="text-sm leading-relaxed whitespace-pre-wrap">{comment.body}</p>
             <div className="flex items-center gap-2 mt-2">
@@ -91,7 +91,7 @@ export function CommentItem({
                 type="button"
                 onClick={handleLike}
                 disabled={pending || !currentUserId}
-                className={`flex items-center gap-1 text-xs ${liked ? "text-primary font-semibold" : "text-base-content/50 hover:text-base-content"} ${!currentUserId ? "cursor-default" : ""}`}
+                className={`flex items-center gap-1 text-xs ${liked ? "text-primary font-semibold" : "text-ink-muted hover:text-base-content"} ${!currentUserId ? "cursor-default" : ""}`}
               >
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" fill={liked ? "currentColor" : "none"} viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
@@ -102,7 +102,7 @@ export function CommentItem({
                 <button
                   type="button"
                   onClick={() => onToggleReply(comment.id)}
-                  className={`text-xs hover:text-base-content ${isReplying ? "text-primary font-semibold" : "text-base-content/50"}`}
+                  className={`text-xs hover:text-base-content ${isReplying ? "text-primary font-semibold" : "text-ink-muted"}`}
                 >
                   {dict.comment?.reply || "回复"}
                 </button>
@@ -112,7 +112,7 @@ export function CommentItem({
                   type="button"
                   onClick={handleDelete}
                   disabled={pending}
-                  className="text-xs text-base-content/30 hover:text-error ml-auto"
+                  className="text-xs text-ink-faint hover:text-error ml-auto"
                 >
                   {dict.common.delete}
                 </button>

@@ -105,7 +105,7 @@ export function ImageCropper({ file, onConfirm, onCancel, dict }: Props) {
           <button type="button" onClick={onCancel} className="btn btn-ghost btn-sm btn-circle">✕</button>
         </div>
         <div className="p-4">
-          <p className="text-xs text-base-content/50 mb-3">{dict.cropHint || "拖动调整位置，滚轮缩放"}</p>
+          <p className="text-xs text-ink-muted mb-3">{dict.cropHint || "拖动调整位置，滚轮缩放"}</p>
           <div
             className="relative w-full overflow-hidden rounded-lg cursor-move select-none"
             style={{ height: 300 }}

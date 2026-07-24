@@ -59,13 +59,13 @@ export default async function PostDetailPage({ params }: Props) {
   return (
     <AppShell>
       <div className="py-8 max-w-3xl">
-        <Link href="/feed" className="text-sm text-base-content/50 hover:text-base-content mb-6 inline-block">← {dict.post.backToFeed}</Link>
+        <Link href="/feed" className="text-sm text-ink-muted hover:text-base-content mb-6 inline-block">← {dict.post.backToFeed}</Link>
 
         <div className="flex items-start gap-4 mb-6">
           <Link href={`/profile/${entry.author.username}`}><UserAvatar username={entry.author.profile?.displayName || entry.author.username} src={entry.author.profile?.avatarUrl} size="md" /></Link>
           <div className="min-w-0">
             <Link href={`/profile/${entry.author.username}`} className="font-semibold hover:underline">{entry.author.profile?.displayName || entry.author.username}</Link>
-            <p className="text-sm text-base-content/50">@{entry.author.username}</p>
+            <p className="text-sm text-ink-muted">@{entry.author.username}</p>
           </div>
         </div>
 
@@ -83,14 +83,14 @@ export default async function PostDetailPage({ params }: Props) {
         </div>
 
         <div className="flex items-center gap-3 mt-4">
-          <p className="text-sm text-base-content/40">{timeStr}</p>
+          <p className="text-sm text-ink-faint">{timeStr}</p>
           {currentUser && !isAuthor && <ReportButton postId={id} dict={dict} />}
         </div>
 
         <div className="mt-10">
           <h2 className="text-xl font-bold mb-4">{dict.post.corrections} ({correctionCount})</h2>
           {visibleCorrections.length === 0 ? (
-            <p className="text-sm text-base-content/50 py-8 text-center">{showCorrectionForm ? dict.post.noCorrections : dict.post.noCorrectionsYet}</p>
+            <p className="text-sm text-ink-muted py-8 text-center">{showCorrectionForm ? dict.post.noCorrections : dict.post.noCorrectionsYet}</p>
           ) : (
             <div className="space-y-4">
               {visibleCorrections.map((correction: CorrectionItem) => (

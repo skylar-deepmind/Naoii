@@ -12,11 +12,11 @@ export default async function LoginPage() {
       <div className="min-h-[60vh] flex items-center justify-center py-8">
         <div className="w-full max-w-sm">
           <div className="text-center mb-8">
-            <h1 className="text-2xl font-bold tracking-tight">{dict.auth.loginTitle}</h1>
-            <p className="mt-2 text-sm text-base-content/60">{dict.auth.loginDesc}</p>
+            <h1 className="text-heading-3 font-bold">{dict.auth.loginTitle}</h1>
+            <p className="mt-2 text-body-sm text-ink-muted">{dict.auth.loginDesc}</p>
           </div>
           <Card><LoginForm dict={dict} /></Card>
-          <p className="text-center text-sm text-base-content/60 mt-6">
+          <p className="text-center text-body-sm text-ink-muted mt-6">
             {dict.auth.noAccount}{" "}
             <Link href="/register" className="link link-primary font-medium">{dict.auth.goRegister}</Link>
           </p>

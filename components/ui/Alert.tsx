@@ -54,7 +54,7 @@ export function Alert({
 
   return (
     <div
-      className={cn("alert", variantClasses[variant], className)}
+      className={cn("alert rounded-lg", variantClasses[variant], className)}
       role="alert"
     >
       {variantIcons[variant]}

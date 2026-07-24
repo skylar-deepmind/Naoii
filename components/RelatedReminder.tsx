@@ -70,14 +70,14 @@ export function RelatedReminder({
       <div className="flex items-start justify-between gap-3">
         <div className="flex items-center gap-2">
           <span className="text-lg">💡</span>
-          <p className="text-sm text-base-content/70">
+          <p className="text-sm text-foreground/70">
             {dict.relatedReminder?.youSaved?.replace("{count}", String(items.length)) || `你之前收藏过 ${items.length} 条相关表达，要看看吗？`}
           </p>
         </div>
         <button
           type="button"
           onClick={() => setDismissed(true)}
-          className="text-xs text-base-content/30 hover:text-base-content shrink-0"
+          className="text-xs text-ink-faint hover:text-base-content shrink-0"
         >
           ✕ {dict.relatedReminder?.close || "关闭"}
         </button>
@@ -110,7 +110,7 @@ export function RelatedReminder({
                 {item.tags.map((t: string) => (
                   <Badge key={t} variant="primary" size="sm">{t}</Badge>
                 ))}
-                <span className="text-xs text-base-content/30 ml-auto">
+                <span className="text-xs text-ink-faint ml-auto">
                   {new Date(item.createdAt).toLocaleDateString("zh-CN")}
                 </span>
               </div>
@@ -129,7 +129,7 @@ export function RelatedReminder({
           <button
             type="button"
             onClick={() => setExpanded(false)}
-            className="text-xs text-base-content/30 hover:text-base-content"
+            className="text-xs text-ink-faint hover:text-base-content"
           >
             {dict.relatedReminder?.collapse || "收起"}
           </button>

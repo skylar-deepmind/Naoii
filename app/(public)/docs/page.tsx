@@ -13,12 +13,12 @@ export default async function DocsPage() {
     <AppShell>
       <div className="py-8 sm:py-12 max-w-3xl">
         <h1 className="text-3xl sm:text-4xl font-bold tracking-tight mb-2">{dict.docs.title}</h1>
-        <p className="text-base-content/60 mb-10">{dict.docs.desc}</p>
+        <p className="text-ink-muted mb-10">{dict.docs.desc}</p>
         <div className="space-y-8">
           {sections.map((s, i) => (
             <Card key={i}>
               <h2 className="text-xl font-bold mb-3">{s.heading}</h2>
-              <div className="text-sm text-base-content/70 leading-relaxed space-y-2">
+              <div className="text-sm text-foreground/70 leading-relaxed space-y-2">
                 {s.body.map((p, j) => (
                   <p key={j}>{p}</p>
                 ))}

@@ -48,7 +48,7 @@ export function ProfileFilters({
           <Link
             key={t}
             href={buildUrl(username, t, currentYear, currentMonth)}
-            className={`px-3 py-1 rounded-btn text-xs font-medium transition-colors ${currentType === t ? "bg-base-100 shadow-sm text-primary" : "text-base-content/60 hover:text-base-content"}`}
+            className={`px-3 py-1 rounded-btn text-xs font-medium transition-colors ${currentType === t ? "bg-base-100 shadow-sm text-primary" : "text-ink-muted hover:text-base-content"}`}
           >
             {labels[t as keyof typeof labels] || t}
           </Link>

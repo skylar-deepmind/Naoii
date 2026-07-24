@@ -92,7 +92,7 @@ export default async function AdminTopicsPage() {
                         {dict.topics?.status?.[status.toLowerCase()] || status}
                       </Badge>
                     </div>
-                    <div className="text-xs text-base-content/50 mt-0.5">
+                    <div className="text-xs text-ink-muted mt-0.5">
                       /{topic.slug} · {new Date(topic.createdAt).toLocaleDateString("zh-CN")}
                     </div>
                   </div>

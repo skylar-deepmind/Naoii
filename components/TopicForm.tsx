@@ -115,7 +115,7 @@ export function TopicForm({ action, initialData, dict }: Props) {
           onChange={(e) => update("slug", e.target.value)}
           placeholder={adminT.slugPlaceholder || "如: summer-2024"}
         />
-        <p className="text-xs text-base-content/40 mt-1">仅限小写字母、数字和连字符</p>
+        <p className="text-xs text-ink-faint mt-1">仅限小写字母、数字和连字符</p>
         {errors.slug && <p className="text-error text-xs mt-1">{errors.slug}</p>}
       </div>
 
@@ -149,7 +149,7 @@ export function TopicForm({ action, initialData, dict }: Props) {
           />
           <span className="label-text">{adminT.isPermanent || "常驻话题"}</span>
         </label>
-        <p className="text-xs text-base-content/40 ml-7 -mt-1">
+        <p className="text-xs text-ink-faint ml-7 -mt-1">
           {adminT.isPermanentHint || "开启后话题不会过期，关闭则为限时活动"}
         </p>
       </div>

@@ -153,7 +153,7 @@ export function ArticleEditor({ dict, editEntry }: Props) {
                   {dict.article?.uploadCover || "上传封面"}
                   <input type="file" accept="image/jpeg,image/png,image/webp,image/gif" className="hidden" onChange={handleCoverPick} disabled={uploading} />
                 </label>
-                <span className="text-xs text-base-content/40">{dict.article?.uploadHint || "支持 JPG/PNG/WebP，最大 5MB"}</span>
+                <span className="text-xs text-ink-faint">{dict.article?.uploadHint || "支持 JPG/PNG/WebP，最大 5MB"}</span>
               </div>
             )}
             {errors.coverImage && <p className="text-xs text-error mt-1">{errors.coverImage}</p>}
@@ -172,7 +172,7 @@ export function ArticleEditor({ dict, editEntry }: Props) {
               value={form.content}
               onChange={(e) => update({ content: e.target.value })}
             />
-            <p className="text-xs text-base-content/40 mt-1 text-right">{form.content.length} / 30000</p>
+            <p className="text-xs text-ink-faint mt-1 text-right">{form.content.length} / 30000</p>
             {errors.content && <p className="text-xs text-error mt-1">{errors.content}</p>}
           </div>
 
@@ -201,11 +201,11 @@ export function ArticleEditor({ dict, editEntry }: Props) {
                 )}
                 <div className="p-4">
                   <h3 className="font-semibold text-base leading-snug mb-1 line-clamp-1">{form.title || dict.common.placeholder}</h3>
-                  <p className="text-sm text-base-content/70 leading-relaxed line-clamp-2">{excerpt || dict.common.placeholder}</p>
+                  <p className="text-sm text-foreground/70 leading-relaxed line-clamp-2">{excerpt || dict.common.placeholder}</p>
                   <div className="flex flex-wrap items-center gap-2 mt-3">
-                    <span className="text-xs text-base-content/40">{dict.article?.feedAuthor || "--"}</span>
+                    <span className="text-xs text-ink-faint">{dict.article?.feedAuthor || "--"}</span>
                     <span className="text-xs text-base-content/20">·</span>
-                    <span className="text-xs text-base-content/40">{dict.article?.feedTime || "--"}</span>
+                    <span className="text-xs text-ink-faint">{dict.article?.feedTime || "--"}</span>
                     {tagList.length > 0 && <><span className="text-xs text-base-content/20">·</span>{tagList.slice(0, 3).map((t, i) => <Badge key={i} variant="default" size="sm">{t}</Badge>)}</>}
                   </div>
                 </div>

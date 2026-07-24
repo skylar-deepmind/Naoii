@@ -42,7 +42,7 @@ export async function Navbar({ user, variant = "default" }: NavbarProps) {
   }
 
   return (
-    <header className="navbar bg-base-100 border-b border-base-200 sticky top-0 z-50 backdrop-blur-sm bg-base-100/90">
+    <header className="navbar bg-surface border-b border-base-300 sticky top-0 z-50">
       <div className="navbar-start">
         {/* Mobile menu */}
         <div className="dropdown">
@@ -51,7 +51,7 @@ export async function Navbar({ user, variant = "default" }: NavbarProps) {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
             </svg>
           </label>
-          <ul tabIndex={0} className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
+          <ul tabIndex={0} className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow-level-1 bg-surface rounded-box w-52">
             {navLinks.map((link) => (
               <li key={link.href + link.label}>
                 <Link href={link.href}>{link.label}</Link>
@@ -106,7 +106,7 @@ export async function Navbar({ user, variant = "default" }: NavbarProps) {
               <label tabIndex={0} className="btn btn-ghost btn-circle">
                 <UserAvatar username={user.displayName || user.username} src={user.avatarUrl} size="sm" />
               </label>
-              <ul tabIndex={0} className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-48">
+              <ul tabIndex={0} className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow-level-1 bg-surface rounded-box w-48">
                 <li className="menu-title"><span>{user.displayName || user.username}</span></li>
                 <li><Link href={`/profile/${user.username}`}>{dict.nav.profile}</Link></li>
                 <li><Link href="/settings/profile">{dict.nav.settings}</Link></li>

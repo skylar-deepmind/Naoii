@@ -4,6 +4,7 @@ interface CardProps {
   children: React.ReactNode;
   className?: string;
   hover?: boolean;
+  elevated?: boolean;
   padding?: "none" | "sm" | "md" | "lg";
 }
 
@@ -18,13 +19,15 @@ export function Card({
   children,
   className,
   hover = false,
+  elevated = false,
   padding = "md",
 }: CardProps) {
   return (
     <div
       className={cn(
-        "card bg-base-100 border border-base-200",
-        hover && "transition-shadow hover:shadow-md cursor-pointer",
+        "card bg-surface border border-base-300",
+        hover && "transition-shadow hover:shadow-level-1 cursor-pointer",
+        elevated && "shadow-level-1",
         className
       )}
     >
@@ -47,7 +50,7 @@ export function CardHeader({
       <div>
         <h3 className="font-semibold text-base">{title}</h3>
         {subtitle && (
-          <p className="text-sm text-base-content/60 mt-0.5">{subtitle}</p>
+          <p className="text-sm text-ink-muted mt-0.5">{subtitle}</p>
         )}
       </div>
       {action && <div>{action}</div>}
@@ -65,7 +68,7 @@ export function CardFooter({
   return (
     <div
       className={cn(
-        "mt-4 pt-4 border-t border-base-200 flex items-center justify-between",
+        "mt-4 pt-4 border-t border-base-300 flex items-center justify-between",
         className
       )}
     >

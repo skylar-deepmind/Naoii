@@ -69,7 +69,7 @@ export default async function MomentsPage({ searchParams }: Props) {
 
       {/* Completeness filter + Sort */}
       <div className="flex flex-wrap items-center gap-2 mb-3">
-        <span className="text-xs text-base-content/40">{dict.completeness.label}：</span>
+        <span className="text-xs text-ink-faint">{dict.completeness.label}：</span>
         {COMPLETENESS_OPTIONS.map((val) => (
           <Link
             key={val}
@@ -80,7 +80,7 @@ export default async function MomentsPage({ searchParams }: Props) {
           </Link>
         ))}
         <div className="ml-auto flex items-center gap-2">
-          <span className="text-xs text-base-content/40">{dict.comment?.sort || "排序"}：</span>
+          <span className="text-xs text-ink-faint">{dict.comment?.sort || "排序"}：</span>
           {(["latest", "hottest"] as const).map((s) => (
             <Link
               key={s}
@@ -163,12 +163,12 @@ function MomentCard({ entry, typeLabels, completenessLabels, correctionLabel, ad
           <UserAvatar username={entry.author.displayName || entry.author.username} size="sm" className="mt-0.5 shrink-0" />
           <div className="flex-1 min-w-0">
             {entry.title && <h3 className="font-semibold text-base leading-snug mb-1 line-clamp-1">{entry.title}</h3>}
-            <p className="text-sm text-base-content/70 leading-relaxed line-clamp-2">{entry.content}</p>
+            <p className="text-sm text-foreground/70 leading-relaxed line-clamp-2">{entry.content}</p>
             <div className="flex flex-wrap items-center gap-2 mt-3">
-              <span className="text-xs text-base-content/50">{entry.author.displayName || entry.author.username}</span>
-              <span className="text-xs text-base-content/30">·</span>
-              <span className="text-xs text-base-content/50">{timeAgo}</span>
-              {entry.targetLanguage && <><span className="text-xs text-base-content/30">·</span><Badge variant="default" size="sm">{entry.targetLanguage.nativeName}</Badge></>}
+              <span className="text-xs text-ink-muted">{entry.author.displayName || entry.author.username}</span>
+              <span className="text-xs text-ink-faint">·</span>
+              <span className="text-xs text-ink-muted">{timeAgo}</span>
+              {entry.targetLanguage && <><span className="text-xs text-ink-faint">·</span><Badge variant="default" size="sm">{entry.targetLanguage.nativeName}</Badge></>}
               {entry.completeness && completenessLabels[entry.completeness] && (
                 <Badge variant={entry.completeness === "PARTIAL" ? "warning" : entry.completeness === "IDEA_ONLY" ? "error" : "default"} size="sm">{completenessLabels[entry.completeness]}</Badge>
               )}

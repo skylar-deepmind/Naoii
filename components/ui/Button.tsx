@@ -2,16 +2,16 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 
 const variantClasses = {
-  primary: "btn-primary",
-  secondary: "btn-secondary",
-  outline: "btn-outline",
-  ghost: "btn-ghost",
+  primary: "btn-primary rounded-full font-medium",
+  secondary: "btn-secondary rounded-full font-medium",
+  outline: "btn-outline rounded-lg",
+  ghost: "btn-ghost rounded-lg",
   success:
-    "bg-success text-success-content hover:opacity-90 border-success",
+    "bg-success text-success-content hover:opacity-90 border-success rounded-lg",
   warning:
-    "bg-warning text-warning-content hover:opacity-90 border-warning",
+    "bg-warning text-warning-content hover:opacity-90 border-warning rounded-lg",
   danger:
-    "bg-error text-error-content hover:opacity-90 border-error",
+    "bg-error text-error-content hover:opacity-90 border-error rounded-lg",
 } as const;
 
 const sizeClasses = {

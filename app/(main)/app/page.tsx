@@ -69,7 +69,7 @@ export default async function HomePage({ searchParams }: Props) {
           <Button variant="outline" size="sm">{dict.nav?.writeArticle || "写篇章"}</Button>
         </Link>
         <div className="ml-auto flex items-center gap-2">
-          <span className="text-xs text-base-content/40">{dict.comment?.sort || "排序"}：</span>
+          <span className="text-xs text-ink-faint">{dict.comment?.sort || "排序"}：</span>
           {(["latest", "hottest"] as const).map((s) => (
             <Link
               key={s}
@@ -92,7 +92,7 @@ export default async function HomePage({ searchParams }: Props) {
               </svg>
             </div>
             <div>
-              <p className="text-sm text-base-content/60">{dict.nav?.moments || "今日瞬间"}</p>
+              <p className="text-sm text-ink-muted">{dict.nav?.moments || "今日瞬间"}</p>
               <p className="text-lg font-bold">{todayMoments}</p>
             </div>
             <div className="ml-auto">
@@ -103,18 +103,18 @@ export default async function HomePage({ searchParams }: Props) {
               </div>
             </div>
             <div>
-              <p className="text-sm text-base-content/60">{dict.nav?.articles || "今日篇章"}</p>
+              <p className="text-sm text-ink-muted">{dict.nav?.articles || "今日篇章"}</p>
               <p className="text-lg font-bold">{todayArticles}</p>
             </div>
           </div>
         </Card>
 
         <Card padding="md">
-          <p className="text-sm text-base-content/60 mb-2">
+          <p className="text-sm text-ink-muted mb-2">
             🔥 {dict.comment?.mostLiked || "热门篇章"}
           </p>
           {hotArticles.length === 0 ? (
-            <p className="text-sm text-base-content/40">—</p>
+            <p className="text-sm text-ink-faint">—</p>
           ) : (
             <div className="space-y-1">
               {hotArticles.slice(0, 3).map((a) => (
@@ -184,12 +184,12 @@ function MomentRow({ entry, typeLabels, completenessLabels, correctionLabel, ado
           <UserAvatar username={entry.author.displayName || entry.author.username} size="sm" className="mt-0.5 shrink-0" />
           <div className="flex-1 min-w-0">
             {entry.title && <h3 className="font-semibold text-base leading-snug mb-1 line-clamp-1">{entry.title}</h3>}
-            <p className="text-sm text-base-content/70 leading-relaxed line-clamp-2">{entry.content}</p>
+            <p className="text-sm text-foreground/70 leading-relaxed line-clamp-2">{entry.content}</p>
             <div className="flex flex-wrap items-center gap-2 mt-3">
-              <span className="text-xs text-base-content/50">{entry.author.displayName || entry.author.username}</span>
-              <span className="text-xs text-base-content/30">·</span>
-              <span className="text-xs text-base-content/50">{timeAgo}</span>
-              {entry.targetLanguage && <><span className="text-xs text-base-content/30">·</span><Badge variant="default" size="sm">{entry.targetLanguage.nativeName}</Badge></>}
+              <span className="text-xs text-ink-muted">{entry.author.displayName || entry.author.username}</span>
+              <span className="text-xs text-ink-faint">·</span>
+              <span className="text-xs text-ink-muted">{timeAgo}</span>
+              {entry.targetLanguage && <><span className="text-xs text-ink-faint">·</span><Badge variant="default" size="sm">{entry.targetLanguage.nativeName}</Badge></>}
               {entry.completeness && completenessLabels[entry.completeness] && (
                 <Badge variant={entry.completeness === "PARTIAL" ? "warning" : entry.completeness === "IDEA_ONLY" ? "error" : "default"} size="sm">{completenessLabels[entry.completeness]}</Badge>
               )}
@@ -223,11 +223,11 @@ function ArticleRow({ entry, dict, timeLabels }: {
           )}
           <div className="flex-1 min-w-0">
             <h3 className="font-semibold text-base leading-snug mb-1 line-clamp-1">{entry.title || dict.common.placeholder}</h3>
-            <p className="text-sm text-base-content/70 leading-relaxed line-clamp-2">{entry.content}</p>
+            <p className="text-sm text-foreground/70 leading-relaxed line-clamp-2">{entry.content}</p>
             <div className="flex flex-wrap items-center gap-2 mt-3">
-              <span className="text-xs text-base-content/50">{entry.author.displayName || entry.author.username}</span>
-              <span className="text-xs text-base-content/30">·</span>
-              <span className="text-xs text-base-content/50">{timeAgo}</span>
+              <span className="text-xs text-ink-muted">{entry.author.displayName || entry.author.username}</span>
+              <span className="text-xs text-ink-faint">·</span>
+              <span className="text-xs text-ink-muted">{timeAgo}</span>
               {tags && tags.length > 0 && tags.slice(0, 3).map((t: string) => (
                 <Badge key={t} variant="default" size="sm">{t}</Badge>
               ))}

@@ -24,13 +24,17 @@ function getInitials(name: string): string {
     .toUpperCase();
 }
 
+const avatarColors = [
+  "#0075de", "#213183", "#d6b6f6", "#ff64c8",
+  "#dd5b00", "#2a9d99", "#1aae39", "#62aef0",
+];
+
 function stringToColor(str: string): string {
   let hash = 0;
   for (let i = 0; i < str.length; i++) {
     hash = str.charCodeAt(i) + ((hash << 5) - hash);
   }
-  const hue = Math.abs(hash) % 360;
-  return `hsl(${hue}, 45%, 55%)`;
+  return avatarColors[Math.abs(hash) % avatarColors.length];
 }
 
 export function UserAvatar({
