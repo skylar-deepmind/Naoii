@@ -547,12 +547,53 @@ export const en: typeof zh = {
         "Naoii welcomes direct feedback, but it is less enthusiastic about comments that stop at: 'This is wrong.'",
         "What is wrong, why is it wrong, and how could it be better—those are the parts that make a revision genuinely useful. After all, we are here to help people express themselves, not to crush their desire to try.",
       ]},
+      { heading: "Articles Are More Than Just Long Moments", body: [
+        "Moments are great for quick recording and short expressions, while articles are for longer writing: diaries, blogs, study summaries, travel notes—anything that takes more than a few lines.",
+        "When writing an article, you can upload a cover image and crop it in the editor; add tags to organize (diary, study, life…); switch between edit and preview modes anytime to see how it will look after publishing.",
+        "Articles can also be saved as drafts. Not sure yet? Set it aside and come back later. Writing doesn't have to finish in one sprint.",
+        "Like moments, articles can receive correction suggestions after publishing. Longer writing is harder to revise, but the feedback tends to go deeper too.",
+      ]},
+      { heading: "Join Topics and Events", body: [
+        "Topics gather expressions around the same theme together. Permanent topics (like 'Self-introduction Practice' or 'Travel Diaries') are always open, while limited-time events are special themes for a specific period—like 'This Summer's Goals' or 'Write a Letter to the Future.'",
+        "On a topic page, you can see the participant count and related expressions. If you're participating in an event, select the topic when posting, and your content will appear under it.",
+        "Topics aren't for exams or rankings. They solve a much simpler problem: sometimes, when you don't know what to write, you just need someone to suggest a title.",
+      ]},
     ],
   },
   changelog: {
     title: "Changelog",
     intro: "Naoii is still growing. This is where we keep track of what it has learned lately—and the occasional time it has tripped over its own feet.",
     versions: [
+      {
+        version: "v0.3.0", date: "2026-07-24",
+        intro: "This time, Naoii redecorated its room. Colors, fonts, buttons, cards—all rethought from scratch. Oh, and it also picked up two new skills along the way.",
+        sections: [
+          { heading: "New Features", items: [
+            "Added 'Articles.' Unlike moments, articles are for longer writing: diaries, blogs, study summaries—anything that takes more than a few lines. Supports cover image upload and cropping, tag management, draft saving, and edit / preview dual-mode switching",
+            "Added 'Topics & Events.' Permanent topics are always open, while limited-time events are themed activities running for a specific period. Associate your posts with a topic, and all expressions under that topic are gathered together for browsing",
+          ]},
+          { heading: "Visual Language", items: [
+            "Rebuilt the entire color system based on Notion's design language. The page background is now warm paper white, with cards and inputs floating on top in pure white—like sticky notes on paper",
+            "The primary color changed from indigo to a calmer Notion Blue. It's the only color in the interface that says 'click here'—the rest are just here to look good",
+            "Buttons now come in two shapes: primary actions (sign up, publish) are full-radius capsules, while secondary actions (cancel, back, settings) keep a more restrained 8px radius",
+            "Introduced a decorative color palette (purple, pink, orange, teal, green, sky blue), currently used for avatar backgrounds and some labels. They don't carry functional meaning—they just keep the interface from being too serious",
+            "Every dark mode color was recalculated from scratch—not a simple inversion, but a deep color system derived from the same warm-paper light-dark logic",
+          ]},
+          { heading: "Typography", items: [
+            "Defined a seven-level typographic scale—from 64px display headings to 12px labels—each with its own font size, line height, and letter-spacing",
+            "Large headings now use subtle negative letter-spacing for a tighter, more confident feel; body text keeps a comfortable 1.5x line height",
+            "Text hierarchy no longer relies on opacity overlays. Instead, three explicit gray levels (ink, ink-muted, ink-faint) ensure readability even in dark mode",
+          ]},
+          { heading: "Components & Pages", items: [
+            "Redesigned over a dozen foundational components: buttons, cards, inputs, badges, empty states, avatars, modals, and more",
+            "Cards and modals now use layered micro-shadows—giving floating elements a gentle 'resting on paper' feel, rather than a blunt drop-shadow",
+            "Removed the frosted glass effect from the navigation bar, returning to a clean solid surface",
+            "Added a dark hero band to the homepage—full-width deep indigo background with a display heading and capsule buttons. It's the only 'nighttime' section on the entire page",
+            "Updated the docs and changelog pages with the new typography and spacing",
+          ]},
+        ],
+        notes: "Features handle 'what you can do.' Feeling handles 'whether you want to do it.' We hope after this update, opening Naoii feels more like opening a notebook you're writing in.\n\nThank you to my modest friend. The growth of this web application has never been a one-person effort.",
+      },
       {
 version: "v0.2.1", date: "2026-07-18",
 intro: "This time, Naoii changed into a new outfit and picked up a few translations that had wandered off.",
