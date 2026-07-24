@@ -62,24 +62,24 @@ export function MobileBottomNav() {
 
   // Hide on desktop
   return (
-    <nav className="dock dock-sm lg:hidden border-t border-base-200 bg-base-100 z-40">
+    <nav className="dock dock-sm lg:hidden border-t border-base-300 bg-surface z-40">
       {navItems.map((item) => {
         if (item.key === "create") {
           return (
             <div key={item.key} className="relative">
-              <button
-                type="button"
-                onClick={() => setCreateOpen(!createOpen)}
-                onBlur={() => setTimeout(() => setCreateOpen(false), 150)}
-                className="flex flex-col items-center justify-center w-full h-full text-primary"
-              >
-                <div className="bg-primary text-primary-content rounded-full p-1.5 -mt-5 shadow-lg">
+                <button
+                  type="button"
+                  onClick={() => setCreateOpen(!createOpen)}
+                  onBlur={() => setTimeout(() => setCreateOpen(false), 150)}
+                  className="flex flex-col items-center justify-center w-full h-full"
+                >
+                  <div className="bg-primary text-primary-content rounded-full p-1.5 -mt-5 shadow-level-1">
                   {item.icon}
                 </div>
                 <span className="dock-label text-xs mt-0.5">{item.label}</span>
               </button>
               {createOpen && (
-                <div className="absolute bottom-full right-0 mb-2 w-36 bg-base-100 rounded-box shadow-lg border border-base-200 z-50 p-1">
+                <div className="absolute bottom-full right-0 mb-2 w-36 bg-surface rounded-box shadow-level-1 border border-base-300 z-50 p-1">
                   <Link
                     href="/posts/new"
                     onClick={() => setCreateOpen(false)}

@@ -29,7 +29,7 @@ export function Sidebar({ sections, dict }: Props) {
   const [createOpen, setCreateOpen] = useState(false);
 
   return (
-    <aside className="hidden lg:flex flex-col w-56 shrink-0 border-r border-base-200 bg-base-100 sticky top-16 h-[calc(100vh-4rem)]">
+    <aside className="hidden lg:flex flex-col w-56 shrink-0 border-r border-base-300 bg-surface sticky top-16 h-[calc(100vh-4rem)]">
       <nav className="flex-1 overflow-y-auto py-4 px-3">
         {sections.map((section, si) => (
           <div key={section.key}>
@@ -41,7 +41,7 @@ export function Sidebar({ sections, dict }: Props) {
                   <li key={item.key}>
                     {item.disabled ? (
                       <span
-                        className="flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-base-content/30 cursor-not-allowed"
+                          className="flex items-center gap-3 px-3 py-2 rounded-[5px] text-sm text-ink-faint cursor-not-allowed"
                         title={item.disabledTooltip || ""}
                       >
                         <span className="w-5 h-5 flex items-center justify-center opacity-40">{item.icon}</span>
@@ -50,10 +50,10 @@ export function Sidebar({ sections, dict }: Props) {
                     ) : (
                       <Link
                         href={item.href}
-                        className={`flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors ${
+                        className={`flex items-center gap-3 px-3 py-2 rounded-[5px] text-sm transition-colors ${
                           active
                             ? "bg-primary/10 text-primary font-semibold border-l-[3px] border-primary pl-[9px]"
-                            : "hover:bg-base-200 text-base-content/70 border-l-[3px] border-transparent pl-[9px]"
+                            : "hover:bg-black/[0.04] text-foreground/70 border-l-[3px] border-transparent pl-[9px]"
                         }`}
                       >
                         <span className="w-5 h-5 flex items-center justify-center">{item.icon}</span>
@@ -85,7 +85,7 @@ export function Sidebar({ sections, dict }: Props) {
           {dict.recordNow || "记录此刻"}
         </button>
         {createOpen && (
-          <div className="absolute bottom-full left-3 right-3 mb-2 bg-base-100 rounded-box shadow-lg border border-base-200 z-50 p-1">
+          <div className="absolute bottom-full left-3 right-3 mb-2 bg-surface rounded-box shadow-level-1 border border-base-300 z-50 p-1">
             <Link
               href="/posts/new"
               onClick={() => setCreateOpen(false)}

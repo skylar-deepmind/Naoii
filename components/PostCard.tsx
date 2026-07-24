@@ -59,12 +59,12 @@ export function PostCard({
           <UserAvatar username={author.displayName || author.username} size="sm" className="mt-0.5 shrink-0" />
           <div className="flex-1 min-w-0">
             {title && <h3 className="font-semibold text-base leading-snug mb-1 line-clamp-1">{title}</h3>}
-            <p className="text-sm text-base-content/70 leading-relaxed line-clamp-2">{content}</p>
+            <p className="text-sm text-foreground/70 leading-relaxed line-clamp-2">{content}</p>
             <div className="flex flex-wrap items-center gap-2 mt-3">
-              <span className="text-xs text-base-content/50">{author.displayName || author.username}</span>
-              <span className="text-xs text-base-content/30">·</span>
-              <span className="text-xs text-base-content/50">{timeAgo}</span>
-              {targetLanguage && <><span className="text-xs text-base-content/30">·</span><Badge variant="default" size="sm">{targetLanguage.nativeName}</Badge></>}
+              <span className="text-xs text-ink-muted">{author.displayName || author.username}</span>
+              <span className="text-xs text-ink-faint">·</span>
+              <span className="text-xs text-ink-muted">{timeAgo}</span>
+              {targetLanguage && <><span className="text-xs text-ink-faint">·</span><Badge variant="default" size="sm">{targetLanguage.nativeName}</Badge></>}
               {completeness && completenessLabels[completeness] && <Badge variant={completeness === "PARTIAL" ? "warning" : completeness === "IDEA_ONLY" ? "error" : "default"} size="sm">{completenessLabels[completeness]}</Badge>}
               {expressionType && typeLabels[expressionType] && <Badge variant="default" size="sm">{typeLabels[expressionType]}</Badge>}
               {correctionCount > 0 && <Badge variant="primary" size="sm">{correctionCount} {correctionLabel}</Badge>}

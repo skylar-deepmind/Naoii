@@ -43,7 +43,7 @@ export function ReviewCard({
 
   return (
     <Card padding="sm">
-      <div className="text-xs text-base-content/30 mb-2">
+      <div className="text-xs text-ink-faint mb-2">
         {dict.review.reviewCount}: {reviewCount}
       </div>
 
@@ -74,14 +74,14 @@ export function ReviewCard({
         <div className="space-y-2">
           {correctedTextSnapshot && (
             <div className="bg-success/5 border border-success/20 rounded-box p-3">
-              <p className="text-xs text-base-content/40 mb-1">{dict.correction.correctedFull}</p>
+              <p className="text-xs text-ink-faint mb-1">{dict.correction.correctedFull}</p>
               <p className="text-sm leading-relaxed whitespace-pre-wrap">{correctedTextSnapshot}</p>
             </div>
           )}
           {explanationSnapshot && (
             <div className="bg-base-200 rounded-box p-3">
-              <p className="text-xs text-base-content/40 mb-1">{dict.correction.reason}</p>
-              <p className="text-sm text-base-content/70 leading-relaxed">{explanationSnapshot}</p>
+              <p className="text-xs text-ink-faint mb-1">{dict.correction.reason}</p>
+              <p className="text-sm text-foreground/70 leading-relaxed">{explanationSnapshot}</p>
             </div>
           )}
         </div>

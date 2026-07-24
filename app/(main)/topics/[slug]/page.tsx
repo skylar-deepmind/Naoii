@@ -72,13 +72,13 @@ export default async function TopicDetailPage({ params, searchParams }: Props) {
               <Badge variant={statusInfo.variant} size="sm">{statusLabel}</Badge>
               {topic.isPermanent && <Badge variant="default" size="sm">{dict.topics?.permanent || "常驻"}</Badge>}
             </div>
-            <p className="text-base text-base-content/60 mb-3">{topic.description}</p>
+            <p className="text-base text-ink-muted mb-3">{topic.description}</p>
             {!topic.isPermanent && topic.eventDescription && (
               <div className="bg-base-200 rounded-box p-3 mb-3 text-sm">
                 <p className="whitespace-pre-wrap">{topic.eventDescription}</p>
               </div>
             )}
-            <div className="flex flex-wrap gap-4 text-sm text-base-content/50">
+            <div className="flex flex-wrap gap-4 text-sm text-ink-muted">
               <span>
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 inline mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
@@ -110,7 +110,7 @@ export default async function TopicDetailPage({ params, searchParams }: Props) {
 
       {/* Back link */}
       <div className="mb-4">
-        <Link href="/topics" className="text-sm text-base-content/50 hover:underline">
+        <Link href="/topics" className="text-sm text-ink-muted hover:underline">
           &larr; {dict.topics?.title || "话题"}
         </Link>
       </div>
@@ -135,11 +135,11 @@ export default async function TopicDetailPage({ params, searchParams }: Props) {
                     <UserAvatar username={entry.author.displayName || entry.author.username} size="sm" className="mt-0.5 shrink-0" />
                     <div className="flex-1 min-w-0">
                       {entry.title && <h3 className="font-semibold text-base leading-snug mb-1 line-clamp-1">{entry.title}</h3>}
-                      <p className="text-sm text-base-content/70 leading-relaxed line-clamp-2">{entry.content}</p>
+                      <p className="text-sm text-foreground/70 leading-relaxed line-clamp-2">{entry.content}</p>
                       <div className="flex flex-wrap items-center gap-2 mt-3">
-                        <span className="text-xs text-base-content/50">{entry.author.displayName || entry.author.username}</span>
-                        <span className="text-xs text-base-content/30">·</span>
-                        <span className="text-xs text-base-content/50">{formatTimeAgo(entry.createdAt, dict.time)}</span>
+                        <span className="text-xs text-ink-muted">{entry.author.displayName || entry.author.username}</span>
+                        <span className="text-xs text-ink-faint">·</span>
+                        <span className="text-xs text-ink-muted">{formatTimeAgo(entry.createdAt, dict.time)}</span>
                         {entry.tags && (entry.tags as string[]).length > 0 && (entry.tags as string[]).slice(0, 2).map((tag: string) => (
                           <Badge key={tag} variant="default" size="sm">{tag}</Badge>
                         ))}

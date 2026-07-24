@@ -34,17 +34,17 @@ export function SlideDrawer({ open, onClose, title, children }: Props) {
 
       {/* Drawer */}
       <div
-        className={`fixed top-0 right-0 h-full w-full sm:w-[420px] bg-base-100 shadow-2xl z-50 transform transition-transform duration-300 ${
+        className={`fixed top-0 right-0 h-full w-full sm:w-[420px] bg-surface shadow-level-2 z-50 transform transition-transform duration-300 ${
           open ? "translate-x-0" : "translate-x-full"
         }`}
       >
         {/* Header */}
-        <div className="flex items-center justify-between px-4 py-3 border-b border-base-200">
+        <div className="flex items-center justify-between px-4 py-3 border-b border-base-300">
           <h3 className="font-semibold text-sm">{title || "评论"}</h3>
           <button
             type="button"
             onClick={onClose}
-            className="btn btn-ghost btn-sm btn-circle"
+            className="btn btn-ghost btn-sm btn-circle rounded-full"
           >
             ✕
           </button>

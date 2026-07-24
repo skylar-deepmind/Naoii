@@ -2,7 +2,6 @@ import Link from "next/link";
 import { AppShell } from "@/components/ui/AppShell";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
-import { Badge } from "@/components/ui/Badge";
 import { DemoSection } from "@/components/DemoSection";
 import { getDict } from "@/lib/i18n";
 
@@ -11,18 +10,18 @@ export default async function HomePage() {
 
   return (
     <div>
-      {/* Hero */}
-      <section className="py-16 sm:py-24 lg:py-32">
+      {/* Hero — deep indigo "night" band */}
+      <section className="py-16 sm:py-24 lg:py-32 bg-secondary text-secondary-content">
         <AppShell>
           <div className="text-center max-w-3xl mx-auto">
-            <Badge variant="primary" size="sm" className="mb-6">{dict.home.badge}</Badge>
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight leading-tight">
-              {dict.home.heroTitle1}<br /><span className="text-primary">{dict.home.heroTitle2}</span>
+            <span className="inline-block bg-surface/15 text-white rounded-full px-3 py-1 text-xs font-semibold tracking-[0.125px] mb-6">{dict.home.badge}</span>
+            <h1 className="text-display-2 lg:text-display-1">
+              {dict.home.heroTitle1}<br /><span className="text-info">{dict.home.heroTitle2}</span>
             </h1>
-            <p className="mt-6 text-lg sm:text-xl text-base-content/60 max-w-2xl mx-auto leading-relaxed">{dict.home.heroDesc}</p>
+            <p className="mt-6 text-body-md text-white/70 max-w-2xl mx-auto">{dict.home.heroDesc}</p>
             <div className="mt-10 flex flex-col sm:flex-row gap-3 justify-center">
               <Button href="/register" variant="primary" size="lg">{dict.home.ctaRegister}</Button>
-              <Button href="/app" variant="outline" size="lg">{dict.home.ctaBrowse}</Button>
+              <Link href="/app" className="btn rounded-full font-medium bg-white/90 text-ink hover:bg-white shadow-level-1 btn-lg">{dict.home.ctaBrowse}</Link>
             </div>
           </div>
         </AppShell>
@@ -32,8 +31,8 @@ export default async function HomePage() {
       <section id="features" className="py-16 sm:py-24 bg-base-200">
         <AppShell>
           <div className="text-center mb-12">
-            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">{dict.home.featuresTitle}</h2>
-            <p className="mt-3 text-base-content/60 max-w-xl mx-auto">{dict.home.featuresDesc}</p>
+            <h2 className="text-heading-2 lg:text-heading-1 font-bold">{dict.home.featuresTitle}</h2>
+            <p className="mt-3 text-ink-muted max-w-xl mx-auto">{dict.home.featuresDesc}</p>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
             {[
@@ -47,7 +46,7 @@ export default async function HomePage() {
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={f.icon} /></svg>
                 </div>
                 <h3 className="font-semibold text-base">{f.title}</h3>
-                <p className="text-sm text-base-content/60 mt-1.5 leading-relaxed">{f.desc}</p>
+                <p className="text-body-sm text-ink-muted mt-1.5">{f.desc}</p>
               </Card>
             ))}
           </div>
@@ -57,7 +56,7 @@ export default async function HomePage() {
       {/* Steps */}
       <section id="how-it-works" className="py-16 sm:py-24">
         <AppShell>
-          <div className="text-center mb-12"><h2 className="text-3xl sm:text-4xl font-bold tracking-tight">{dict.home.stepsTitle}</h2></div>
+          <div className="text-center mb-12"><h2 className="text-heading-2 lg:text-heading-1 font-bold">{dict.home.stepsTitle}</h2></div>
           <div className="max-w-2xl mx-auto">
             <ul className="steps steps-vertical w-full">
   {[
@@ -69,7 +68,7 @@ export default async function HomePage() {
     <li key={i} className="step step-primary py-3">
       <div className="w-full min-w-0 text-left">
         <p className="font-semibold leading-6">{s.title}</p>
-        <p className="mt-0.5 text-sm leading-5 text-base-content/60">
+        <p className="mt-0.5 text-body-sm text-ink-muted">
           {s.desc}
         </p>
       </div>
@@ -84,8 +83,8 @@ export default async function HomePage() {
       <section id="demo" className="py-16 sm:py-24 bg-base-200">
         <AppShell>
           <div className="text-center mb-12">
-            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">{dict.home.demoTitle}</h2>
-            <p className="mt-3 text-base-content/60 max-w-xl mx-auto">{dict.home.demoDesc}</p>
+            <h2 className="text-heading-2 lg:text-heading-1 font-bold">{dict.home.demoTitle}</h2>
+            <p className="mt-3 text-ink-muted max-w-xl mx-auto">{dict.home.demoDesc}</p>
           </div>
           <DemoSection dict={dict} />
         </AppShell>
@@ -94,11 +93,11 @@ export default async function HomePage() {
       {/* Reputation */}
       <section id="reputation" className="py-16 sm:py-24">
         <AppShell>
-          <div className="max-w-2xl mx-auto"><h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-center mb-12">{dict.home.repTitle}</h2>
+          <div className="max-w-2xl mx-auto"><h2 className="text-heading-2 lg:text-heading-1 font-bold text-center mb-12">{dict.home.repTitle}</h2>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 text-center">
-              <Card><p className="text-3xl font-bold text-primary">{dict.home.rep1Title}</p><p className="text-sm text-base-content/60 mt-2">{dict.home.rep1Desc}</p></Card>
-              <Card><p className="text-3xl font-bold text-primary">{dict.home.rep2Title}</p><p className="text-sm text-base-content/60 mt-2">{dict.home.rep2Desc}</p></Card>
-              <Card><p className="text-3xl font-bold text-primary">{dict.home.rep3Title}</p><p className="text-sm text-base-content/60 mt-2">{dict.home.rep3Desc}</p></Card>
+              <Card><p className="text-heading-3 font-bold text-primary">{dict.home.rep1Title}</p><p className="text-body-sm text-ink-muted mt-2">{dict.home.rep1Desc}</p></Card>
+              <Card><p className="text-heading-3 font-bold text-primary">{dict.home.rep2Title}</p><p className="text-body-sm text-ink-muted mt-2">{dict.home.rep2Desc}</p></Card>
+              <Card><p className="text-heading-3 font-bold text-primary">{dict.home.rep3Title}</p><p className="text-body-sm text-ink-muted mt-2">{dict.home.rep3Desc}</p></Card>
             </div>
           </div>
         </AppShell>
@@ -106,12 +105,12 @@ export default async function HomePage() {
 
       {/* Library */}
       <section id="library" className="py-16 sm:py-24 bg-base-200">
-        <AppShell><div className="max-w-2xl mx-auto text-center"><h2 className="text-3xl sm:text-4xl font-bold tracking-tight">{dict.home.libTitle}</h2><p className="mt-4 text-base-content/60">{dict.home.libDesc}</p></div></AppShell>
+        <AppShell><div className="max-w-2xl mx-auto text-center"><h2 className="text-heading-2 lg:text-heading-1 font-bold">{dict.home.libTitle}</h2><p className="mt-4 text-ink-muted">{dict.home.libDesc}</p></div></AppShell>
       </section>
 
       {/* CTA */}
       <section className="py-16 sm:py-24 bg-primary text-primary-content">
-        <AppShell><div className="text-center max-w-2xl mx-auto"><h2 className="text-3xl sm:text-4xl font-bold tracking-tight">{dict.home.ctaTitle}</h2><p className="mt-4 text-lg opacity-90 leading-relaxed">{dict.home.ctaDesc}</p><Button href="/register" variant="primary" size="lg" className="mt-8 bg-base-100 text-primary border-none hover:bg-base-200">{dict.home.ctaButton}</Button></div></AppShell>
+        <AppShell><div className="text-center max-w-2xl mx-auto"><h2 className="text-heading-2 lg:text-heading-1 font-bold">{dict.home.ctaTitle}</h2><p className="mt-4 text-body-md opacity-90">{dict.home.ctaDesc}</p><Button href="/register" variant="primary" size="lg" className="mt-8 bg-surface text-primary hover:bg-base-200">{dict.home.ctaButton}</Button></div></AppShell>
       </section>
     </div>
   );

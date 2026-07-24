@@ -68,7 +68,7 @@ export default async function ProfilePage({ params, searchParams }: Props) {
                 </Link>
               )}
             </div>
-            <p className="text-base-content/60 text-sm">@{user.username}</p>
+            <p className="text-ink-muted text-sm">@{user.username}</p>
             {profile.bio && <p className="mt-3 text-sm leading-relaxed max-w-lg">{profile.bio}</p>}
           </div>
         </div>
@@ -84,9 +84,9 @@ export default async function ProfilePage({ params, searchParams }: Props) {
         <Card className="mb-8">
           <h2 className="font-semibold text-base mb-4">{dict.profile.learningInfo}</h2>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm">
-            <div><p className="text-base-content/50 text-xs mb-0.5">{dict.profile.nativeLang}</p><p className="flex items-center gap-1.5">{profile.nativeLanguage ? <Badge variant="default" size="sm">{profile.nativeLanguage.nativeName}</Badge> : <span className="text-base-content/40">{dict.profile.notSet}</span>}</p></div>
-            <div><p className="text-base-content/50 text-xs mb-0.5">{dict.profile.learningLang}</p><p className="flex items-center gap-1.5">{profile.learningLanguage ? <Badge variant="primary" size="sm">{profile.learningLanguage.nativeName}</Badge> : <span className="text-base-content/40">{dict.profile.notSet}</span>}</p></div>
-            <div><p className="text-base-content/50 text-xs mb-0.5">{dict.auth.level}</p><p className="flex items-center gap-1.5">{profile.level ? <Badge variant="success" size="sm">{dict.level[profile.level as keyof typeof dict.level] || profile.level}</Badge> : <span className="text-base-content/40">{dict.profile.notSet}</span>}</p></div>
+            <div><p className="text-ink-muted text-xs mb-0.5">{dict.profile.nativeLang}</p><p className="flex items-center gap-1.5">{profile.nativeLanguage ? <Badge variant="default" size="sm">{profile.nativeLanguage.nativeName}</Badge> : <span className="text-ink-faint">{dict.profile.notSet}</span>}</p></div>
+            <div><p className="text-ink-muted text-xs mb-0.5">{dict.profile.learningLang}</p><p className="flex items-center gap-1.5">{profile.learningLanguage ? <Badge variant="primary" size="sm">{profile.learningLanguage.nativeName}</Badge> : <span className="text-ink-faint">{dict.profile.notSet}</span>}</p></div>
+            <div><p className="text-ink-muted text-xs mb-0.5">{dict.auth.level}</p><p className="flex items-center gap-1.5">{profile.level ? <Badge variant="success" size="sm">{dict.level[profile.level as keyof typeof dict.level] || profile.level}</Badge> : <span className="text-ink-faint">{dict.profile.notSet}</span>}</p></div>
           </div>
         </Card>
 
@@ -143,7 +143,7 @@ function StatCard({ label, count, active, href, variant = "default" }: { label: 
       <Card padding="sm" hover>
         <div className="text-center">
           <p className={`text-2xl font-bold ${variant === "warning" ? "text-warning" : active ? "text-primary" : ""}`}>{count}</p>
-          <p className={`text-xs mt-1 ${active ? "text-base-content font-medium" : "text-base-content/60"}`}>{label}</p>
+          <p className={`text-xs mt-1 ${active ? "text-base-content font-medium" : "text-ink-muted"}`}>{label}</p>
           {active && <div className="w-8 h-0.5 bg-primary mx-auto mt-1.5 rounded-full" />}
         </div>
       </Card>
@@ -177,10 +177,10 @@ function MomentRow({ entry, typeLabels, completenessLabels, correctionLabel, ado
         <div className="flex items-start gap-3">
           <div className="flex-1 min-w-0">
             {entry.title && <h3 className="font-semibold text-base leading-snug mb-1 line-clamp-1">{entry.title}</h3>}
-            <p className="text-sm text-base-content/70 leading-relaxed line-clamp-2">{entry.content}</p>
+            <p className="text-sm text-foreground/70 leading-relaxed line-clamp-2">{entry.content}</p>
             <div className="flex flex-wrap items-center gap-2 mt-3">
-              <span className="text-xs text-base-content/50">{timeAgo}</span>
-              {entry.targetLanguage && <><span className="text-xs text-base-content/30">·</span><Badge variant="default" size="sm">{entry.targetLanguage.nativeName}</Badge></>}
+              <span className="text-xs text-ink-muted">{timeAgo}</span>
+              {entry.targetLanguage && <><span className="text-xs text-ink-faint">·</span><Badge variant="default" size="sm">{entry.targetLanguage.nativeName}</Badge></>}
               {entry.completeness && completenessLabels[entry.completeness] && (
                 <Badge variant={entry.completeness === "PARTIAL" ? "warning" : entry.completeness === "IDEA_ONLY" ? "error" : "default"} size="sm">{completenessLabels[entry.completeness]}</Badge>
               )}
@@ -217,9 +217,9 @@ function ArticleRow({ entry, dict, timeLabels }: {
           )}
           <div className="flex-1 min-w-0">
             <h3 className="font-semibold text-base leading-snug mb-1 line-clamp-1">{entry.title || dict.common?.placeholder || "无标题"}</h3>
-            <p className="text-sm text-base-content/70 leading-relaxed line-clamp-2">{entry.content}</p>
+            <p className="text-sm text-foreground/70 leading-relaxed line-clamp-2">{entry.content}</p>
             <div className="flex flex-wrap items-center gap-2 mt-3">
-              <span className="text-xs text-base-content/50">{timeAgo}</span>
+              <span className="text-xs text-ink-muted">{timeAgo}</span>
               {tags && tags.length > 0 && tags.slice(0, 3).map((t: string) => (
                 <Badge key={t} variant="default" size="sm">{t}</Badge>
               ))}

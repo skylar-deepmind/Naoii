@@ -53,7 +53,7 @@ export default async function ArticleDetailPage({ params }: Props) {
   return (
     <AppShell>
       <article className="py-8 max-w-3xl mx-auto">
-        <Link href="/feed" className="text-sm text-base-content/50 hover:text-base-content mb-6 inline-block">
+        <Link href="/feed" className="text-sm text-ink-muted hover:text-base-content mb-6 inline-block">
           ← {dict.post.backToFeed}
         </Link>
 
@@ -74,7 +74,7 @@ export default async function ArticleDetailPage({ params }: Props) {
             <Link href={`/profile/${entry.author.username}`} className="font-semibold hover:underline">
               {entry.author.profile?.displayName || entry.author.username}
             </Link>
-            <p className="text-sm text-base-content/50">{timeStr}</p>
+            <p className="text-sm text-ink-muted">{timeStr}</p>
           </div>
           <div className="ml-auto flex items-center gap-2">
             {entry.visibility !== "PUBLIC" && (

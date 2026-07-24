@@ -85,7 +85,7 @@ export function AvatarUpload({ username, currentUrl, onSave, dict }: Props) {
         className="hidden"
         onChange={handleFile}
       />
-      <div className="text-xs text-base-content/50">
+      <div className="text-xs text-ink-muted">
         <p>{dict.clickToUpload || "点击头像上传"}</p>
         <p>{dict.uploadHint || "支持 JPG、PNG、WebP，最大 5MB"}</p>
         {loading && <p className="text-primary mt-1">{dict.processing || "处理中..."}</p>}

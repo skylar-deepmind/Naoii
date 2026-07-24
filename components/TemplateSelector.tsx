@@ -42,12 +42,12 @@ export function TemplateSelector({ dict, locale, currentContent, onInsert }: Pro
         onClick={() => setOpen(!open)}
         className="w-full flex items-center justify-between px-4 py-2.5 text-sm hover:bg-base-200 transition-colors"
       >
-        <span className="text-base-content/70">
+        <span className="text-foreground/70">
           {dict.templates.toggleLabel}
         </span>
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          className={`h-4 w-4 text-base-content/40 transition-transform ${open ? "rotate-180" : ""}`}
+          className={`h-4 w-4 text-ink-faint transition-transform ${open ? "rotate-180" : ""}`}
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
@@ -88,7 +88,7 @@ export function TemplateSelector({ dict, locale, currentContent, onInsert }: Pro
                 {currentTemplate.tips.map((tip, i) => (
                   <li
                     key={i}
-                    className="text-sm text-base-content/70 flex items-start gap-2"
+                    className="text-sm text-foreground/70 flex items-start gap-2"
                   >
                     <span className="text-primary shrink-0 mt-0.5">{i + 1}.</span>
                     {tip}
@@ -107,7 +107,7 @@ export function TemplateSelector({ dict, locale, currentContent, onInsert }: Pro
                 </button>
               )}
 
-              <p className="text-xs text-base-content/30 mt-2">
+              <p className="text-xs text-ink-faint mt-2">
                 {dict.templates.noOverwrite}
               </p>
             </div>

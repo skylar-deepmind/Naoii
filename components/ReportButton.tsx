@@ -39,7 +39,7 @@ export function ReportButton({ postId, correctionId, dict }: Props) {
 
   return (
     <span className="relative">
-      <button type="button" className="text-xs text-base-content/30 hover:text-error cursor-pointer" onClick={() => setOpen(!open)}>{dict.report.report}</button>
+      <button type="button" className="text-xs text-ink-faint hover:text-error cursor-pointer" onClick={() => setOpen(!open)}>{dict.report.report}</button>
       {open && (
         <div className="absolute top-6 right-0 z-50 bg-base-100 border border-base-300 rounded-box shadow-lg p-3 w-56">
           {error && <Alert variant="error" className="mb-2 text-xs">{error}</Alert>}

@@ -36,7 +36,7 @@ export function CreateButton({ dict }: Props) {
             </svg>
             <div>
               <p className="text-sm font-medium">{dict.momentNew || "发瞬间"}</p>
-              <p className="text-xs text-base-content/50">{dict.momentDesc || "快速记录短表达"}</p>
+              <p className="text-xs text-ink-muted">{dict.momentDesc || "快速记录短表达"}</p>
             </div>
           </Link>
           <Link
@@ -49,7 +49,7 @@ export function CreateButton({ dict }: Props) {
             </svg>
             <div>
               <p className="text-sm font-medium">{dict.articleNew || "写篇章"}</p>
-              <p className="text-xs text-base-content/50">{dict.articleDesc || "长文章、日记、博客"}</p>
+              <p className="text-xs text-ink-muted">{dict.articleDesc || "长文章、日记、博客"}</p>
             </div>
           </Link>
         </div>

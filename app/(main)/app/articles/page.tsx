@@ -83,7 +83,7 @@ export default async function ArticlesPage({ searchParams }: Props) {
 
       {/* Sort */}
       <div className="flex items-center gap-2 mb-4">
-        <span className="text-xs text-base-content/40">{dict.comment?.sort || "排序"}：</span>
+        <span className="text-xs text-ink-faint">{dict.comment?.sort || "排序"}：</span>
         {(["latest", "hottest"] as const).map((s) => (
           <Link
             key={s}
@@ -96,7 +96,7 @@ export default async function ArticlesPage({ searchParams }: Props) {
         {tag && (
           <Link
             href={`/app/articles?sort=${sort}`}
-            className="text-xs text-base-content/40 ml-2 hover:underline"
+            className="text-xs text-ink-faint ml-2 hover:underline"
           >
             ✕ {dict.feed?.clearFilter || "清除筛选"}
           </Link>
@@ -154,15 +154,15 @@ function ArticleCard({ entry, dict, timeLabels }: {
           )}
           <div className="flex-1 min-w-0">
             <h3 className="font-semibold text-base leading-snug mb-1 line-clamp-1">{entry.title || dict.common.placeholder}</h3>
-            <p className="text-sm text-base-content/70 leading-relaxed line-clamp-2">{entry.content}</p>
+            <p className="text-sm text-foreground/70 leading-relaxed line-clamp-2">{entry.content}</p>
             <div className="flex flex-wrap items-center gap-2 mt-3">
               <UserAvatar username={entry.author.displayName || entry.author.username} size="sm" />
-              <span className="text-xs text-base-content/50">{entry.author.displayName || entry.author.username}</span>
-              <span className="text-xs text-base-content/30">·</span>
-              <span className="text-xs text-base-content/50">{timeAgo}</span>
+              <span className="text-xs text-ink-muted">{entry.author.displayName || entry.author.username}</span>
+              <span className="text-xs text-ink-faint">·</span>
+              <span className="text-xs text-ink-muted">{timeAgo}</span>
               {tags && tags.length > 0 && (
                 <>
-                  <span className="text-xs text-base-content/30">·</span>
+                  <span className="text-xs text-ink-faint">·</span>
                   {tags.slice(0, 3).map((tag: string) => (
                     <Badge key={tag} variant="default" size="sm">{tag}</Badge>
                   ))}

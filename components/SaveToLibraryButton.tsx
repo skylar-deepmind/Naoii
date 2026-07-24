@@ -57,7 +57,7 @@ export function SaveToLibraryButton({ correctionId, postId, isAccepted, isSaved,
         onChange={(e) => setTags(e.target.value)}
       />
       {suggestedTags && suggestedTags.length > 0 && (
-        <p className="text-xs text-base-content/50">推荐: {suggestedTags.join("、")}</p>
+        <p className="text-xs text-ink-muted">推荐: {suggestedTags.join("、")}</p>
       )}
       <div className="flex gap-2">
         <Button size="sm" variant="primary" loading={loading} onClick={handleSave}>保存</Button>

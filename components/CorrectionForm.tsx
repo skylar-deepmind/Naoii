@@ -57,7 +57,7 @@ export function CorrectionForm({ postId, originalContent, dict }: Props) {
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4 mt-4">
       <h3 className="font-semibold text-base">{dict.correction.submitTitle}</h3>
       {serverErrors?._form && <Alert variant="error">{serverErrors._form[0]}</Alert>}
-      <div className="text-sm text-base-content/50">
+      <div className="text-sm text-ink-muted">
         <p className="mb-2">{dict.correction.original}：</p>
         <div className="bg-base-200 rounded-box p-3 text-sm whitespace-pre-wrap max-h-32 overflow-y-auto">{originalContent}</div>
       </div>

@@ -58,7 +58,7 @@ export default async function AnalyticsPage({ searchParams }: Props) {
           <Card key={m.label} padding="sm">
             <div className="text-center">
               <p className="text-2xl font-bold text-primary">{m.value}</p>
-              <p className="text-xs text-base-content/50 mt-1">{m.label}</p>
+              <p className="text-xs text-ink-muted mt-1">{m.label}</p>
             </div>
           </Card>
         ))}
@@ -82,7 +82,7 @@ export default async function AnalyticsPage({ searchParams }: Props) {
           href="https://dash.cloudflare.com"
           target="_blank"
           rel="noopener noreferrer"
-          className="text-xs text-base-content/30 hover:text-base-content"
+          className="text-xs text-ink-faint hover:text-base-content"
         >
           Cloudflare Analytics 外部入口 →
         </a>

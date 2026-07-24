@@ -20,7 +20,7 @@ export function EditTagsButton({ itemId, currentTags, dict }: Props) {
 
   if (!editing) {
     return (
-      <button type="button" onClick={() => setEditing(true)} className="text-xs text-base-content/30 hover:text-primary">
+      <button type="button" onClick={() => setEditing(true)} className="text-xs text-ink-faint hover:text-primary">
         {dict.editTags || "编辑标签"}
       </button>
     );
@@ -41,7 +41,7 @@ export function EditTagsButton({ itemId, currentTags, dict }: Props) {
     <div className="flex items-center gap-2">
       <Input value={tags} onChange={(e) => setTags(e.target.value)} className="input-xs" placeholder={dict.commaSep || "逗号分隔"} />
       <Button size="sm" variant="ghost" loading={loading} onClick={handleSave}>{dict.save || "保存"}</Button>
-      <button type="button" onClick={() => setEditing(false)} className="text-xs text-base-content/30">{dict.cancel || "取消"}</button>
+      <button type="button" onClick={() => setEditing(false)} className="text-xs text-ink-faint">{dict.cancel || "取消"}</button>
     </div>
   );
 }

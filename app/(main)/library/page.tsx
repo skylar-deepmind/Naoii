@@ -42,10 +42,10 @@ export default async function LibraryPage({ searchParams }: Props) {
       {/* ── Stats Dashboard ──────────────────────── */}
       {stats && (
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-8">
-          <Card padding="sm"><div className="text-center"><p className="text-2xl font-bold text-primary">{stats.total}</p><p className="text-xs text-base-content/50 mt-1">{dict.library.total}</p></div></Card>
-          <Card padding="sm"><div className="text-center"><p className="text-2xl font-bold text-secondary">{stats.weekNew}</p><p className="text-xs text-base-content/50 mt-1">{dict.library.weekNew}</p></div></Card>
-          <Card padding="sm"><div className="text-center"><p className="text-2xl font-bold text-success">{stats.reviewed}</p><p className="text-xs text-base-content/50 mt-1">{dict.library.reviewed}</p></div></Card>
-          <Card padding="sm"><div className="text-center"><p className="text-2xl font-bold text-warning">{stats.pending}</p><p className="text-xs text-base-content/50 mt-1">{dict.library.pendingReview}</p></div></Card>
+          <Card padding="sm"><div className="text-center"><p className="text-2xl font-bold text-primary">{stats.total}</p><p className="text-xs text-ink-muted mt-1">{dict.library.total}</p></div></Card>
+          <Card padding="sm"><div className="text-center"><p className="text-2xl font-bold text-secondary">{stats.weekNew}</p><p className="text-xs text-ink-muted mt-1">{dict.library.weekNew}</p></div></Card>
+          <Card padding="sm"><div className="text-center"><p className="text-2xl font-bold text-success">{stats.reviewed}</p><p className="text-xs text-ink-muted mt-1">{dict.library.reviewed}</p></div></Card>
+          <Card padding="sm"><div className="text-center"><p className="text-2xl font-bold text-warning">{stats.pending}</p><p className="text-xs text-ink-muted mt-1">{dict.library.pendingReview}</p></div></Card>
         </div>
       )}
 
@@ -63,7 +63,7 @@ export default async function LibraryPage({ searchParams }: Props) {
 
       {/* ── Filters ──────────────────────────────── */}
       <div className="flex flex-wrap items-center gap-2 mb-6">
-        <span className="text-xs text-base-content/40">{dict.library.filter}:</span>
+        <span className="text-xs text-ink-faint">{dict.library.filter}:</span>
         <Link href="/library" className={`btn btn-xs ${!filter ? "btn-primary" : "btn-ghost"}`}>{dict.library.all}</Link>
         <Link href="/library?filter=mastered" className={`btn btn-xs ${filter === "mastered" ? "btn-primary" : "btn-ghost"}`}>{dict.library.mastered}</Link>
         <Link href="/library?filter=pending" className={`btn btn-xs ${filter === "pending" ? "btn-primary" : "btn-ghost"}`}>{dict.library.pending}</Link>
@@ -90,11 +90,11 @@ export default async function LibraryPage({ searchParams }: Props) {
           {filtered.map((item) => (
             <Card key={item.id}>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
-                <div><p className="text-xs text-base-content/40 mb-1">{dict.library.original}</p><p className="text-sm bg-error/5 border border-error/10 rounded-box p-3 leading-relaxed whitespace-pre-wrap">{item.originalTextSnapshot}</p></div>
-                <div><p className="text-xs text-base-content/40 mb-1">{dict.library.corrected}</p><p className="text-sm bg-success/5 border border-success/20 rounded-box p-3 leading-relaxed whitespace-pre-wrap">{item.correctedTextSnapshot || dict.common.placeholder}</p></div>
+                <div><p className="text-xs text-ink-faint mb-1">{dict.library.original}</p><p className="text-sm bg-error/5 border border-error/10 rounded-box p-3 leading-relaxed whitespace-pre-wrap">{item.originalTextSnapshot}</p></div>
+                <div><p className="text-xs text-ink-faint mb-1">{dict.library.corrected}</p><p className="text-sm bg-success/5 border border-success/20 rounded-box p-3 leading-relaxed whitespace-pre-wrap">{item.correctedTextSnapshot || dict.common.placeholder}</p></div>
               </div>
               {item.explanationSnapshot && (
-                <div className="mb-3"><p className="text-xs text-base-content/40 mb-1">{dict.library.reason}</p><p className="text-sm text-base-content/70 bg-base-200 rounded-box p-3 leading-relaxed">{item.explanationSnapshot}</p></div>
+                <div className="mb-3"><p className="text-xs text-ink-faint mb-1">{dict.library.reason}</p><p className="text-sm text-foreground/70 bg-base-200 rounded-box p-3 leading-relaxed">{item.explanationSnapshot}</p></div>
               )}
               <div className="flex flex-wrap items-center gap-2 mb-3">
                 {item.reviewStatus && (
@@ -105,7 +105,7 @@ export default async function LibraryPage({ searchParams }: Props) {
                 {((item.tags as string[]) || []).map((t: string) => (
                   <Badge key={t} variant="primary" size="sm">{t}</Badge>
                 ))}
-                <span className="text-xs text-base-content/30 ml-auto">{dict.library.savedAt} {new Date(item.createdAt).toLocaleDateString()}</span>
+                <span className="text-xs text-ink-faint ml-auto">{dict.library.savedAt} {new Date(item.createdAt).toLocaleDateString()}</span>
               </div>
               <div className="flex items-center gap-3 pt-3 border-t border-base-200 flex-wrap">
                 {item.post && (
