@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useState, useTransition } from "react";
 import { UserAvatar } from "@/components/ui/UserAvatar";
 import { Card } from "@/components/ui/Card";
@@ -79,10 +80,10 @@ export function CommentItem({
     <div className={depth > 0 ? "ml-6 pl-4 border-l-2 border-base-200" : ""}>
       <Card padding="sm">
         <div className="flex items-start gap-2">
-          <UserAvatar username={authorName} src={avatarUrl} size="sm" className="mt-0.5 shrink-0" />
+          <Link href={`/profile/${comment.author.username}`} className="shrink-0"><UserAvatar username={authorName} src={avatarUrl} size="sm" className="mt-0.5" /></Link>
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 mb-1">
-              <span className="text-sm font-medium">{authorName}</span>
+              <Link href={`/profile/${comment.author.username}`} className="text-sm font-medium hover:underline">{authorName}</Link>
               <span className="text-xs text-ink-faint">{timeStr}</span>
             </div>
             <p className="text-sm leading-relaxed whitespace-pre-wrap">{comment.body}</p>

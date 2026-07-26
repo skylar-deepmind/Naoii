@@ -89,8 +89,8 @@ export function TopicForm({ action, initialData, dict }: Props) {
     const result = await action({}, fd);
     if (result?.errors) {
       setErrors(Object.fromEntries(Object.entries(result.errors).map(([k, v]) => [k, v?.[0] || ""])));
-      setSubmitting(false);
     }
+    setSubmitting(false);
   };
 
   return (

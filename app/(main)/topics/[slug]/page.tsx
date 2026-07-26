@@ -6,13 +6,17 @@ import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { UserAvatar } from "@/components/ui/UserAvatar";
+import { ProfileLink } from "@/components/ui/ProfileLink";
+import { TopicDiscussion } from "@/components/TopicDiscussion";
 import { getTopicBySlug, getTopicEntries, getTopicParticipantCount, type TopicStatus } from "@/server/queries/topic";
+import { getTopicCommentsSorted, getTopicCommentCount } from "@/server/queries/topic-comments";
 import { getCurrentUser } from "@/lib/auth";
 import { getDict } from "@/lib/i18n";
+import type { CommentSort } from "@/server/queries/comment";
 
 interface Props {
   params: Promise<{ slug: string }>;
-  searchParams: Promise<{ cursor?: string }>;
+  searchParams: Promise<{ cursor?: string; tab?: string; sort?: string }>;
 }
 
 const statusBadgeMap: Record<TopicStatus, { variant: "success" | "warning" | "error" | "default"; label: string }> = {
@@ -38,23 +42,44 @@ function formatTimeAgo(dateStr: string, timeLabels?: Record<string, string>): st
 
 export default async function TopicDetailPage({ params, searchParams }: Props) {
   const { slug } = await params;
-  const { cursor } = await searchParams;
+  const sp = await searchParams;
+  const { cursor, tab = "discussion", sort = "time_desc" } = sp;
   const user = await getCurrentUser();
   const dict = await getDict();
 
   const topic = await getTopicBySlug(slug);
   if (!topic) notFound();
 
-  const [participantCount, { entries, nextCursor }] = await Promise.all([
-    getTopicParticipantCount(topic.id),
-    getTopicEntries({ topicId: topic.id, cursor }),
-  ]);
+  const canPost = topic.status === "ACTIVE";
+  const activeTab = tab === "entries" ? "entries" : "discussion";
+
+  // Discussion data
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let comments: any[] = [];
+  let commentCount = 0;
+  if (activeTab === "discussion") {
+    const result: Awaited<ReturnType<typeof getTopicCommentsSorted>> = await getTopicCommentsSorted(topic.id, sort as CommentSort, user?.id);
+    comments = result;
+    commentCount = await getTopicCommentCount(topic.id);
+  }
+
+  // Entry data
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let entries: any[] = [];
+  let nextCursor: string | null = null;
+  let participantCount = 0;
+  if (activeTab === "entries") {
+    const result: Awaited<ReturnType<typeof getTopicEntries>> = await getTopicEntries({ topicId: topic.id, cursor });
+    entries = result.entries;
+    nextCursor = result.nextCursor;
+    participantCount = await getTopicParticipantCount(topic.id);
+  } else {
+    participantCount = await getTopicParticipantCount(topic.id);
+  }
 
   const st = dict.topics?.status || {};
   const statusInfo = statusBadgeMap[topic.status];
   const statusLabel = st[topic.status.toLowerCase() as keyof typeof st] || statusInfo.label;
-
-  const canPost = topic.status === "ACTIVE";
 
   return (
     <AppShell>
@@ -89,7 +114,7 @@ export default async function TopicDetailPage({ params, searchParams }: Props) {
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 inline mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                 </svg>
-                {topic.entryCount} {dict.topics?.relatedEntries || "篇内容"}
+                {activeTab === "discussion" ? commentCount : topic.entryCount} {activeTab === "discussion" ? (dict.topics?.discussionCount || "条讨论") : (dict.topics?.relatedEntries || "篇内容")}
               </span>
               {topic.startTime && (
                 <span>
@@ -98,13 +123,6 @@ export default async function TopicDetailPage({ params, searchParams }: Props) {
               )}
             </div>
           </div>
-          {canPost && user && (
-            <div className="flex gap-2 shrink-0">
-              <Link href={`/posts/new?topic=${slug}`}>
-                <Button variant="primary" size="sm">{dict.topics?.quickPost || "发瞬间"}</Button>
-              </Link>
-            </div>
-          )}
         </div>
       </div>
 
@@ -115,8 +133,52 @@ export default async function TopicDetailPage({ params, searchParams }: Props) {
         </Link>
       </div>
 
-      {/* Entries */}
-      {entries.length === 0 ? (
+      {/* Tab switcher */}
+      <div className="flex gap-2 mb-6 border-b border-base-200">
+        <Link
+          href={`/topics/${slug}?tab=discussion&sort=${sort}`}
+          className={`px-4 py-2.5 text-sm font-medium border-b-2 -mb-px transition-colors ${
+            activeTab === "discussion"
+              ? "border-primary text-primary"
+              : "border-transparent text-ink-muted hover:text-base-content"
+          }`}
+        >
+          {dict.topics?.discussion || "讨论区"}
+        </Link>
+        <Link
+          href={`/topics/${slug}?tab=entries`}
+          className={`px-4 py-2.5 text-sm font-medium border-b-2 -mb-px transition-colors ${
+            activeTab === "entries"
+              ? "border-primary text-primary"
+              : "border-transparent text-ink-muted hover:text-base-content"
+          }`}
+        >
+          {dict.topics?.featuredEntries || "精选内容"}
+        </Link>
+      </div>
+
+      {/* Tab content */}
+      {activeTab === "discussion" ? (
+        canPost || comments.length > 0 ? (
+          <TopicDiscussion
+            topicId={topic.id}
+            initialComments={comments}
+            currentUserId={user?.id}
+            sort={sort}
+            dict={dict}
+          />
+        ) : (
+          <EmptyState
+            icon={
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+              </svg>
+            }
+            title={dict.topics?.noDiscussion || "暂无讨论"}
+            description={dict.topics?.closedDesc || "话题已关闭，不再接受新讨论"}
+          />
+        )
+      ) : entries.length === 0 ? (
         <EmptyState
           icon={
             <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -132,12 +194,12 @@ export default async function TopicDetailPage({ params, searchParams }: Props) {
               <Link key={entry.id} href={entry.type === "ARTICLE" ? `/articles/${entry.id}` : `/posts/${entry.id}`}>
                 <Card hover>
                   <div className="flex items-start gap-3">
-                    <UserAvatar username={entry.author.displayName || entry.author.username} size="sm" className="mt-0.5 shrink-0" />
+                    <ProfileLink username={entry.author.username} className="shrink-0"><UserAvatar username={entry.author.displayName || entry.author.username} src={entry.author.avatarUrl} size="sm" className="mt-0.5" /></ProfileLink>
                     <div className="flex-1 min-w-0">
                       {entry.title && <h3 className="font-semibold text-base leading-snug mb-1 line-clamp-1">{entry.title}</h3>}
                       <p className="text-sm text-foreground/70 leading-relaxed line-clamp-2">{entry.content}</p>
                       <div className="flex flex-wrap items-center gap-2 mt-3">
-                        <span className="text-xs text-ink-muted">{entry.author.displayName || entry.author.username}</span>
+                        <ProfileLink username={entry.author.username} className="text-xs text-ink-muted hover:underline">{entry.author.displayName || entry.author.username}</ProfileLink>
                         <span className="text-xs text-ink-faint">·</span>
                         <span className="text-xs text-ink-muted">{formatTimeAgo(entry.createdAt, dict.time)}</span>
                         {entry.tags && (entry.tags as string[]).length > 0 && (entry.tags as string[]).slice(0, 2).map((tag: string) => (
@@ -153,7 +215,7 @@ export default async function TopicDetailPage({ params, searchParams }: Props) {
           </div>
           {nextCursor && (
             <div className="mt-8 text-center">
-              <Link href={`/topics/${slug}?cursor=${nextCursor}`}>
+              <Link href={`/topics/${slug}?tab=entries&cursor=${nextCursor}`}>
                 <Button variant="outline" size="md">{dict.feed?.loadMore || "加载更多"}</Button>
               </Link>
             </div>

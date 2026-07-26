@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { UserAvatar } from "@/components/ui/UserAvatar";
+import { ProfileLink } from "@/components/ui/ProfileLink";
 import { getFeedEntries } from "@/server/queries/entry";
 import { getDict } from "@/lib/i18n";
 import { prisma } from "@/lib/prisma";
@@ -156,8 +157,8 @@ function ArticleCard({ entry, dict, timeLabels }: {
             <h3 className="font-semibold text-base leading-snug mb-1 line-clamp-1">{entry.title || dict.common.placeholder}</h3>
             <p className="text-sm text-foreground/70 leading-relaxed line-clamp-2">{entry.content}</p>
             <div className="flex flex-wrap items-center gap-2 mt-3">
-              <UserAvatar username={entry.author.displayName || entry.author.username} size="sm" />
-              <span className="text-xs text-ink-muted">{entry.author.displayName || entry.author.username}</span>
+              <ProfileLink username={entry.author.username} className="shrink-0"><UserAvatar username={entry.author.displayName || entry.author.username} src={entry.author.avatarUrl} size="sm" /></ProfileLink>
+              <ProfileLink username={entry.author.username} className="text-xs text-ink-muted hover:underline">{entry.author.displayName || entry.author.username}</ProfileLink>
               <span className="text-xs text-ink-faint">·</span>
               <span className="text-xs text-ink-muted">{timeAgo}</span>
               {tags && tags.length > 0 && (

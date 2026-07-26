@@ -758,6 +758,13 @@ export const zh = {
     createEntry: "参与讨论",
     quickPost: "快速发布",
     fromTopic: "来自话题",
+    discussion: "讨论区",
+    featuredEntries: "精选内容",
+    postDiscussion: "发表看法",
+    loginToDiscuss: "后参与讨论",
+    noDiscussion: "暂无讨论，来说点什么吧",
+    discussionCount: "条讨论",
+    closedDesc: "话题已关闭，不再接受讨论",
   },
   comment: {
     title: "评论",
