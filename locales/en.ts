@@ -88,6 +88,7 @@ export const en: typeof zh = {
     topics: "Topics",
     comingSoon: "Coming Soon",
     help: "Help",
+    me: "Me",
     userMenu: "User Menu",
   },
   footer: {

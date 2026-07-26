@@ -34,7 +34,19 @@ export async function Navbar({ user, variant = "default" }: NavbarProps) {
     { label: dict.nav.library, href: "/library" },
   ];
 
+  const appLinks = [
+    { label: dict.nav.home, href: "/app" },
+    { label: dict.nav.moments, href: "/app/moments" },
+    { label: dict.nav.articles, href: "/app/articles" },
+    { label: dict.nav.topics, href: "/topics" },
+    { label: dict.nav.library, href: "/library" },
+    { label: dict.nav.notifications, href: "/notifications" },
+    { label: dict.nav.settings, href: "/settings/profile" },
+    { label: dict.nav.help, href: "/docs" },
+  ];
+
   const navLinks = isAuthenticated ? authenticatedLinks : publicLinks;
+  const mobileLinks = isApp ? appLinks : navLinks;
 
   let unreadCount = 0;
   if (user) {
@@ -52,7 +64,7 @@ export async function Navbar({ user, variant = "default" }: NavbarProps) {
             </svg>
           </label>
           <ul tabIndex={0} className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow-level-1 bg-surface rounded-box w-52">
-            {navLinks.map((link) => (
+            {mobileLinks.map((link) => (
               <li key={link.href + link.label}>
                 <Link href={link.href}>{link.label}</Link>
               </li>
@@ -80,8 +92,8 @@ export async function Navbar({ user, variant = "default" }: NavbarProps) {
 
       {/* Right side */}
       <div className="navbar-end gap-1">
-        <ThemeSwitcher />
-        <LanguageSwitcher currentLocale={locale} />
+        <div className="hidden min-[380px]:block"><ThemeSwitcher /></div>
+        <div className="hidden min-[380px]:block"><LanguageSwitcher currentLocale={locale} /></div>
 
         {isAuthenticated ? (
           <>

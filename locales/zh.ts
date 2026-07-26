@@ -86,6 +86,7 @@ export const zh = {
     topics: "话题",
     comingSoon: "即将推出",
     help: "帮助",
+    me: "我",
     userMenu: "用户菜单",
   },
   footer: {

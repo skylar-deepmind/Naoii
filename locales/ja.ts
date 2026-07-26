@@ -88,6 +88,7 @@ export const ja: typeof zh = {
     topics: "トピック",
     comingSoon: "近日公開",
     help: "ヘルプ",
+    me: "Me",
     userMenu: "ユーザーメニュー",
   },
   footer: {
