@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import { UserAvatar } from "@/components/ui/UserAvatar";
+import { ProfileLink } from "@/components/ui/ProfileLink";
 
 interface PostCardProps {
   id: string;
@@ -56,12 +57,12 @@ export function PostCard({
     <Link href={`/posts/${id}`}>
       <Card hover>
         <div className="flex items-start gap-3">
-          <UserAvatar username={author.displayName || author.username} size="sm" className="mt-0.5 shrink-0" />
+          <ProfileLink username={author.username} className="shrink-0"><UserAvatar username={author.displayName || author.username} src={author.avatarUrl} size="sm" className="mt-0.5" /></ProfileLink>
           <div className="flex-1 min-w-0">
             {title && <h3 className="font-semibold text-base leading-snug mb-1 line-clamp-1">{title}</h3>}
             <p className="text-sm text-foreground/70 leading-relaxed line-clamp-2">{content}</p>
             <div className="flex flex-wrap items-center gap-2 mt-3">
-              <span className="text-xs text-ink-muted">{author.displayName || author.username}</span>
+              <ProfileLink username={author.username} className="text-xs text-ink-muted hover:underline">{author.displayName || author.username}</ProfileLink>
               <span className="text-xs text-ink-faint">·</span>
               <span className="text-xs text-ink-muted">{timeAgo}</span>
               {targetLanguage && <><span className="text-xs text-ink-faint">·</span><Badge variant="default" size="sm">{targetLanguage.nativeName}</Badge></>}

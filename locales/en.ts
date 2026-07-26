@@ -746,6 +746,13 @@ sections: [
     createEntry: "Join Discussion",
     quickPost: "Quick Post",
     fromTopic: "From Topic",
+    discussion: "Discussion",
+    featuredEntries: "Featured",
+    postDiscussion: "Post",
+    loginToDiscuss: "to join the discussion",
+    noDiscussion: "No discussion yet, share your thoughts",
+    discussionCount: "discussions",
+    closedDesc: "This topic is closed and no longer accepts discussion",
   },
   comment: {
     title: "Comments",

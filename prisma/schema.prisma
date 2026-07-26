@@ -374,7 +374,8 @@ model EntryLike {
 
 model Comment {
   id           String    @id @default(cuid())
-  entryId      String
+  entryId      String?
+  topicId      String?
   correctionId String?
   authorId     String
   parentId  String?
@@ -383,7 +384,8 @@ model Comment {
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
 
-  entry    Entry      @relation(fields: [entryId], references: [id], onDelete: Cascade)
+  entry      Entry?      @relation(fields: [entryId], references: [id], onDelete: Cascade)
+  topic      Topic?      @relation(fields: [topicId], references: [id], onDelete: Cascade)
   correction Correction? @relation(fields: [correctionId], references: [id], onDelete: SetNull)
   author   User       @relation(fields: [authorId], references: [id], onDelete: Cascade)
   parent   Comment?  @relation("CommentReplies", fields: [parentId], references: [id], onDelete: Cascade)
@@ -391,6 +393,7 @@ model Comment {
   likes    CommentLike[]
 
   @@index([entryId])
+  @@index([topicId])
   @@index([authorId])
   @@index([parentId])
 }
@@ -425,8 +428,9 @@ model Topic {
   createdAt        DateTime  @default(now())
   updatedAt        DateTime  @updatedAt
 
-  createdBy User    @relation(fields: [createdById], references: [id])
+  createdBy User      @relation(fields: [createdById], references: [id])
   entries   Entry[]
+  comments  Comment[]
 
   @@index([slug])
   @@index([startTime, endTime])

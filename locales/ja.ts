@@ -746,6 +746,13 @@ sections: [
     createEntry: "参加する",
     quickPost: "クイック投稿",
     fromTopic: "トピックから",
+    discussion: "ディスカッション",
+    featuredEntries: "注目コンテンツ",
+    postDiscussion: "投稿する",
+    loginToDiscuss: "してディスカッションに参加",
+    noDiscussion: "まだ議論がありません、コメントを投稿しましょう",
+    discussionCount: "件の議論",
+    closedDesc: "このトピックは終了し、新しい議論は受け付けていません",
   },
   comment: {
     title: "コメント",

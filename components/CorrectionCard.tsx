@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import { UserAvatar } from "@/components/ui/UserAvatar";
@@ -22,9 +23,9 @@ export function CorrectionCard({ correctedText, explanation, toneNote, isAccepte
     <Card>
       {/* Author header */}
       <div className="flex items-center gap-3 mb-4">
-        <UserAvatar username={author.displayName || author.username} size="sm" />
+        <Link href={`/profile/${author.username}`} className="shrink-0"><UserAvatar username={author.displayName || author.username} src={author.avatarUrl} size="sm" /></Link>
         <div className="flex-1">
-          <span className="text-sm font-medium">{author.displayName || author.username}</span>
+          <Link href={`/profile/${author.username}`} className="text-sm font-medium hover:underline">{author.displayName || author.username}</Link>
           <span className="text-xs text-ink-faint ml-2">{timeStr}</span>
         </div>
         {isAccepted && <Badge variant="success" size="sm">{dict.correction.acceptedBadge}</Badge>}
