@@ -35,7 +35,9 @@ export default async function PostDetailPage({ params }: Props) {
   if (!entry) notFound();
 
   const isAuthor = currentUser?.id === entry.author.id;
-  if (entry.visibility === "PRIVATE" && !isAuthor) notFound();
+  const canModerate = currentUser?.role === "ADMIN";
+  if (entry.status !== "PUBLISHED" && !isAuthor && !canModerate) notFound();
+  if (entry.visibility === "PRIVATE" && !isAuthor && !canModerate) notFound();
 
   // Fetch corrections via shared ID (Entry.id == Post.id for mirrored records)
   const corrections = await getEntryCorrections(id);

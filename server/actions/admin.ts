@@ -56,9 +56,9 @@ export async function hidePostAction(formData: FormData): Promise<ActionResult> 
   const postId = getString(formData, "postId");
   if (!postId) return { errors: { _form: ["缺少帖子 ID"] } };
 
-  await prisma.post.update({ where: { id: postId }, data: { status: "HIDDEN" } });
+  await updatePostAndEntryStatus(postId, "HIDDEN");
   await logAction("hide_post", "post", postId);
-  revalidatePath("/admin");
+  revalidatePostPaths(postId);
   return { success: true };
 }
 
@@ -67,10 +67,32 @@ export async function restorePostAction(formData: FormData): Promise<ActionResul
   const postId = getString(formData, "postId");
   if (!postId) return { errors: { _form: ["缺少帖子 ID"] } };
 
-  await prisma.post.update({ where: { id: postId }, data: { status: "PUBLISHED" } });
+  await updatePostAndEntryStatus(postId, "PUBLISHED");
   await logAction("restore_post", "post", postId);
-  revalidatePath("/admin");
+  revalidatePostPaths(postId);
   return { success: true };
+}
+
+async function updatePostAndEntryStatus(postId: string, status: "HIDDEN" | "PUBLISHED") {
+  await prisma.$transaction(async (tx) => {
+    await tx.post.update({ where: { id: postId }, data: { status } });
+
+    // New content is rendered from Entry; Post remains a same-ID compatibility
+    // record for Correction.postId. Keep both records in sync when present.
+    const entry = await tx.entry.findUnique({ where: { id: postId }, select: { id: true } });
+    if (entry) {
+      await tx.entry.update({ where: { id: postId }, data: { status } });
+    }
+  });
+}
+
+function revalidatePostPaths(postId: string) {
+  revalidatePath("/admin");
+  revalidatePath("/feed");
+  revalidatePath(`/posts/${postId}`);
+  revalidatePath(`/articles/${postId}`);
+  revalidatePath("/app");
+  revalidatePath("/app/articles");
 }
 
 // ─── Corrections ────────────────────────────────────
