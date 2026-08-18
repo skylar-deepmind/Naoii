@@ -95,6 +95,7 @@ enum EntryVisibility {
 enum EntryStatus {
   DRAFT
   PUBLISHED
+  HIDDEN
 }
 
 // ─── Models ────────────────────────────────────────────

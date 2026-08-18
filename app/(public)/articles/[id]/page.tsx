@@ -33,9 +33,10 @@ export default async function ArticleDetailPage({ params }: Props) {
   if (!entry || entry.type !== "ARTICLE") notFound();
 
   const isAuthor = currentUser?.id === entry.author.id;
+  const canModerate = currentUser?.role === "ADMIN";
 
-  if (entry.status !== "PUBLISHED" && !isAuthor) notFound();
-  if (entry.visibility === "PRIVATE" && !isAuthor) notFound();
+  if (entry.status !== "PUBLISHED" && !isAuthor && !canModerate) notFound();
+  if (entry.visibility === "PRIVATE" && !isAuthor && !canModerate) notFound();
 
   const [likeCount, liked, commentCount, comments] = await Promise.all([
     getEntryLikeCount(id),

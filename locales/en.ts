@@ -99,6 +99,7 @@ export const en: typeof zh = {
     changelog: "Changelog",
     feed: "Feed",
     library: "Library",
+    license: "AGPL-3.0 License",
     copyright: "Multilingual natural expression training community",
     feedback: "Feedback & Community",
     joinKeet: "Join Keet group",
