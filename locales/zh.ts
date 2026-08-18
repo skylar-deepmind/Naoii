@@ -97,6 +97,7 @@ export const zh = {
     changelog: "更新日志",
     feed: "广场",
     library: "表达库",
+    license: "AGPL-3.0 许可证",
     copyright: "多语言自然表达训练社区",
     feedback: "反馈与交流",
     joinKeet: "加入 Keet 群组",

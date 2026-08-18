@@ -99,6 +99,7 @@ export const ja: typeof zh = {
     changelog: "更新履歴",
     feed: "フィード",
     library: "ライブラリ",
+    license: "AGPL-3.0 ライセンス",
     copyright: "多言語自然表現トレーニングコミュニティ",
     feedback: "フィードバック＆交流",
     joinKeet: "Keetグループに参加",

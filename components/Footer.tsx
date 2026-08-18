@@ -40,6 +40,14 @@ export async function Footer() {
             <Link href="/" className="text-lg font-bold tracking-tight text-foreground">{dict.common.siteName}</Link>
             <p className="text-sm mt-1 text-neutral/60">{dict.common.tagline}</p>
           </div>
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-wider text-neutral/40 mb-3">License</p>
+            <ul className="space-y-1.5">
+              <li>
+                <a href="https://github.com/skylar-deepmind/Naoii/blob/main/LICENSE" target="_blank" rel="noopener noreferrer" className="text-sm text-neutral/60 hover:text-neutral transition-colors">{dict.footer.license}</a>
+              </li>
+            </ul>
+          </div>
           {linkGroups.map((group) => (
             <div key={group.title}>
               <p className="text-xs font-semibold uppercase tracking-wider text-neutral/40 mb-3">{group.title}</p>
