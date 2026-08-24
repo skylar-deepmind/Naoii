@@ -64,6 +64,8 @@ export async function Footer() {
         <div className="border-t border-base-300 mt-8 pt-6 text-center text-sm text-neutral/40 space-y-3">
           <p>© {new Date().getFullYear()} {dict.common.siteName} — {dict.footer.copyright}</p>
           <div className="flex items-center justify-center gap-4">
+            <Link href="/terms" className="text-neutral/50 hover:text-neutral transition-colors">{dict.footer.terms}</Link>
+            <Link href="/privacy" className="text-neutral/50 hover:text-neutral transition-colors">{dict.footer.privacy}</Link>
             <span className="text-neutral/30">{dict.footer.feedback}</span>
             <a href="https://discord.gg/FrhuAStZu4" target="_blank" rel="noopener noreferrer" className="btn btn-ghost btn-xs gap-1.5" title={dict.footer.joinDiscord}>
               <svg className="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">

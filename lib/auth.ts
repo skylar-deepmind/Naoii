@@ -52,7 +52,15 @@ export async function createSession(userId: string) {
 
 export async function deleteSession() {
   const cookieStore = await cookies();
-  cookieStore.delete(COOKIE_NAME);
+  // Match the attributes used when creating the session so the browser expires
+  // the root-scoped authentication cookie in a single logout action.
+  cookieStore.set(COOKIE_NAME, "", {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    path: "/",
+    maxAge: 0,
+  });
 }
 
 // ─── Current User ───────────────────────────────────

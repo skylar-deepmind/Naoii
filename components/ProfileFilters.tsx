@@ -34,12 +34,14 @@ export function ProfileFilters({
     moment: string;
     article: string;
     draft: string;
+    participated: string;
     allYears: string;
     allMonths: string;
   };
 }) {
   const types = ["all", "moment", "article"];
   if (isOwner) types.push("draft");
+  if (isOwner) types.push("participated");
 
   return (
     <div className="flex flex-wrap items-center gap-2">

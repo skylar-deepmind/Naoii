@@ -12,6 +12,7 @@ import { FeedTabs } from "@/components/FeedTabs";
 import { getCurrentUser } from "@/lib/auth";
 import { getFeedEntries } from "@/server/queries/entry";
 import { getDict } from "@/lib/i18n";
+import type { Dictionary } from "@/locales";
 
 type TabKey = "latest" | "awaiting" | "has_corrections" | "adopted";
 type ContentType = "all" | "moment" | "article";
@@ -61,7 +62,7 @@ export default async function FeedPage({ searchParams }: Props) {
       <PageHeader
         title={dict.feed.title}
         description={dict.feed.desc}
-        action={
+        action={user ? (
           <div className="flex gap-2">
             <Link href="/articles/new">
               <Button variant="outline" size="sm">{dict.nav?.writeArticle || "写篇章"}</Button>
@@ -70,7 +71,11 @@ export default async function FeedPage({ searchParams }: Props) {
               <Button variant="primary" size="sm">{dict.nav.postNew}</Button>
             </Link>
           </div>
-        }
+        ) : (
+          <Link href="/login">
+            <Button variant="primary" size="sm">{dict.feed.loginToParticipate}</Button>
+          </Link>
+        )}
       />
 
       {/* Content Type Tabs */}
@@ -105,14 +110,16 @@ export default async function FeedPage({ searchParams }: Props) {
             </svg>
           }
           title={dict.feed.empty}
-          action={{ label: dict.feed.emptyAction, href: "/posts/new" }}
+          action={user
+            ? { label: dict.feed.emptyAction, href: "/posts/new" }
+            : { label: dict.feed.loginToParticipate, href: "/login" }}
         />
       ) : (
         <>
           <div className="space-y-3">
             {entries.map((entry) =>
               entry.type === "ARTICLE" ? (
-                <ArticleCard key={entry.id} entry={entry} typeLabels={dict.typeLabels} timeLabels={dict.time} dict={dict} />
+                <ArticleCard key={entry.id} entry={entry} timeLabels={dict.time} dict={dict} />
               ) : (
                 <MomentCard key={entry.id} entry={entry} typeLabels={dict.typeLabels} completenessLabels={dict.completeness} correctionLabel={dict.correction.label} adoptedLabel={dict.post.accepted} timeLabels={dict.time} />
               )
@@ -179,11 +186,10 @@ function MomentCard({ entry, typeLabels, completenessLabels, correctionLabel, ad
 
 // ── Article Card ─────────────────────────────────────
 
-function ArticleCard({ entry, typeLabels, timeLabels, dict }: {
+function ArticleCard({ entry, timeLabels, dict }: {
   entry: Awaited<ReturnType<typeof getFeedEntries>>["entries"][number];
-  typeLabels: Record<string, string>;
   timeLabels: Record<string, string>;
-  dict: any;
+  dict: Dictionary;
 }) {
   const timeAgo = formatTimeAgo(entry.createdAt, timeLabels);
   const tags = entry.tags as string[] | null;

@@ -1,11 +1,15 @@
-import Link from "next/link";
 import { AppShell } from "@/components/ui/AppShell";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { DemoSection } from "@/components/DemoSection";
+import { getCurrentUser } from "@/lib/auth";
 import { getDict } from "@/lib/i18n";
+import { redirect } from "next/navigation";
 
 export default async function HomePage() {
+  const user = await getCurrentUser();
+  if (user) redirect("/app");
+
   const dict = await getDict();
 
   return (
@@ -21,7 +25,14 @@ export default async function HomePage() {
             <p className="mt-6 text-body-md text-white/70 max-w-2xl mx-auto">{dict.home.heroDesc}</p>
             <div className="mt-10 flex flex-col sm:flex-row gap-3 justify-center">
               <Button href="/register" variant="primary" size="lg">{dict.home.ctaRegister}</Button>
-              <Link href="/app" className="btn rounded-full font-medium bg-white/90 text-ink hover:bg-white shadow-level-1 btn-lg">{dict.home.ctaBrowse}</Link>
+              <Button
+                href="/feed"
+                variant="outline"
+                size="lg"
+                className="border-secondary-content/70 bg-secondary-content/10 text-secondary-content hover:border-secondary-content hover:bg-secondary-content/20"
+              >
+                {dict.home.ctaBrowse}
+              </Button>
             </div>
           </div>
         </AppShell>

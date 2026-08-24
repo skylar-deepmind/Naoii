@@ -10,6 +10,7 @@ import { CorrectionComments } from "@/components/CorrectionComments";
 import { AcceptButton } from "@/components/AcceptButton";
 import { SaveToLibraryButton } from "@/components/SaveToLibraryButton";
 import { ReportButton } from "@/components/ReportButton";
+import { EntryManagementActions } from "@/components/EntryManagementActions";
 import { getEntryById, getEntryCorrections, getEntryCorrectionCount } from "@/server/queries/entry";
 import { getCurrentUser } from "@/lib/auth";
 import { getLocale, getDict } from "@/lib/i18n";
@@ -87,6 +88,7 @@ export default async function PostDetailPage({ params }: Props) {
         <div className="flex items-center gap-3 mt-4">
           <p className="text-sm text-ink-faint">{timeStr}</p>
           {currentUser && !isAuthor && <ReportButton postId={id} dict={dict} />}
+          {isAuthor && <EntryManagementActions entryId={entry.id} type="MOMENT" visibility={entry.visibility} labels={{ edit: dict.common.edit, visibility: dict.post.visibility, delete: dict.common.delete, deleteConfirm: dict.profile?.deleteConfirm || "确认删除这条内容吗？它会移至草稿箱。", public: dict.post.visibilityPublic, unlisted: dict.post.visibilityUnlisted, private: dict.post.visibilityPrivate }} />}
         </div>
 
         <div className="mt-10">
@@ -101,7 +103,7 @@ export default async function PostDetailPage({ params }: Props) {
                   <div className="flex items-center gap-3 mt-2 ml-2">
                     {isAuthor && <AcceptButton correctionId={correction.id} postId={id} isAlreadyAccepted={correction.isAccepted} postHasAccepted={postHasAccepted} dict={dict} />}
                     {currentUser && currentUser.id !== correction.author.id && <ReportButton postId={id} correctionId={correction.id} dict={dict} />}
-                    <SaveToLibraryButton correctionId={correction.id} postId={id} isAccepted={correction.isAccepted} isSaved={savedCorrectionIds.has(correction.id)} dict={dict} />
+                    {currentUser && <SaveToLibraryButton correctionId={correction.id} postId={id} isAccepted={correction.isAccepted} isSaved={savedCorrectionIds.has(correction.id)} dict={dict} />}
                     <CorrectionComments
                       entryId={id}
                       correctionId={correction.id}
