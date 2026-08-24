@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { cookies } from "next/headers";
 import { Providers } from "@/components/Providers";
+import { getLocale } from "@/lib/i18n";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -38,8 +39,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const cookieStore = await cookies();
-  const langCookie = cookieStore.get("naoii_lang")?.value;
-  const lang = langCookie === "ja" ? "ja" : langCookie === "en" ? "en" : "zh";
+  const lang = await getLocale();
 
   const themeCookie = cookieStore.get("naoii_theme")?.value || "system";
   const prefersDark = themeCookie === "dark" || (themeCookie === "system" && false); // server default light

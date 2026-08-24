@@ -92,7 +92,7 @@ export async function Navbar({ user, variant = "default" }: NavbarProps) {
 
       {/* Right side */}
       <div className="navbar-end gap-1">
-        <div className="hidden min-[380px]:block"><ThemeSwitcher /></div>
+        <div className="hidden min-[380px]:block"><ThemeSwitcher labels={dict.theme} /></div>
         <div className="hidden min-[380px]:block"><LanguageSwitcher currentLocale={locale} /></div>
 
         {isAuthenticated ? (
@@ -125,8 +125,13 @@ export async function Navbar({ user, variant = "default" }: NavbarProps) {
                 {user.role === "ADMIN" && <li><Link href="/admin">{dict.nav.admin}</Link></li>}
                 <div className="divider my-1" />
                 <li>
-                  <form action={logoutAction}>
-                    <button type="submit" className="w-full text-left">{dict.nav.logout}</button>
+                  <form action={logoutAction} className="w-full">
+                    <button
+                      type="submit"
+                      className="btn btn-ghost btn-sm w-full justify-start text-left font-normal"
+                    >
+                      {dict.nav.logout}
+                    </button>
                   </form>
                 </li>
               </ul>

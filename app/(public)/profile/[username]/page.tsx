@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/Button";
 import { UserAvatar } from "@/components/ui/UserAvatar";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { ProfileFilters } from "@/components/ProfileFilters";
+import { EntryManagementActions } from "@/components/EntryManagementActions";
 import { getUserByUsername, getUserEntryStats, getUserAvailableYears, getUserEntries, type UserEntryType } from "@/server/queries/user";
 import { getCurrentUser } from "@/lib/auth";
 import { getDict } from "@/lib/i18n";
@@ -50,6 +51,7 @@ export default async function ProfilePage({ params, searchParams }: Props) {
     moment: dict.profile.moments || "瞬间",
     article: dict.profile.articles || "篇章",
     draft: dict.profile.drafts || "草稿箱",
+    participated: dict.profile.participated || "我的参与",
     allYears: dict.profile.allYears || "全部年份",
     allMonths: dict.profile.allMonths || "全部月份",
   };
@@ -78,6 +80,9 @@ export default async function ProfilePage({ params, searchParams }: Props) {
           <StatCard label={dict.profile.articles || "篇章"} count={stats.articleCount} active={type === "article"} href={`/profile/${username}?type=article`} />
           {isOwner && (
             <StatCard label={dict.profile.drafts || "草稿箱"} count={stats.draftCount} active={type === "draft"} href={`/profile/${username}?type=draft`} variant="warning" />
+          )}
+          {isOwner && (
+            <StatCard label={dict.profile.participated || "我的参与"} count={stats.participatedCount} active={type === "participated"} href={`/profile/${username}?type=participated`} />
           )}
         </div>
 
@@ -117,9 +122,9 @@ export default async function ProfilePage({ params, searchParams }: Props) {
             <div className="space-y-3">
               {entries.map((entry) =>
                 entry.type === "ARTICLE" ? (
-                  <ArticleRow key={entry.id} entry={entry} dict={dict} timeLabels={dict.time} />
+                  <ArticleRow key={entry.id} entry={entry} dict={dict} timeLabels={dict.time} isOwner={isOwner} />
                 ) : (
-                  <MomentRow key={entry.id} entry={entry} typeLabels={dict.typeLabels} completenessLabels={dict.completeness} correctionLabel={dict.correction?.label || "修改建议"} adoptedLabel={dict.post?.accepted || "已采纳"} timeLabels={dict.time} />
+                  <MomentRow key={entry.id} entry={entry} typeLabels={dict.typeLabels} completenessLabels={dict.completeness} correctionLabel={dict.correction?.label || "修改建议"} adoptedLabel={dict.post?.accepted || "已采纳"} timeLabels={dict.time} isOwner={isOwner} dict={dict} />
                 )
               )}
             </div>
@@ -161,19 +166,22 @@ function buildProfileUrl(username: string, type?: string, year?: number, month?:
   return `/profile/${username}${qs ? `?${qs}` : ""}`;
 }
 
-function MomentRow({ entry, typeLabels, completenessLabels, correctionLabel, adoptedLabel, timeLabels }: {
+function MomentRow({ entry, typeLabels, completenessLabels, correctionLabel, adoptedLabel, timeLabels, isOwner, dict }: {
   entry: NonNullable<Awaited<ReturnType<typeof getUserEntries>>["entries"]>[number];
   typeLabels: Record<string, string>;
   completenessLabels: Record<string, string>;
   correctionLabel: string;
   adoptedLabel: string;
   timeLabels: Record<string, string>;
+  isOwner: boolean;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  dict: any;
 }) {
   const timeAgo = formatTimeAgo(entry.createdAt, timeLabels);
 
   return (
-    <Link href={`/posts/${entry.id}`}>
-      <Card hover>
+    <Card hover>
+      <Link href={`/posts/${entry.id}`}>
         <div className="flex items-start gap-3">
           <div className="flex-1 min-w-0">
             {entry.title && <h3 className="font-semibold text-base leading-snug mb-1 line-clamp-1">{entry.title}</h3>}
@@ -187,28 +195,33 @@ function MomentRow({ entry, typeLabels, completenessLabels, correctionLabel, ado
               {entry.expressionType && typeLabels[entry.expressionType] && <Badge variant="default" size="sm">{typeLabels[entry.expressionType]}</Badge>}
               {entry.correctionCount > 0 && <Badge variant="primary" size="sm">{entry.correctionCount} {correctionLabel}</Badge>}
               {entry.hasAdoptedCorrection && <Badge variant="success" size="sm">{adoptedLabel}</Badge>}
+              {entry.participation.includes("correction") && <Badge variant="primary" size="sm">{dict.profile?.participatedCorrection || "提交过修改建议"}</Badge>}
+              {entry.participation.includes("comment") && <Badge variant="default" size="sm">{dict.profile?.participatedComment || "评论过"}</Badge>}
               {entry.visibility === "PRIVATE" && <Badge variant="warning" size="sm">私密</Badge>}
+              {entry.participation.includes("comment") && <Badge variant="default" size="sm">{dict.profile?.participatedComment || "评论过"}</Badge>}
               {entry.status === "DRAFT" && <Badge variant="warning" size="sm">草稿</Badge>}
             </div>
           </div>
         </div>
-      </Card>
-    </Link>
+      </Link>
+      {isOwner && <div className="mt-2 border-t border-base-200 pt-2"><EntryManagementActions entryId={entry.id} type="MOMENT" visibility={entry.visibility} labels={managementLabels(dict)} /></div>}
+    </Card>
   );
 }
 
-function ArticleRow({ entry, dict, timeLabels }: {
+function ArticleRow({ entry, dict, timeLabels, isOwner }: {
   entry: NonNullable<Awaited<ReturnType<typeof getUserEntries>>["entries"]>[number];
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   dict: any;
   timeLabels: Record<string, string>;
+  isOwner: boolean;
 }) {
   const timeAgo = formatTimeAgo(entry.createdAt, timeLabels);
   const tags = entry.tags as string[] | null;
 
   return (
-    <Link href={`/articles/${entry.id}`}>
-      <Card hover>
+    <Card hover>
+      <Link href={`/articles/${entry.id}`}>
         <div className="flex gap-4">
           {entry.coverImage && (
             <div className="shrink-0 w-24 h-24 sm:w-28 sm:h-24">
@@ -228,9 +241,19 @@ function ArticleRow({ entry, dict, timeLabels }: {
             </div>
           </div>
         </div>
-      </Card>
-    </Link>
+      </Link>
+      {isOwner && <div className="mt-2 border-t border-base-200 pt-2"><EntryManagementActions entryId={entry.id} type="ARTICLE" visibility={entry.visibility} labels={managementLabels(dict)} /></div>}
+    </Card>
   );
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function managementLabels(dict: any) {
+  return {
+    edit: dict.common?.edit || "编辑", visibility: dict.post?.visibility || "可见性", delete: dict.common?.delete || "删除",
+    deleteConfirm: dict.profile?.deleteConfirm || "确认删除这条内容吗？它会移至草稿箱。",
+    public: dict.post?.visibilityPublic || "公开", unlisted: dict.post?.visibilityUnlisted || "仅链接可见", private: dict.post?.visibilityPrivate || "私密",
+  };
 }
 
 function formatTimeAgo(dateStr: string, timeLabels?: Record<string, string>): string {

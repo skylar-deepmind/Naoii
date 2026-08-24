@@ -149,6 +149,7 @@ export async function updateEntryAction(
     revalidatePath(`/posts/${entryId}`);
     revalidatePath(`/articles/${entryId}`);
     revalidatePath("/feed");
+    revalidatePath(`/profile/${user.username}`);
     return { success: true };
   } catch (e: any) {
     const message = e?.message || "";
@@ -201,6 +202,7 @@ export async function deleteEntryAction(
 
     revalidatePath("/feed");
     revalidatePath("/library");
+    revalidatePath(`/profile/${user.username}`);
     return { success: true };
   } catch (e: any) {
     const message = e?.message || "";

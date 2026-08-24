@@ -11,7 +11,7 @@ import { Textarea } from "@/components/ui/Textarea";
 import { Select } from "@/components/ui/Select";
 import { TemplateSelector } from "@/components/TemplateSelector";
 import { TopicSelector } from "@/components/TopicSelector";
-import { createEntryAction } from "@/server/actions/entry";
+import { createEntryAction, updateEntryAction } from "@/server/actions/entry";
 import { useToast } from "@/lib/toast";
 import { RelatedReminder } from "@/components/RelatedReminder";
 import type { Dictionary, Locale } from "@/locales";
@@ -73,17 +73,23 @@ interface Props {
   locale: Locale;
   intent: string | null;
   userId?: string;
+  editEntry?: { id: string; title: string | null; content: string; sourceLanguageId: string | null; targetLanguageId: string | null; expressionType: string | null; tone: string | null; completeness: string | null; visibility: string; topicId: string | null };
 }
 
 // ── Main Component ──────────────────────────────
 
-export function PostWizard({ languages, dict, locale, intent, userId }: Props) {
+export function PostWizard({ languages, dict, locale, intent, userId, editEntry }: Props) {
   const router = useRouter();
   const { addToast } = useToast();
   const initialised = useRef(false);
 
   const [step, setStep] = useState(0);
   const [form, setForm] = useState<FormState>(() => {
+    if (editEntry) return {
+      completeness: editEntry.completeness || "COMPLETE", sourceLanguage: editEntry.sourceLanguageId || "", targetLanguage: editEntry.targetLanguageId || "",
+      expressionType: editEntry.expressionType || "", tone: editEntry.tone || "", title: editEntry.title || "", content: editEntry.content,
+      visibility: editEntry.visibility, topicId: editEntry.topicId || "",
+    };
     const saved = loadDraft();
     const base = saved || { ...DEFAULT_STATE, completeness: intent === "ask" ? "PARTIAL" : "COMPLETE" };
     return base;
@@ -93,9 +99,10 @@ export function PostWizard({ languages, dict, locale, intent, userId }: Props) {
 
   // Auto-save
   useEffect(() => {
+    if (editEntry) return;
     if (initialised.current) saveDraft(form);
     else initialised.current = true;
-  }, [form]);
+  }, [form, editEntry]);
 
   // ── Helpers ─────────────────────────────────
   const update = useCallback((patch: Partial<FormState>) => {
@@ -180,6 +187,7 @@ export function PostWizard({ languages, dict, locale, intent, userId }: Props) {
     setSubmitting(true);
     const fd = new FormData();
     fd.append("type", "MOMENT");
+    if (editEntry) fd.append("entryId", editEntry.id);
     if (form.title) fd.append("title", form.title);
     fd.append("content", form.content);
     fd.append("sourceLanguage", form.sourceLanguage);
@@ -191,12 +199,13 @@ export function PostWizard({ languages, dict, locale, intent, userId }: Props) {
     fd.append("status", "PUBLISHED");
     if (form.topicId) fd.append("topicId", form.topicId);
     try {
-      const result = await createEntryAction({}, fd);
+      const result = await (editEntry ? updateEntryAction : createEntryAction)({}, fd);
       if (result?.errors) {
         setErrors((prev) => ({ ...prev, ...Object.fromEntries(Object.entries(result.errors!).map(([k, v]) => [k, v?.[0] || ""])) }));
         setSubmitting(false);
       } else {
-        clearDraft();
+        if (!editEntry) clearDraft();
+        else router.push(`/posts/${editEntry.id}`);
       }
     } catch (e: any) {
       // redirect() throws NEXT_REDIRECT — clear draft then let Next.js handle redirect
@@ -333,11 +342,11 @@ export function PostWizard({ languages, dict, locale, intent, userId }: Props) {
             {/* Action buttons */}
             <div className="flex flex-col gap-2">
               <Button variant="primary" className="w-full" loading={submitting} onClick={handleSubmit}>
-                {form.visibility === "PUBLIC" ? dict.post.submitPublic || dict.post.submit : form.visibility === "UNLISTED" ? dict.post.submitUnlisted || "发布（仅链接可见）" : dict.post.submitPrivate || "发布（仅自己可见）"}
+                {editEntry ? (dict.common.save || "保存修改") : form.visibility === "PUBLIC" ? dict.post.submitPublic || dict.post.submit : form.visibility === "UNLISTED" ? dict.post.submitUnlisted || "发布（仅链接可见）" : dict.post.submitPrivate || "发布（仅自己可见）"}
               </Button>
               <div className="flex justify-between">
                 <Button variant="ghost" size="sm" onClick={goBack}>{dict.post.prevStep}</Button>
-                <Button variant="ghost" size="sm" onClick={handleClear}>{dict.post.clearDraft}</Button>
+                {!editEntry && <Button variant="ghost" size="sm" onClick={handleClear}>{dict.post.clearDraft}</Button>}
               </div>
               <p className="text-xs text-ink-faint text-center">
                 {form.visibility === "PUBLIC" ? dict.post.hintPublic || "发布后所有人可见" : form.visibility === "UNLISTED" ? dict.post.hintUnlisted || "仅通过链接访问" : dict.post.hintPrivate || "仅自己可见"}

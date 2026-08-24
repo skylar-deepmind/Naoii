@@ -104,6 +104,34 @@ export const en: typeof zh = {
     feedback: "Feedback & Community",
     joinKeet: "Join Keet group",
     joinDiscord: "Join Discord server",
+    terms: "Terms of Service",
+    privacy: "Privacy Policy",
+  },
+  theme: {
+    switcherLabel: "Change theme",
+    system: "System",
+    light: "Light",
+    dark: "Dark",
+  },
+  legal: {
+    termsTitle: "Terms of Service",
+    termsLead: "Please read these terms before using Naoii.",
+    termsSections: [
+      { heading: "Acceptance", body: ["By accessing or using Naoii, you agree to these terms. Do not use the service if you do not agree."] },
+      { heading: "Accounts and profile information", body: ["Keep your registration information accurate and your account credentials secure. You are responsible for activity that occurs through your account."] },
+      { heading: "Community content", body: ["You retain rights in content you publish and grant Naoii permission to process it to provide, display, and operate the service. Do not post unlawful, infringing, harassing, spam, or privacy-violating content.", "Public content appears in the community. Unlisted content may still be viewed by anyone with its link, so consider personal information carefully before publishing."] },
+      { heading: "Your responsibility and service changes", body: ["Naoii is a language-learning community and does not guarantee that corrections are accurate, complete, or suitable for your purpose. We may change, suspend, or end features or accounts to operate the service safely and lawfully."] },
+      { heading: "Third parties and contact", body: ["The service may link to third parties such as Discord, which are governed by their own terms and privacy policies. Contact us through the Naoii Discord community with questions about these terms."] },
+    ],
+    privacyTitle: "Privacy Policy",
+    privacyLead: "This policy explains how Naoii handles data you provide while using the service.",
+    privacySections: [
+      { heading: "Data we collect", body: ["When you register, we collect your username, email address, and a hashed password. You may also provide profile details, language preferences, an avatar, and content in posts, comments, corrections, and reports.", "We process essential technical information, including session state and browser-language preference, to provide the service."] },
+      { heading: "How we use data", body: ["We use this data to create and protect accounts, display community content, provide learning features, send in-app notifications, prevent abuse, and maintain and improve the service."] },
+      { heading: "Public content and uploads", body: ["Moments, articles, comments, and corrections marked public are visible to all visitors. Uploaded images are stored in the service upload directory and may be public with their related content. Do not upload sensitive personal information."] },
+      { heading: "Cookies", body: ["Naoii uses a necessary session cookie to keep you signed in, plus language and theme cookies to remember your interface preferences. We do not use these cookies for targeted advertising."] },
+      { heading: "Sharing, retention, and contact", body: ["We do not sell personal data. Data is handled only as needed to provide the service and address security or compliance matters; third-party links, including Discord, follow their own policies. Contact us through the Naoii Discord community about your account or data."] },
+    ],
   },
   home: {
     badge: "Multilingual Natural Expression Training Community",
@@ -341,6 +369,7 @@ export const en: typeof zh = {
     emptyAction: "Post Moment",
     clearFilter: "Clear filter",
     welcome: "Welcome back",
+    loginToParticipate: "Log in to participate",
   },
   library: {
     title: "My Library",
@@ -409,6 +438,10 @@ export const en: typeof zh = {
     articles: "Articles",
     allContent: "All",
     drafts: "Drafts",
+    participated: "My Activity",
+    participatedComment: "Commented",
+    participatedCorrection: "Suggested a correction",
+    deleteConfirm: "Delete this content? It will be moved to drafts.",
     filterType: "Type",
     filterYear: "Year",
     filterMonth: "Month",
@@ -566,6 +599,27 @@ export const en: typeof zh = {
     title: "Changelog",
     intro: "Naoii is still growing. This is where we keep track of what it has learned lately—and the occasional time it has tripped over its own feet.",
     versions: [
+      {
+        version: "v0.4.0", date: "2026-08-24",
+        intro: "This time, Naoii tidied up the front door. First-time visitors can find their way more easily, and regulars no longer have to read the welcome sign again.",
+        sections: [
+          { heading: "A place to look around, even on your first visit", items: [
+            "On a first visit, Naoii now follows your browser language and picks Chinese, English, or Japanese. If you have chosen a language yourself, though, your choice still has the final word",
+            "The community feed is now open to browse. You can see what people are practicing and how they help each other before signing up; publishing, commenting, and saving are there when you are ready to join in",
+            "The homepage's 'Browse Community' button now takes you straight to the feed instead of stopping at the login page first",
+            "Added Terms of Service and a Privacy Policy. The things worth being clear about are better kept in the open",
+          ]},
+          { heading: "Less ceremony once you are in", items: [
+            "Signed-in users who visit the homepage now go straight back to their workspace. Once you are one of us, there is no need to begin with 'Sign up for free' every time",
+            "Logging out now takes one click—no need to negotiate with the button twice",
+          ]},
+          { heading: "Languages and dark mode", items: [
+            "The theme menu's System, Light, and Dark options—and their accessibility labels—now speak Chinese, English, and Japanese, so Chinese no longer hides in an English interface",
+            "Adjusted the homepage Hero's 'Browse Community' button so it stays easy to see in dark mode, instead of playing hide-and-seek with the night in a white coat",
+          ]},
+        ],
+        notes: "A good first impression does not have to be loud. The language is right, the path is open, the button is visible, and logging out is easy—the rest is yours to express, slowly.",
+      },
       {
         version: "v0.3.0", date: "2026-07-24",
         intro: "This time, Naoii redecorated its room. Colors, fonts, buttons, cards—all rethought from scratch. Oh, and it also picked up two new skills along the way.",

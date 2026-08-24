@@ -91,7 +91,7 @@ export async function getUserAdoptedCorrections(userId: string) {
 
 const PROFILE_PAGE_SIZE = 12;
 
-export type UserEntryType = "all" | "moment" | "article" | "draft";
+export type UserEntryType = "all" | "moment" | "article" | "draft" | "participated";
 
 export async function getUserEntryStats(userId: string, isOwner: boolean) {
   const baseWhere: Prisma.EntryWhereInput = { authorId: userId };
@@ -100,7 +100,7 @@ export async function getUserEntryStats(userId: string, isOwner: boolean) {
     baseWhere.status = "PUBLISHED";
   }
 
-  const [allMoments, allArticles, drafts] = await Promise.all([
+  const [allMoments, allArticles, drafts, participated] = await Promise.all([
     prisma.entry.count({
       where: { ...baseWhere, type: "MOMENT", ...(isOwner ? {} : {}) },
     }),
@@ -112,9 +112,10 @@ export async function getUserEntryStats(userId: string, isOwner: boolean) {
           where: { authorId: userId, status: "DRAFT" },
         })
       : Promise.resolve(0),
+    isOwner ? getParticipationByEntryId(userId).then((entries) => entries.size) : Promise.resolve(0),
   ]);
 
-  return { momentCount: allMoments, articleCount: allArticles, draftCount: drafts };
+  return { momentCount: allMoments, articleCount: allArticles, draftCount: drafts, participatedCount: participated };
 }
 
 export async function getUserAvailableYears(userId: string, isOwner: boolean) {
@@ -157,8 +158,19 @@ export async function getUserEntries({
   const isOwner = viewerId === userId;
 
   const where: Prisma.EntryWhereInput = { authorId: userId };
+  const participationByEntryId = type === "participated" && isOwner
+    ? await getParticipationByEntryId(userId)
+    : new Map<string, string[]>();
 
-  if (type === "draft") {
+  if (type === "participated") {
+    if (!isOwner) return { entries: [], nextCursor: null };
+    const entryIds = [...participationByEntryId.keys()];
+    if (entryIds.length === 0) return { entries: [], nextCursor: null };
+    delete where.authorId;
+    where.id = { in: entryIds };
+    where.status = "PUBLISHED";
+    where.OR = [{ visibility: { in: ["PUBLIC", "UNLISTED"] } }, { authorId: userId }];
+  } else if (type === "draft") {
     where.status = "DRAFT";
     if (!isOwner) return { entries: [], nextCursor: null };
   } else {
@@ -227,7 +239,29 @@ export async function getUserEntries({
   }
 
   return {
-    entries: entries.map((e) => formatEntryCard(e, countMap.get(e.id) ?? 0, adoptedIds.has(e.id))),
+    entries: entries.map((e) => ({
+      ...formatEntryCard(e, countMap.get(e.id) ?? 0, adoptedIds.has(e.id)),
+      participation: participationByEntryId.get(e.id) ?? [],
+    })),
     nextCursor: hasMore ? entries[entries.length - 1]?.id : null,
   };
+}
+
+async function getParticipationByEntryId(userId: string): Promise<Map<string, string[]>> {
+  const [corrections, comments] = await Promise.all([
+    prisma.correction.findMany({ where: { authorId: userId, status: { not: "DELETED" } }, select: { postId: true } }),
+    prisma.comment.findMany({ where: { authorId: userId }, select: { entryId: true, correction: { select: { postId: true } } } }),
+  ]);
+  const participation = new Map<string, Set<string>>();
+  const add = (entryId: string, kind: string) => {
+    const kinds = participation.get(entryId) ?? new Set<string>();
+    kinds.add(kind);
+    participation.set(entryId, kinds);
+  };
+  for (const correction of corrections) add(correction.postId, "correction");
+  for (const comment of comments) {
+    if (comment.entryId) add(comment.entryId, "comment");
+    if (comment.correction?.postId) add(comment.correction.postId, "comment");
+  }
+  return new Map([...participation].map(([entryId, kinds]) => [entryId, [...kinds]]));
 }

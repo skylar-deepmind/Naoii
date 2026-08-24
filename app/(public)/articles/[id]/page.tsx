@@ -6,6 +6,7 @@ import { Card } from "@/components/ui/Card";
 import { UserAvatar } from "@/components/ui/UserAvatar";
 import { LikeButton } from "@/components/LikeButton";
 import { CommentSection } from "@/components/CommentSection";
+import { EntryManagementActions } from "@/components/EntryManagementActions";
 import { getEntryById } from "@/server/queries/entry";
 import { getEntryLikeCount, getEntryLikeStatus } from "@/server/actions/like";
 import { getCommentsSorted, getCommentCount } from "@/server/queries/comment";
@@ -86,12 +87,8 @@ export default async function ArticleDetailPage({ params }: Props) {
             {entry.status !== "PUBLISHED" && (
               <Badge variant="warning" size="sm">{dict.article?.draft || "草稿"}</Badge>
             )}
-            <LikeButton entryId={id} initialLiked={liked} initialCount={likeCount} />
-            {isAuthor && (
-              <Link href={`/articles/${entry.id}/edit`} className="btn btn-sm btn-ghost">
-                {dict.common.edit}
-              </Link>
-            )}
+            {currentUser && <LikeButton entryId={id} initialLiked={liked} initialCount={likeCount} />}
+            {isAuthor && <EntryManagementActions entryId={entry.id} type="ARTICLE" visibility={entry.visibility} labels={{ edit: dict.common.edit, visibility: dict.post.visibility, delete: dict.common.delete, deleteConfirm: dict.profile?.deleteConfirm || "确认删除这条内容吗？它会移至草稿箱。", public: dict.post.visibilityPublic, unlisted: dict.post.visibilityUnlisted, private: dict.post.visibilityPrivate }} />}
           </div>
         </div>
 
